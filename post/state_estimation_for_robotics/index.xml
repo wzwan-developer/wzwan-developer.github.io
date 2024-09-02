@@ -7,6 +7,14 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>wzwan</copyright><atom:link href="https://wzwan-developer.github.io/post/state_estimation_for_robotics/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>舒尔补</title>
+        <link>https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/</link>
+        <pubDate>Mon, 02 Sep 2024 23:51:06 +0800</pubDate>
+        
+        <guid>https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>边缘化</title>
         <link>https://wzwan-developer.github.io/p/201/</link>
         <pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate>
@@ -21,7 +29,7 @@ $ HX=b $
 $$\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$&lt;p&gt;
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。&lt;/p&gt;
 &lt;h3 id=&#34;过程&#34;&gt;过程
-&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用舒尔补 进行三角化，如下所示：
+&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用&lt;a class=&#34;link&#34; href=&#34;https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/&#34; &gt;舒尔补&lt;/a&gt; 进行三角化，如下所示：
 &lt;/p&gt;
 $$\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$&lt;p&gt;
 化简可得：
