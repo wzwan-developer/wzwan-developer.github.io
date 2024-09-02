@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>数学理论 on wzwan</title>
-        <link>https://wzwan-developer.github.io/categories/%E6%95%B0%E5%AD%A6%E7%90%86%E8%AE%BA/</link>
+        <link>wzwannet.cn/categories/%E6%95%B0%E5%AD%A6%E7%90%86%E8%AE%BA/</link>
         <description>Recent content in 数学理论 on wzwan</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>wzwan</copyright>
-        <lastBuildDate>Mon, 02 Sep 2024 23:51:06 +0800</lastBuildDate><atom:link href="https://wzwan-developer.github.io/categories/%E6%95%B0%E5%AD%A6%E7%90%86%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 02 Sep 2024 23:51:06 +0800</lastBuildDate><atom:link href="wzwannet.cn/categories/%E6%95%B0%E5%AD%A6%E7%90%86%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>舒尔补</title>
-        <link>https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/</link>
+        <link>wzwannet.cn/p/%E8%88%92%E5%B0%94%E8%A1%A5/</link>
         <pubDate>Mon, 02 Sep 2024 23:51:06 +0800</pubDate>
         
-        <guid>https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/</guid>
+        <guid>wzwannet.cn/p/%E8%88%92%E5%B0%94%E8%A1%A5/</guid>
         <description></description>
         </item>
         <item>
         <title>边缘化</title>
-        <link>https://wzwan-developer.github.io/p/201/</link>
+        <link>wzwannet.cn/p/201/</link>
         <pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://wzwan-developer.github.io/p/201/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/201/book.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
+        <guid>wzwannet.cn/p/201/</guid>
+        <description>&lt;img src="wzwannet.cn/wzwannet.cn/p/201/book.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
 &lt;/h2&gt;&lt;h3 id=&#34;模型&#34;&gt;模型
 &lt;/h3&gt;&lt;p&gt;优化问题具有如下通用形式：
 $ HX=b $
@@ -30,7 +30,7 @@ $ HX=b $
 $$\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$&lt;p&gt;
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。&lt;/p&gt;
 &lt;h3 id=&#34;过程&#34;&gt;过程
-&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用&lt;a class=&#34;link&#34; href=&#34;https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/&#34; &gt;舒尔补&lt;/a&gt; 进行三角化，如下所示：
+&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用&lt;a class=&#34;link&#34; href=&#34;wzwannet.cn/p/%E8%88%92%E5%B0%94%E8%A1%A5/&#34; &gt;舒尔补&lt;/a&gt; 进行三角化，如下所示：
 &lt;/p&gt;
 $$\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$&lt;p&gt;
 化简可得：
@@ -69,10 +69,10 @@ $$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&amp;
 $$(H_{k}^{T}W_{k}^{-1}H_{k})\hat{x}=H_{k}^{T}W_{k}^{-1}z_k$$&lt;p&gt;，
 其中&lt;/p&gt;
 $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
-&lt;img src=&#34;https://wzwan-developer.github.io/p/201/image00.png&#34;
+&lt;img src=&#34;wzwannet.cn/p/201/image00.png&#34;
 	width=&#34;714&#34;
 	height=&#34;352&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/201/image00_hu2802948725242621933.png 480w, https://wzwan-developer.github.io/p/201/image00_hu16496475951586850660.png 1024w&#34;
+	srcset=&#34;wzwannet.cn/p/201/image00_hu2802948725242621933.png 480w, wzwannet.cn/p/201/image00_hu16496475951586850660.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -82,10 +82,10 @@ $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
 	
 &gt;
 借助本文第一节，目标为从$x$变量中删除$\hat{x&amp;rsquo;}_{k-1}$，执行舒尔补可得
-&lt;img src=&#34;https://wzwan-developer.github.io/p/201/image01.png&#34;
+&lt;img src=&#34;wzwannet.cn/p/201/image01.png&#34;
 	width=&#34;707&#34;
 	height=&#34;463&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/201/image01_hu12842677403844977782.png 480w, https://wzwan-developer.github.io/p/201/image01_hu10364658897043807725.png 1024w&#34;
+	srcset=&#34;wzwannet.cn/p/201/image01_hu12842677403844977782.png 480w, wzwannet.cn/p/201/image01_hu10364658897043807725.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -94,10 +94,10 @@ $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
 		data-flex-basis=&#34;366px&#34;
 	
 &gt;
-&lt;img src=&#34;https://wzwan-developer.github.io/p/201/image02.png&#34;
+&lt;img src=&#34;wzwannet.cn/p/201/image02.png&#34;
 	width=&#34;1371&#34;
 	height=&#34;694&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/201/image02_hu7680983322299133859.png 480w, https://wzwan-developer.github.io/p/201/image02_hu10029282904931644770.png 1024w&#34;
+	srcset=&#34;wzwannet.cn/p/201/image02_hu7680983322299133859.png 480w, wzwannet.cn/p/201/image02_hu10029282904931644770.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
