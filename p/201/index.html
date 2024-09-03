@@ -10,7 +10,7 @@
 <meta property='og:description' content="《机器人学中的状态估计》系列">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/201/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-02T23:56:52&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/201/book.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-03T08:42:45&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/201/book.png' />
 <meta name="twitter:title" content="边缘化">
 <meta name="twitter:description" content="《机器人学中的状态估计》系列"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/201/book.png' />
@@ -386,7 +386,10 @@ $${\frac{\partial J(x)}{\partial x^{T}}}|_x=-H^{T}W^{-1}(z-H\hat{x})=0 \Rightarr
 <em>注：此时形式以及是接近优化角度的$HX=b$。</em></p>
 <h3 id="滤波角度">滤波角度
 </h3><p>由于马尔可夫性，当前时刻仅与前一时刻有关，由此再次参考 3.3.2章节 &ldquo;通过MAP推导卡尔曼滤波&rdquo;，
-假设已经有了k-1时刻的后验估计$ { \hat {x}<em>{k-1} ,\hat{P}</em>{k-1}}$,目标是计算$ { \hat {x}<em>{k} ,\hat{P}</em>{k}}$，我们使用k-1时刻的后验估计加上k时刻的$v_k$,$y_k$来估计$ { \hat {x}<em>{k} ,\hat{P}</em>{k}}$。
+假设已经有了k-1时刻的后验估计</p>
+$$ \{ \hat {x}_{k-1} ,\hat{P}_{k-1}\}$$<p>,目标是计算</p>
+$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$<p>，我们使用k-1时刻的后验估计加上k时刻的$v_k$,$y_k$来估计</p>
+$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$<p>。
 为了推导该过程，定义
 </p>
 $$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&&\\-A_{k-1}&I\\&&C_{k}\end{bmatrix},W=\begin{bmatrix}\hat {P}_{k-1}&&\\&Q_k&\\&&R_k\end{bmatrix}$$<p>
@@ -466,7 +469,7 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
 
 
         <span>
-            最后更新于 2024-09-02  23:56  &#43;0800
+            最后更新于 2024-09-03  08:42  &#43;0800
         </span>
     </section></footer>
 
