@@ -56,7 +56,7 @@ $$ x=\begin{bmatrix}a\\b\end{bmatrix} $$&lt;p&gt;,变量构成的协方差矩阵
 $$\sum=\begin{bmatrix} A &amp; C^{T} \\C&amp;D \end{bmatrix}$$&lt;p&gt;,其中$A=cov(a,a)$,$C=cov(a,b)$,$D=cov(b,b)$。
 则$x$的概率分布为：
 &lt;/p&gt;
-$$P(a,b)=P(a)P(a|b)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\begin{bmatrix}a&amp;b\end{bmatrix})$$&lt;p&gt;。使用上一节内容将矩阵转化为对角矩阵
+$$P(a,b)=P(a)P(b|a)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\begin{bmatrix}a&amp;b\end{bmatrix})$$&lt;p&gt;。使用上一节内容将矩阵转化为对角矩阵
 &lt;/p&gt;
 $$ \begin{align}
 P(a,b) \\ 

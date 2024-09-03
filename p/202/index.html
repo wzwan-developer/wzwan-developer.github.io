@@ -10,14 +10,11 @@
 <meta property='og:description' content="《机器人学中的状态估计》系列">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/202/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T23:51:06&#43;08:00'/><meta property='article:modified_time' content='2024-09-03T17:43:40&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/202/book.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T23:51:06&#43;08:00'/><meta property='article:modified_time' content='2024-09-03T22:19:08&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/202/book.png' />
 <meta name="twitter:title" content="舒尔补">
 <meta name="twitter:description" content="《机器人学中的状态估计》系列"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/202/book.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
-
-  
-
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <meta name="referrer" content="no-referrer-when-downgrade">
         
@@ -364,7 +361,7 @@ $$ x=\begin{bmatrix}a\\b\end{bmatrix} $$<p>,变量构成的协方差矩阵等于
 $$\sum=\begin{bmatrix} A & C^{T} \\C&D \end{bmatrix}$$<p>,其中$A=cov(a,a)$,$C=cov(a,b)$,$D=cov(b,b)$。
 则$x$的概率分布为：
 </p>
-$$P(a,b)=P(a)P(a|b)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix})$$<p>。使用上一节内容将矩阵转化为对角矩阵
+$$P(a,b)=P(a)P(b|a)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix})$$<p>。使用上一节内容将矩阵转化为对角矩阵
 </p>
 $$ \begin{align}
 P(a,b) \\ 
@@ -411,7 +408,7 @@ P(a,b) \\
 
 
         <span>
-            最后更新于 2024-09-03  17:43  &#43;0800
+            最后更新于 2024-09-03  22:19  &#43;0800
         </span>
     </section></footer>
 
