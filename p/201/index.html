@@ -6,11 +6,11 @@
 
 <link rel='canonical' href='https://wzwan-developer.github.io/p/201/'>
 
-<link rel="stylesheet" href="/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="边缘化">
+<link rel="stylesheet" href="/scss/style.min.f23e6e2e1b61bc3ca6814f240b169170253bceb87b8130749f231f01dc0a6239.css"><meta property='og:title' content="边缘化">
 <meta property='og:description' content="《机器人学中的状态估计》系列">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/201/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-03T08:42:45&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/201/book.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-03T17:43:40&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/201/book.png' />
 <meta name="twitter:title" content="边缘化">
 <meta name="twitter:description" content="《机器人学中的状态估计》系列"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/201/book.png' />
@@ -28,9 +28,7 @@
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
+            localStorage.setItem(colorSchemeKey, "auto");
         })();
     </script><script>
     (function() {
@@ -78,7 +76,7 @@
         
         <div class="site-meta">
             <h1 class="site-name"><a href="/">wzwan</a></h1>
-            <h2 class="site-description">好风凭借力，送我上青云。</h2>
+            <h2 class="site-description">一切真知都是从直接经验发源的。</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -181,26 +179,6 @@
             <ol class="menu">
 
                 
-                    <li id="dark-mode-toggle">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                        <span>暗色模式</span>
-                    </li>
-                
             </ol>
         </li>
     </ol>
@@ -271,7 +249,7 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E6%95%B0%E5%AD%A6%E7%90%86%E8%AE%BA/" >
+            <a href="/categories/math/" style="background-color: #2a9d8f; color: #fff;">
                 数学理论
             </a>
         
@@ -355,7 +333,7 @@ $ HX=b $
 $$\begin{bmatrix}H_{mm}&H_{mr}\\H_{rm}&H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$<p>
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。</p>
 <h3 id="过程">过程
-</h3><p>对$H$矩阵利用<a class="link" href="https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/" >舒尔补</a> 进行三角化，如下所示：
+</h3><p>对$H$矩阵利用<a class="link" href="https://wzwan-developer.github.io/p/202/" >舒尔补</a> 进行三角化，如下所示：
 </p>
 $$\begin{bmatrix}I&0\\-H_{rm}H_{mm}^{-1}&I\end{bmatrix}\begin{bmatrix}H_{mm}&H_{mr}\\H_{rm}&H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&0\\-H_{rm}H_{mm}^{-1}&I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$<p>
 化简可得：
@@ -469,7 +447,7 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
 
 
         <span>
-            最后更新于 2024-09-03  08:42  &#43;0800
+            最后更新于 2024-09-03  17:43  &#43;0800
         </span>
     </section></footer>
 
@@ -511,9 +489,20 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
         <div class="flex article-list--tile">
             
                 
-<article class="">
-    <a href="/p/%E8%88%92%E5%B0%94%E8%A1%A5/">
+<article class="has-image">
+    <a href="/p/202/">
         
+        
+            <div class="article-image">
+                <img src="/p/202/book.f45639a02aaf3e00144b79da13f9cc74_hu12832796188554429731.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 舒尔补"
+                        data-key="202" 
+                        data-hash="md5-9FY5oCqvPgAUS3naE/nMdA==">
+                
+            </div>
         
 
         <div class="article-details">

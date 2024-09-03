@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="《机器人学中的状态估计》">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="《机器人学中的状态估计》系列">
 <title>舒尔补</title>
 
-<link rel='canonical' href='https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/'>
+<link rel='canonical' href='https://wzwan-developer.github.io/p/202/'>
 
-<link rel="stylesheet" href="/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="舒尔补">
-<meta property='og:description' content="《机器人学中的状态估计》">
-<meta property='og:url' content='https://wzwan-developer.github.io/p/%E8%88%92%E5%B0%94%E8%A1%A5/'>
+<link rel="stylesheet" href="/scss/style.min.f23e6e2e1b61bc3ca6814f240b169170253bceb87b8130749f231f01dc0a6239.css"><meta property='og:title' content="舒尔补">
+<meta property='og:description' content="《机器人学中的状态估计》系列">
+<meta property='og:url' content='https://wzwan-developer.github.io/p/202/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T23:51:06&#43;08:00'/><meta property='article:modified_time' content='2024-09-02T23:56:52&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T23:51:06&#43;08:00'/><meta property='article:modified_time' content='2024-09-03T17:43:40&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/202/book.png' />
 <meta name="twitter:title" content="舒尔补">
-<meta name="twitter:description" content="《机器人学中的状态估计》">
+<meta name="twitter:description" content="《机器人学中的状态估计》系列"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/202/book.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
   
@@ -27,9 +28,7 @@
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            if(!localStorage.getItem(colorSchemeKey)){
-                localStorage.setItem(colorSchemeKey, "auto");
-            }
+            localStorage.setItem(colorSchemeKey, "auto");
         })();
     </script><script>
     (function() {
@@ -77,7 +76,7 @@
         
         <div class="site-meta">
             <h1 class="site-name"><a href="/">wzwan</a></h1>
-            <h2 class="site-description">好风凭借力，送我上青云。</h2>
+            <h2 class="site-description">一切真知都是从直接经验发源的。</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -180,42 +179,73 @@
             <ol class="menu">
 
                 
-                    <li id="dark-mode-toggle">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                        <span>暗色模式</span>
-                    </li>
-                
             </ol>
         </li>
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#舒尔补定义">舒尔补定义</a></li>
+    <li><a href="#舒尔补的定理推导">舒尔补的定理推导</a></li>
+    <li><a href="#用途">用途</a>
+      <ol>
+        <li><a href="#快速求矩阵的逆">快速求矩阵的逆</a></li>
+        <li><a href="#舒尔补在信息矩阵求解中的使用">舒尔补在信息矩阵求解中的使用</a></li>
+        <li><a href="#通过舒尔补分解多元高斯分布">通过舒尔补分解多元高斯分布</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
-    <article class="main-article">
+    <article class="has-image main-article">
     <header class="article-header">
+        <div class="article-image">
+            <a href="/p/202/">
+                <img src="/p/202/book_hu10313395913711560831.png"
+                        srcset="/p/202/book_hu10313395913711560831.png 800w, /p/202/book_hu9329998549912767397.png 1600w"
+                        width="800" 
+                        height="533" 
+                        loading="lazy"
+                        alt="Featured image of post 舒尔补" />
+                
+            </a>
+        </div>
+    
 
     <div class="article-details">
     
     <header class="article-category">
         
-            <a href="/categories/%E6%95%B0%E5%AD%A6%E7%90%86%E8%AE%BA/" >
+            <a href="/categories/math/" style="background-color: #2a9d8f; color: #fff;">
                 数学理论
             </a>
         
@@ -224,12 +254,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/%E8%88%92%E5%B0%94%E8%A1%A5/">舒尔补</a>
+            <a href="/p/202/">舒尔补</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            《机器人学中的状态估计》
+            《机器人学中的状态估计》系列
         </h3>
         
     </div>
@@ -265,7 +295,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 0 分钟
+                    阅读时长: 2 分钟
                 </time>
             </div>
         
@@ -290,7 +320,63 @@
     <section class="article-content">
     
     
-    
+    <h2 id="舒尔补定义">舒尔补定义
+</h2><p>给定任意的矩阵块 $M$ ，如下所示：</p>
+$$M=\begin{bmatrix} A & B\\  C &D\\ \end{bmatrix}$$<ul>
+<li>如果，矩阵块 $D$ 是可逆的，则 $A − B D^{-1}  C$称之为 $D$ 关于 $M$的舒尔补。</li>
+<li>如果，矩阵块 $A$ 是可逆的，则 $D − CA^{-1}  B$称之为 $A$ 关于 $M$的舒尔补。</li>
+</ul>
+<h2 id="舒尔补的定理推导">舒尔补的定理推导
+</h2><p>将$M$矩阵分别变成上三角或者下三角：
+</p>
+$$\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}
+\begin{bmatrix}A & B\\ C & D\end{bmatrix}=\begin{bmatrix}A & B\\ 0 & \Delta _{A}\end{bmatrix}$$$$\begin{bmatrix}A & B\\ C&D\end{bmatrix}
+\begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}=
+\begin{bmatrix}A & 0\\ C & \Delta _{A}\end{bmatrix}$$<p>其中${\Delta _{A} =D-CA^{-1}B }$。联合起来，将${M}$变形为对角形：
+</p>
+$$\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}
+\begin{bmatrix}A & B\\ C & D\end{bmatrix}
+\begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}=
+\begin{bmatrix}A & 0\\ 0 & \Delta _{A}\end{bmatrix}
+$$<p>
+反过来亦可从对角矩阵恢复${M}$:
+</p>
+$$\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}
+\begin{bmatrix}A & 0\\ 0& \Delta _{A}\end{bmatrix}
+\begin{bmatrix}I & A^{-1}B\\  0&I\\\end{bmatrix}=
+\begin{bmatrix}A & B\\ C & D\ \end{bmatrix}
+$$<h2 id="用途">用途
+</h2><h3 id="快速求矩阵的逆">快速求矩阵的逆
+</h3><p>矩阵${M}$可以改写为：
+</p>
+$$M=\begin{bmatrix}A & B\\ C&D\end{bmatrix}=\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}
+\begin{bmatrix}A & 0\\ 0& \Delta _{A}\end{bmatrix}
+\begin{bmatrix}I & A^{-1}B\\  0&I\\\end{bmatrix}$$$$M^{-1}=\begin{bmatrix}A & B\\ C&D\end{bmatrix}^{-1}=\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}^{-1}\begin{bmatrix}A^{-1} & 0\\ 0& \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I & A^{-1}B\\  0&I\\\end{bmatrix}^{-1}\\  =\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}\begin{bmatrix}A^{-1} & 0\\ 0& \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}\\=\begin{bmatrix}A^{-1}+A^{-1}B{\Delta _A}^{-1}CA^{-1}&-A^{-1}B{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&{\Delta _A}^{-1} \end{bmatrix}
+$$<h3 id="舒尔补在信息矩阵求解中的使用">舒尔补在信息矩阵求解中的使用
+</h3><p>协方差矩阵</p>
+$$\sum=\begin{bmatrix}A & C^{T}\\C&D\end{bmatrix}$$<p>,
+则信息矩阵</p>
+$$\sum^{-1}=\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\\=\begin{bmatrix}A^{-1}+A^{-1}C^{T}{\Delta _A}^{-1}CA^{-1}&-A^{-1}C^{T}{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&{\Delta _A}^{-1} \end{bmatrix}\\\stackrel{\triangle}{=}\begin{bmatrix}\Lambda_{aa}&\Lambda _{ab}\\\Lambda _{ba}&\Lambda _{bb} \end{bmatrix}$$<p>
+其中，由上式可推导得$A^{-1}=\Lambda _{aa}-\Lambda _{ab}\Lambda _{bb}^{-1}\Lambda _{ba}$, 以及$D^{-1}=\Lambda _{bb}-\Lambda _{ba}\Lambda _{aa}^{-1}\Lambda _{ab}$，它们即为下次优化会使用的先验信息矩阵（边际概率的信息矩阵）。</p>
+<h3 id="通过舒尔补分解多元高斯分布">通过舒尔补分解多元高斯分布
+</h3><p>假设多元变量$M$服从高斯分布，且由两部分组成：</p>
+$$ x=\begin{bmatrix}a\\b\end{bmatrix} $$<p>,变量构成的协方差矩阵等于</p>
+$$\sum=\begin{bmatrix} A & C^{T} \\C&D \end{bmatrix}$$<p>,其中$A=cov(a,a)$,$C=cov(a,b)$,$D=cov(b,b)$。
+则$x$的概率分布为：
+</p>
+$$P(a,b)=P(a)P(a|b)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix})$$<p>。使用上一节内容将矩阵转化为对角矩阵
+</p>
+$$ \begin{align}
+P(a,b) \\ 
+\propto  exp\left (  -\frac{1}{2}\begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix}\right) \\
+  \propto exp \left( -\frac{1}{2}\begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}\begin{bmatrix}A^{-1} & 0\\ 0& \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}\begin{bmatrix}a&b\end{bmatrix})\right )\\
+  \propto exp\left( -\frac{1}{2}\begin{bmatrix}a^{T}&(b-CA^{-1}a)^{T}\end{bmatrix}\begin{bmatrix}A^{-1}&0\\0&{\Delta _A^{-1}}\end{bmatrix}\begin{bmatrix}a\\b-CA^{-1}a\end{bmatrix}\right)\\
+  \propto exp \left( -\frac{1}{2}(a^TA^{-1}a)+(b-CA^{-1}a)^{T} \Delta _A^{-1}(b-CA^{-1}a) \right)\\
+  \propto exp \left( -\frac{1}{2}a^{T}A^{-1}a\right)exp \left ( -\frac{1}{2}(b-CA^{-1}a)^{T}\Delta _A^{-1}(b-CA^{-1}a)\right)\\
+  \propto P(a)P(b|a)
+  \\\end{align}$$<p>
+在《机器人学中的状态估计》2.2.3章节&quot;联合概率密度函数，分解与推断&quot;可见相似内容,其实就是高斯推断，套用相关模型$P(a)$是观测（边际概率），$P(b|a)$是后验概率，$P(a|b)$是传感器模型。</p>
+
 </section>
 
 
@@ -325,7 +411,7 @@
 
 
         <span>
-            最后更新于 2024-09-02  23:56  &#43;0800
+            最后更新于 2024-09-03  17:43  &#43;0800
         </span>
     </section></footer>
 
