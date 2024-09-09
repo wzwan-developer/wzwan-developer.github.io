@@ -7,12 +7,116 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>wzwan</copyright><atom:link href="https://wzwan-developer.github.io/categories/math/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>如何理解概率论中的“矩”</title>
+        <link>https://wzwan-developer.github.io/p/203/</link>
+        <pubDate>Mon, 09 Sep 2024 11:12:48 +0800</pubDate>
+        
+        <guid>https://wzwan-developer.github.io/p/203/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/p/203/gaussian-normal-distribution-graph.png" alt="Featured image of post 如何理解概率论中的“矩”" /&gt;&lt;h2 id=&#34;概率论中的矩&#34;&gt;概率论中的“矩”
+&lt;/h2&gt;&lt;h3 id=&#34;彩票的问题&#34;&gt;彩票的问题
+&lt;/h3&gt;&lt;p&gt;假设福利彩票，每一注两元钱，且中奖的概率分布如下：
+&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph1.png&#34;
+	width=&#34;359&#34;
+	height=&#34;402&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/203/graph1_hu7074458194076008173.png 480w, https://wzwan-developer.github.io/p/203/graph1_hu11398514835930632876.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;概率分布图&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;89&#34;
+		data-flex-basis=&#34;214px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;其中，概率的“称”如下所示：
+&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph2.png&#34;
+	width=&#34;613&#34;
+	height=&#34;402&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/203/graph2_hu1581581583894811490.png 480w, https://wzwan-developer.github.io/p/203/graph2_hu3775081096410037377.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;概率的称&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;365px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时我们称量一下中奖500万元：
+&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph3.png&#34;
+	width=&#34;613&#34;
+	height=&#34;402&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/203/graph3_hu9993873231620659325.png 480w, https://wzwan-developer.github.io/p/203/graph3_hu8003149627366197390.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;500万元&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;365px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上述结果表明：不确定的500万元等价于确定的0.5元。此时将所有的中奖概率刻画上去：
+&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph4.png&#34;
+	width=&#34;613&#34;
+	height=&#34;402&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/203/graph4_hu8029704338762354472.png 480w, https://wzwan-developer.github.io/p/203/graph4_hu18134410058688724433.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;365px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上述结果等于&lt;/p&gt;
+$$1.5 = 5\times 10\% + 100\times0.5\% + 5000000\times0.000001\% $$&lt;p&gt;
+结果表明一张彩票成本两元，但是实际上能获得确定的1.5元，每买一张都会亏损0.5元。&lt;/p&gt;
+&lt;h2 id=&#34;矩&#34;&gt;“矩”
+&lt;/h2&gt;&lt;h3 id=&#34;一阶矩&#34;&gt;一阶矩
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;上述我们计算的就是概率的一阶矩，也就是期望（expectation/mean）。
+&lt;/code&gt;&lt;/pre&gt;
+$$
+E[X]=\sum p_{i}x_{i}
+$$&lt;p&gt;含义如下：
+&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph5.png&#34;
+	width=&#34;572&#34;
+	height=&#34;402&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/203/graph5_hu18168430126999916666.png 480w, https://wzwan-developer.github.io/p/203/graph5_hu8960376600484578208.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;”期望含义“&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;142&#34;
+		data-flex-basis=&#34;341px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;二阶矩&#34;&gt;二阶矩
+&lt;/h3&gt;&lt;p&gt;二阶矩是广为认知的协方差矩阵$\Sigma$
+&lt;/p&gt;
+$$
+    \Sigma=E[(X-\mu)^{2}]=\sum_{i}p_{i}(x_{i}-\mu)^{2}
+$$&lt;h3 id=&#34;高阶矩&#34;&gt;高阶矩
+&lt;/h3&gt;&lt;p&gt;三阶矩称为偏度，四阶矩称为峰度。各有用途但是共同的特点为称量之后才能使用。&lt;/p&gt;
+&lt;h2 id=&#34;参考链接&#34;&gt;参考链接
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;[1]&lt;em&gt;&lt;a class=&#34;link&#34; href=&#34;https://matongxue.blog.csdn.net/article/details/109766892&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;如何理解概率论中的“矩”？&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>舒尔补</title>
         <link>https://wzwan-developer.github.io/p/202/</link>
         <pubDate>Mon, 02 Sep 2024 23:51:06 +0800</pubDate>
         
         <guid>https://wzwan-developer.github.io/p/202/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/202/book.png" alt="Featured image of post 舒尔补" /&gt;&lt;h2 id=&#34;舒尔补定义&#34;&gt;舒尔补定义
+        <description>&lt;img src="https://wzwan-developer.github.io/p/202/gaussian-normal-distribution-graph.png" alt="Featured image of post 舒尔补" /&gt;&lt;h2 id=&#34;舒尔补定义&#34;&gt;舒尔补定义
 &lt;/h2&gt;&lt;p&gt;给定任意的矩阵块 $M$ ，如下所示：&lt;/p&gt;
 $$M=\begin{bmatrix} A &amp; B\\  C &amp;D\\ \end{bmatrix}$$&lt;ul&gt;
 &lt;li&gt;如果，矩阵块 $D$ 是可逆的，则 $A − B D^{-1}  C$称之为 $D$ 关于 $M$的舒尔补。&lt;/li&gt;
@@ -76,7 +180,7 @@ P(a,b) \\
         <pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate>
         
         <guid>https://wzwan-developer.github.io/p/201/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/201/book.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
+        <description>&lt;img src="https://wzwan-developer.github.io/p/201/gaussian-normal-distribution-graph.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
 &lt;/h2&gt;&lt;h3 id=&#34;模型&#34;&gt;模型
 &lt;/h3&gt;&lt;p&gt;优化问题具有如下通用形式：
 $ HX=b $
