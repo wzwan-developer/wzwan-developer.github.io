@@ -241,7 +241,7 @@ $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
 		data-flex-basis=&#34;486px&#34;
 	
 &gt;
-借助本文第一节，目标为从$x$变量中删除$\hat{x&amp;rsquo;}_{k-1}$，执行舒尔补可得
+借助本文第一节，目标为从$x$变量中删除$\hat{x&#39;}_{k-1}$，执行舒尔补可得
 &lt;img src=&#34;https://wzwan-developer.github.io/p/201/image01.png&#34;
 	width=&#34;707&#34;
 	height=&#34;463&#34;
