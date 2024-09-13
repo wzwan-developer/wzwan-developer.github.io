@@ -126,7 +126,103 @@ $$\begin{align}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l
 =\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align}$$&lt;h4 id=&#34;推导二该论文中的推导思路&#34;&gt;推导二：该论文中的推导思路
 &lt;/h4&gt;&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;后续补充！&lt;/span&gt;&lt;/p&gt;
 &lt;h3 id=&#34;二阶闭式导数的推导&#34;&gt;二阶闭式导数的推导
-&lt;/h3&gt;&lt;h2 id=&#34;代码详解&#34;&gt;代码详解
+&lt;/h3&gt;&lt;h4 id=&#34;推导一balm论文的思路-1&#34;&gt;推导一：BALM论文的思路
+&lt;/h4&gt;&lt;p&gt;首先引入BALM中两个定理，如下所示:&lt;/p&gt;
+&lt;h5 id=&#34;定理1&#34;&gt;定理1
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;已知：&lt;/p&gt;
+$$\mathbf{A}=\frac1N\sum_{i=1}^N\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)^T,\bar{\mathbf{p}}=\frac{1}{N}\sum_{i=1}^{N}\mathbf{p}_{i}$$&lt;p&gt;
+对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有&lt;/p&gt;
+$$\frac{\partial\lambda_k}{\partial\mathbf{p}_i}=\frac2N(\mathbf{p}_i-\bar{\mathbf{p}})^T\mathbf{u}_k\mathbf{u}_k^T$$&lt;p&gt;其中,$\bar{p}$是$N$个点的均值。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;证明如下：假设点$p_i= [x_{i} , y_{i} , z_{i}]^{T}$以及对应的特征向量矩阵$U={[u_{1} , u_{2} , u_{3} ]}^{T}$。进一步定义$p$是$p_{i}$的一个元素，$p$是$x_{i},y_{i},z_{i}$中其中一个。协方差矩阵$A$可以分解为
+$\Lambda=U^{T}AU$,其中:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\Lambda$是对角矩阵，其对角线元素是特征值,
+$\lambda_{1},\lambda_{2},\lambda_{3}$。&lt;/li&gt;
+&lt;li&gt;$U$是一个正交矩阵，其列是$A$的特征向量$u_{1},u_{2},u_{3}$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对$\Lambda$求导可得下式：
+&lt;/p&gt;
+$$
+\frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}AU+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+U^{T}A\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式1}
+$$&lt;p&gt;
+又因为$\Lambda=U^{T}AU$,可以推导得到&lt;/p&gt;
+$$U^{T}A=\Lambda{}U^{T},AU=U\Lambda\tag{式2}$$&lt;p&gt;,将式1带入式2，可得：
+&lt;/p&gt;
+$$
+\frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式3}
+$$&lt;p&gt;
+又因为：
+&lt;/p&gt;
+$$
+U^{T}U=I\\
+\Longrightarrow {U^{T}\frac{\partial{U}}{\partial{p}}+\left(\frac{\partial{U}}{\partial{p}}\right)^{T}U=0}\tag{式4}
+$$&lt;p&gt;
+由此可知，$U^{T}\frac{\partial{U}}{\partial{p}}$是一个&lt;a class=&#34;link&#34; href=&#34;https://baike.baidu.com/item/%E5%8F%8D%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5/9063240&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;反对称矩阵&lt;/a&gt;，其对角线元素和0。
+&lt;img src=&#34;https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix.png&#34;
+	width=&#34;1640&#34;
+	height=&#34;268&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix_hu12682485345853843236.png 480w, https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix_hu16826235980269994892.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;反对称矩阵的定义&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;611&#34;
+		data-flex-basis=&#34;1468px&#34;
+	
+&gt;
+因此可得:
+&lt;/p&gt;
+$$
+\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)=0\tag{式5}
+$$&lt;p&gt;
+将式5带入式3中，可得：
+&lt;/p&gt;
+$$
+\frac{\partial{}\Lambda}{\partial{p}}=U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U\tag{式6}
+$$&lt;p&gt;
+又因为$\lambda_{k}={u_{k}}^{T}Au_{k}$,代入式6可得：
+&lt;/p&gt;
+$$
+\frac{\partial{}\lambda_{k}}{\partial{p}}={u_{k}}^{T}\left(\frac{\partial{A}}{\partial{p}}\right)u_{k}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p}}\tag{式7}
+$$&lt;p&gt;
+此时将标量$p$换回为向量$p_{i}$,得到下式
+&lt;/p&gt;
+$$
+\frac{\partial{}\lambda_{k}}{\partial{p_{i}}}=\begin{bmatrix} 
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{x_{i}}}&amp;
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{y_{i}}}&amp;
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{z_{i}}}
+\end{bmatrix}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p_{i}}}\tag{式8}
+$$&lt;p&gt;
+带入矩阵$A$和$\bar{p}$的定义可得：
+&lt;/p&gt;
+$$
+\begin{align}
+\frac{\partial{}\lambda_{k}}{\partial{p_{j}}}=\frac1N\sum_{i=1}^N{\frac{\partial{{u_{k}}^{T}\left({p}_j-\bar{p}\right)\left(p_j-\bar{p}\right)^Tu_{k}}}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{\frac{\partial{\left({p}_j-\bar{p}\right)^{T}{u_{k}}{u_{k}}^{T}\left(p_j-\bar{p}\right)}}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{\frac{\partial\left(\left({u_{k}}^{T}\left(p_j-\bar{p}\right)\right)^{T}\left({u_{k}}^{T}\left(p_j-\bar{p}\right)\right)\right)}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{2{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\bar{p}\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\bar{p}\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\left(\frac{1}{N}\sum_{i=1}^{N}p_{i}\right)\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\left(\frac{1}{N}\sum_{i=1}^{N}p_{i}\right)\right)}{\partial{p_{i}}}}\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2N\sum_{j=1,j\ne{i}}^N\left(p_j-\bar{p}\right)^{T}u_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\sum_{j=1,j\ne{i}}^N\left(p_j-\bar{p}\right)^{T}\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(\left(\sum_{j=1}^{N}(p_{j}-\bar{p})^{T}\right)-\left(p_i-\bar{p}\right)^{T}\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(0-\left(p_i-\bar{p}\right)^{T}\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}
+\end{align}\tag{式9}
+$$&lt;h5 id=&#34;定理2&#34;&gt;定理2
+&lt;/h5&gt;&lt;h4 id=&#34;推导二该论文中的推导思路-1&#34;&gt;推导二：该论文中的推导思路
+&lt;/h4&gt;&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;后续补充！&lt;/span&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;定理1：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;代码详解&#34;&gt;代码详解
 &lt;/h2&gt;&lt;h2 id=&#34;参考文献&#34;&gt;参考文献
 &lt;/h2&gt;&lt;p&gt;[1]&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/pdf/2109.06550&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》&lt;/a&gt;&lt;/p&gt;

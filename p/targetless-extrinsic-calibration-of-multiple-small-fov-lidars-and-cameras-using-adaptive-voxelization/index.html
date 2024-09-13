@@ -10,7 +10,7 @@
 <meta property='og:description' content="多雷达外参标定章节">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-12T00:19:19&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-13T17:09:25&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
 <meta name="twitter:title" content="Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization">
 <meta name="twitter:description" content="多雷达外参标定章节"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
@@ -222,7 +222,12 @@
             <li><a href="#推导二该论文中的推导思路">推导二：该论文中的推导思路</a></li>
           </ol>
         </li>
-        <li><a href="#二阶闭式导数的推导">二阶闭式导数的推导</a></li>
+        <li><a href="#二阶闭式导数的推导">二阶闭式导数的推导</a>
+          <ol>
+            <li><a href="#推导一balm论文的思路-1">推导一：BALM论文的思路</a></li>
+            <li><a href="#推导二该论文中的推导思路-1">推导二：该论文中的推导思路</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
     <li><a href="#代码详解">代码详解</a></li>
@@ -307,7 +312,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 6 分钟
+                    阅读时长: 9 分钟
                 </time>
             </div>
         
@@ -445,7 +450,103 @@ $$\begin{align}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l
 =\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align}$$<h4 id="推导二该论文中的推导思路">推导二：该论文中的推导思路
 </h4><p><span style="color:red;">后续补充！</span></p>
 <h3 id="二阶闭式导数的推导">二阶闭式导数的推导
-</h3><h2 id="代码详解">代码详解
+</h3><h4 id="推导一balm论文的思路-1">推导一：BALM论文的思路
+</h4><p>首先引入BALM中两个定理，如下所示:</p>
+<h5 id="定理1">定理1
+</h5><blockquote>
+<p>已知：</p>
+$$\mathbf{A}=\frac1N\sum_{i=1}^N\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)^T,\bar{\mathbf{p}}=\frac{1}{N}\sum_{i=1}^{N}\mathbf{p}_{i}$$<p>
+对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有</p>
+$$\frac{\partial\lambda_k}{\partial\mathbf{p}_i}=\frac2N(\mathbf{p}_i-\bar{\mathbf{p}})^T\mathbf{u}_k\mathbf{u}_k^T$$<p>其中,$\bar{p}$是$N$个点的均值。</p>
+</blockquote>
+<p>证明如下：假设点$p_i= [x_{i} , y_{i} , z_{i}]^{T}$以及对应的特征向量矩阵$U={[u_{1} , u_{2} , u_{3} ]}^{T}$。进一步定义$p$是$p_{i}$的一个元素，$p$是$x_{i},y_{i},z_{i}$中其中一个。协方差矩阵$A$可以分解为
+$\Lambda=U^{T}AU$,其中:</p>
+<ul>
+<li>$\Lambda$是对角矩阵，其对角线元素是特征值,
+$\lambda_{1},\lambda_{2},\lambda_{3}$。</li>
+<li>$U$是一个正交矩阵，其列是$A$的特征向量$u_{1},u_{2},u_{3}$。</li>
+</ul>
+<p>对$\Lambda$求导可得下式：
+</p>
+$$
+\frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}AU+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+U^{T}A\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式1}
+$$<p>
+又因为$\Lambda=U^{T}AU$,可以推导得到</p>
+$$U^{T}A=\Lambda{}U^{T},AU=U\Lambda\tag{式2}$$<p>,将式1带入式2，可得：
+</p>
+$$
+\frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式3}
+$$<p>
+又因为：
+</p>
+$$
+U^{T}U=I\\
+\Longrightarrow {U^{T}\frac{\partial{U}}{\partial{p}}+\left(\frac{\partial{U}}{\partial{p}}\right)^{T}U=0}\tag{式4}
+$$<p>
+由此可知，$U^{T}\frac{\partial{U}}{\partial{p}}$是一个<a class="link" href="https://baike.baidu.com/item/%E5%8F%8D%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5/9063240"  target="_blank" rel="noopener"
+    >反对称矩阵</a>，其对角线元素和0。
+<img src="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix.png"
+	width="1640"
+	height="268"
+	srcset="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix_hu12682485345853843236.png 480w, /p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix_hu16826235980269994892.png 1024w"
+	loading="lazy"
+	
+		alt="反对称矩阵的定义"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="611"
+		data-flex-basis="1468px"
+	
+>
+因此可得:
+</p>
+$$
+\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)=0\tag{式5}
+$$<p>
+将式5带入式3中，可得：
+</p>
+$$
+\frac{\partial{}\Lambda}{\partial{p}}=U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U\tag{式6}
+$$<p>
+又因为$\lambda_{k}={u_{k}}^{T}Au_{k}$,代入式6可得：
+</p>
+$$
+\frac{\partial{}\lambda_{k}}{\partial{p}}={u_{k}}^{T}\left(\frac{\partial{A}}{\partial{p}}\right)u_{k}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p}}\tag{式7}
+$$<p>
+此时将标量$p$换回为向量$p_{i}$,得到下式
+</p>
+$$
+\frac{\partial{}\lambda_{k}}{\partial{p_{i}}}=\begin{bmatrix} 
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{x_{i}}}&
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{y_{i}}}&
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{z_{i}}}
+\end{bmatrix}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p_{i}}}\tag{式8}
+$$<p>
+带入矩阵$A$和$\bar{p}$的定义可得：
+</p>
+$$
+\begin{align}
+\frac{\partial{}\lambda_{k}}{\partial{p_{j}}}=\frac1N\sum_{i=1}^N{\frac{\partial{{u_{k}}^{T}\left({p}_j-\bar{p}\right)\left(p_j-\bar{p}\right)^Tu_{k}}}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{\frac{\partial{\left({p}_j-\bar{p}\right)^{T}{u_{k}}{u_{k}}^{T}\left(p_j-\bar{p}\right)}}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{\frac{\partial\left(\left({u_{k}}^{T}\left(p_j-\bar{p}\right)\right)^{T}\left({u_{k}}^{T}\left(p_j-\bar{p}\right)\right)\right)}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{2{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\bar{p}\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\bar{p}\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\left(\frac{1}{N}\sum_{i=1}^{N}p_{i}\right)\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\left(\frac{1}{N}\sum_{i=1}^{N}p_{i}\right)\right)}{\partial{p_{i}}}}\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2N\sum_{j=1,j\ne{i}}^N\left(p_j-\bar{p}\right)^{T}u_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\sum_{j=1,j\ne{i}}^N\left(p_j-\bar{p}\right)^{T}\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(\left(\sum_{j=1}^{N}(p_{j}-\bar{p})^{T}\right)-\left(p_i-\bar{p}\right)^{T}\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(0-\left(p_i-\bar{p}\right)^{T}\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}
+\end{align}\tag{式9}
+$$<h5 id="定理2">定理2
+</h5><h4 id="推导二该论文中的推导思路-1">推导二：该论文中的推导思路
+</h4><p><span style="color:red;">后续补充！</span></p>
+<blockquote>
+<p>定理1：</p>
+</blockquote>
+<h2 id="代码详解">代码详解
 </h2><h2 id="参考文献">参考文献
 </h2><p>[1]<a class="link" href="https://arxiv.org/pdf/2109.06550"  target="_blank" rel="noopener"
     >《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》</a></p>
@@ -488,7 +589,7 @@ $$\begin{align}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l
 
 
         <span>
-            最后更新于 2024-09-12  00:19  &#43;0800
+            最后更新于 2024-09-13  17:09  &#43;0800
         </span>
     </section></footer>
 
