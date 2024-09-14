@@ -10,7 +10,7 @@
 <meta property='og:description' content="多雷达外参标定章节">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-13T17:09:25&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-14T10:41:12&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
 <meta name="twitter:title" content="Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization">
 <meta name="twitter:description" content="多雷达外参标定章节"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
@@ -312,7 +312,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 9 分钟
+                    阅读时长: 11 分钟
                 </time>
             </div>
         
@@ -459,7 +459,7 @@ $$\mathbf{A}=\frac1N\sum_{i=1}^N\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)\left(
 对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有</p>
 $$\frac{\partial\lambda_k}{\partial\mathbf{p}_i}=\frac2N(\mathbf{p}_i-\bar{\mathbf{p}})^T\mathbf{u}_k\mathbf{u}_k^T$$<p>其中,$\bar{p}$是$N$个点的均值。</p>
 </blockquote>
-<p>证明如下：假设点$p_i= [x_{i} , y_{i} , z_{i}]^{T}$以及对应的特征向量矩阵$U={[u_{1} , u_{2} , u_{3} ]}^{T}$。进一步定义$p$是$p_{i}$的一个元素，$p$是$x_{i},y_{i},z_{i}$中其中一个。协方差矩阵$A$可以分解为
+<p><strong>证明如下</strong>：假设点$p_i= [x_{i} , y_{i} , z_{i}]^{T}$以及对应的特征向量矩阵$U={[u_{1} , u_{2} , u_{3} ]}^{T}$。进一步定义$p$是$p_{i}$的一个元素，$p$是$x_{i},y_{i},z_{i}$中其中一个。协方差矩阵$A$可以分解为
 $\Lambda=U^{T}AU$,其中:</p>
 <ul>
 <li>$\Lambda$是对角矩阵，其对角线元素是特征值,
@@ -541,7 +541,81 @@ $$
 =\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}
 \end{align}\tag{式9}
 $$<h5 id="定理2">定理2
-</h5><h4 id="推导二该论文中的推导思路-1">推导二：该论文中的推导思路
+</h5><blockquote>
+<p>已知：</p>
+$$\mathbf{A}=\frac1N\sum_{i=1}^N\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)\left(\mathbf{p}_i-\bar{\mathbf{p}}\right)^T,\bar{\mathbf{p}}=\frac{1}{N}\sum_{i=1}^{N}\mathbf{p}_{i}$$<p>
+对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有</p>
+$$\begin{aligned}\frac{\partial^{2}\lambda_{k}}{\partial\mathbf{p}_{j}\partial\mathbf{p}_{i}}=\begin{cases}\frac{2}{N}\biggl(\frac{N-1}{N}\mathbf{u}_{k}\mathbf{u}_{k}^{T}+\mathbf{u}_{k}(\mathbf{p}_{i}-\bar{\mathbf{p}})^{T}\mathbf{U}\mathbf{F}_{k}^{\mathbf{p}_{j}}\\\\+\mathbf{U}\mathbf{F}_{k}^{\mathbf{p}_{j}}\biggl(\mathbf{u}_{k}^{T}(\mathbf{p}_{i}-\bar{\mathbf{p}})\biggr)\biggr),\quad i=j\\\\\frac{2}{N}\biggl(-\frac{1}{N}\mathbf{u}_{k}\mathbf{u}_{k}^{T}+\mathbf{u}_{k}(\mathbf{p}_{i}-\bar{\mathbf{p}})^{T}\mathbf{U}\mathbf{F}_{k}^{\mathbf{p}_{j}}\\\\+\mathbf{U}\mathbf{F}_{k}^{\mathbf{p}_{j}}\biggl(\mathbf{u}_{k}^{T}(\mathbf{p}_{i}-\bar{\mathbf{p}})\biggr)\biggr),\quad i\neq j\end{cases}\end{aligned}$$<p> </p>
+$$\mathbf{F}_{k}^{\mathbf{P}_{j}}=\begin{bmatrix}\mathbf{F}_{1,k}^{\mathbf{P}_{j}}\\\mathbf{F}_{2,k}^{\mathbf{P}_{j}}\\\mathbf{F}_{3,k}^{\mathbf{P}_{j}}\end{bmatrix}\in\mathbb{R}^{3\times3},\quad\mathbf{U}=\begin{bmatrix}\mathbf{u}_{1}&\mathbf{u}_{2}&\mathbf{u}_{3}\end{bmatrix}$$<p> </p>
+$$\left.\mathbf{F}_{m,n}^{\mathbf{P}_{j}}=\left\{\begin{matrix}\frac{(\mathbf{p}_{j}-\bar{\mathbf{p}})^{T}}{N(\lambda_{n}-\lambda_{m})}(\mathbf{u}_{m}\mathbf{u}_{n}^{T}+\mathbf{u}_{n}\mathbf{u}_{m}^{T}),m\neq n\\\mathbf{0}_{1\times3}&,m=n\end{matrix}\right.\right.$$</blockquote>
+<p><strong>证明如下</strong>：
+已知协方差矩阵可被分解，且设$q$是点$p_{i}$的一个标量$x_{i},y_{i},z_{i}$之一，如下所示：
+</p>
+$$\mathbf{A}=\mathbf{U}\mathbf{\Lambda}\mathbf{U}^{T} \tag{式1}$$<p>
+首先对其求关于$q$的导数：
+</p>
+$$\frac{\partial\mathbf{A}}{\partial q}=\frac{\partial}{\partial q}\left(\mathbf{U}\mathbf{\Lambda}\mathbf{U}^{T}\right)\tag{式2}$$<p>
+根据链式法则，右侧可以写为：
+</p>
+$${\frac{\partial\mathbf{A}}{\partial q}}={\frac{\partial\mathbf{U}}{\partial q}}\mathbf{\Lambda}\mathbf{U}^{T}+\mathbf{U}{\frac{\partial\mathbf{\Lambda}}{\partial q}}\mathbf{U}^{T}+\mathbf{U}\mathbf{\Lambda}{\frac{\partial\mathbf{U}^{T}}{\partial q}} $$<p>
+由于$\frac{\partial{U}^{T}}{\partial{q}}=\left({\frac{\partial\mathbf{U}}{\partial q}}\right)^{T}$,因此式2可以变为
+</p>
+$$\begin{align}
+\frac{\partial\mathbf{A}}{\partial q}=\frac{\partial\mathbf{U}}{\partial q}\mathbf{\Lambda}\mathbf{U}^T+\mathbf{U}\frac{\partial\mathbf{\Lambda}}{\partial q}\mathbf{U}^T+\mathbf{U}\mathbf{\Lambda}\left(\frac{\partial\mathbf{U}}{\partial q}\right)^T\\
+\Longrightarrow \mathbf{U}^{T}{\frac{\partial\mathbf{A}}{\partial q}}\mathbf{U}=\mathbf{U}^{T}{\frac{\partial\mathbf{U}}{\partial q}}\mathbf{\Lambda}+{\frac{\partial\mathbf{\Lambda}}{\partial q}}+\mathbf{\Lambda}\left({\frac{\partial\mathbf{U}}{\partial q}}\right)^{T}\mathbf{U} 
+\end{align}\tag{式3}$$<p>
+设$C^{q}=U^{T}\frac{\partial\mathbf{U}}{\partial q} $,因为$C^{q}$是反对称矩阵(由定理1的证明可知),所以有以下$C^{q}+{C^{q}}^{T}=0$,即${C^{q}}^{T}=-C^{q}$。代入式3可得：
+</p>
+$$
+\mathbf{U}^{T}{\frac{\partial\mathbf{A}}{\partial q}}\mathbf{U}=\mathbf{C}^{q}\mathbf{\Lambda}+{\frac{\partial\mathbf{\Lambda}}{\partial q}}-\mathbf{\Lambda}\mathbf{C}^{q}
+\tag{式4}$$<p>
+取$C^{q}$的m行，n列可得：
+</p>
+$$
+\begin{align}
+\left(\mathbf{U}^T\frac{\partial\mathbf{A}}{\partial q}\mathbf{U}\right)_{m,n}=\left(\frac{\partial\boldsymbol{\Lambda}}{\partial q}\right)_{m,n}-\left(\mathbf{\Lambda}\mathbf{C}^q-\mathbf{C}^q\mathbf{\Lambda}\right)_{m,n}\\
+\Longrightarrow 
+\left(\frac{\partial\boldsymbol{\Lambda}}{\partial q}\right)_{m,n}=\left(\mathbf{U}^T\frac{\partial\mathbf{A}}{\partial q}\mathbf{U}\right)_{m,n}+\left(\mathbf{\Lambda}\mathbf{C}^q-\mathbf{C}^q\mathbf{\Lambda}\right)_{m,n}\\
+\Longrightarrow 
+0=\left(\mathbf{U}^T\frac{\partial\mathbf{A}}{\partial q}\mathbf{U}\right)_{m,n}+\left(\mathbf{\Lambda}\mathbf{C}^q-\mathbf{C}^q\mathbf{\Lambda}\right)_{m,n}\\
+\Longrightarrow 
+0=u_{m}^{T}{\frac{\partial{A}}{\partial{q}}}u_{n}+\lambda_{m}C_{m,n}^{q}-C_{m,n}^{q}\lambda_{n}\\
+\Longrightarrow 
+C_{m,n}^{q}\left(\lambda_{m}-\lambda_{n}\right)=-u_{m}^{T}{\frac{\partial{A}}{\partial{q}}}u_{n}\\
+\Longrightarrow 
+\mathbf{C}_{m,n}^q=\frac{\mathbf{u}_m^T\frac{\partial\mathbf{A}}{\partial q}\mathbf{u}_n}{\lambda_n-\lambda_m}&,(\lambda_{m}\ne\lambda_{n})
+\end{align}
+\tag{式5}$$<p>
+取$C^{q}$的m行，m列,由于它是反对称矩阵，所以它的对角线元素为0，即：
+</p>
+$$\begin{align}
+\mathbf{C}_{m,m}^q=\mathbf{u}_m^T\frac{\partial\mathbf{u}_m}{\partial q}\\
+\Longrightarrow 
+{C}_{m,m}^q=0&,(m=n)
+\end{align}\tag{式6}$$<p>
+接下来求解$u_{k}$对p_{j}的三个分量的微积分：
+</p>
+$$
+\begin{align}
+\frac{\partial u_{k}}{\partial{q}}=\frac{\partial Ue_{k}}{\partial q}
+=UU^{T}\frac{\partial U}{\partial q}e_{k}
+=UC^{q}e_{k}
+\end{align}
+\tag{式7}
+$$<p>
+将$q$替换为$p_{j}$,可得：
+</p>
+$$
+\begin{align}
+\begin{aligned}
+\frac{\partial\mathbf{u}_k}{\partial\mathbf{p}_j}& =\begin{bmatrix}\frac{\partial\mathbf{U}\mathbf{e}_k}{\partial x_j}&\frac{\partial\mathbf{U}\mathbf{e}_k}{\partial y_j}&\frac{\partial\mathbf{U}\mathbf{e}_k}{\partial z_j}\end{bmatrix} \\
+&=\begin{bmatrix}\mathbf{U}\mathbf{C}^{x_j}\mathbf{e}_k&\mathbf{U}\mathbf{C}^{y_j}\mathbf{e}_k&\mathbf{U}\mathbf{C}^{z_j}\mathbf{e}_k\end{bmatrix} \\
+&=\mathbf{U}\big[\mathbf{C}^{x_j}\mathbf{e}_k\quad\mathbf{C}^{y_j}\mathbf{e}_k\quad\mathbf{C}^{z_j}\mathbf{e}_k\big] \\
+&=\mathbf{U}\begin{bmatrix}\mathbf{C}_{1,k}^{x_j}&\mathbf{C}_{1,k}^{y_j}&\mathbf{C}_{1,k}^{z_j}\\\mathbf{C}_{2,k}^{x_j}&\mathbf{C}_{2,k}^{y_j}&\mathbf{C}_{2,k}^{z_j}\\\mathbf{C}_{3,k}^{x_j}&\mathbf{C}_{3,k}^{y_j}&\mathbf{C}_{3,k}^{z_j}\end{bmatrix}
+\end{aligned}
+\end{align}
+\tag{式8}
+$$<h4 id="推导二该论文中的推导思路-1">推导二：该论文中的推导思路
 </h4><p><span style="color:red;">后续补充！</span></p>
 <blockquote>
 <p>定理1：</p>
@@ -589,7 +663,7 @@ $$<h5 id="定理2">定理2
 
 
         <span>
-            最后更新于 2024-09-13  17:09  &#43;0800
+            最后更新于 2024-09-14  10:41  &#43;0800
         </span>
     </section></footer>
 
