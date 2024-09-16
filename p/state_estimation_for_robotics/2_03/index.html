@@ -4,16 +4,16 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="《机器人学中的状态估计》系列，本文转自博客：马同学图解数学">
 <title>如何理解概率论中的“矩”</title>
 
-<link rel='canonical' href='https://wzwan-developer.github.io/p/203/'>
+<link rel='canonical' href='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/'>
 
 <link rel="stylesheet" href="/scss/style.min.f23e6e2e1b61bc3ca6814f240b169170253bceb87b8130749f231f01dc0a6239.css"><meta property='og:title' content="如何理解概率论中的“矩”">
 <meta property='og:description' content="《机器人学中的状态估计》系列，本文转自博客：马同学图解数学">
-<meta property='og:url' content='https://wzwan-developer.github.io/p/203/'>
+<meta property='og:url' content='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-09T11:12:48&#43;08:00'/><meta property='article:modified_time' content='2024-09-11T23:50:30&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/203/gaussian-normal-distribution-graph.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-09T11:12:48&#43;08:00'/><meta property='article:modified_time' content='2024-09-16T15:47:58&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.png' />
 <meta name="twitter:title" content="如何理解概率论中的“矩”">
 <meta name="twitter:description" content="《机器人学中的状态估计》系列，本文转自博客：马同学图解数学"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/203/gaussian-normal-distribution-graph.png' />
+    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <meta name="referrer" content="no-referrer-when-downgrade">
@@ -240,9 +240,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/203/">
-                <img src="/p/203/gaussian-normal-distribution-graph_hu3391118883229197673.png"
-                        srcset="/p/203/gaussian-normal-distribution-graph_hu3391118883229197673.png 800w, /p/203/gaussian-normal-distribution-graph_hu11178713357505648039.png 1600w"
+            <a href="/p/state_estimation_for_robotics/2_03/">
+                <img src="/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph_hu3391118883229197673.png"
+                        srcset="/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph_hu3391118883229197673.png 800w, /p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph_hu11178713357505648039.png 1600w"
                         width="800" 
                         height="431" 
                         loading="lazy"
@@ -265,7 +265,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/203/">如何理解概率论中的“矩”</a>
+            <a href="/p/state_estimation_for_robotics/2_03/">如何理解概率论中的“矩”</a>
         </h2>
     
         
@@ -334,10 +334,10 @@
     <h2 id="概率论中的矩">概率论中的“矩”
 </h2><h3 id="彩票的问题">彩票的问题
 </h3><p>假设福利彩票，每一注两元钱，且中奖的概率分布如下：
-<img src="/p/203/graph1.png"
+<img src="/p/state_estimation_for_robotics/2_03/graph1.png"
 	width="359"
 	height="402"
-	srcset="/p/203/graph1_hu7074458194076008173.png 480w, /p/203/graph1_hu11398514835930632876.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_03/graph1_hu7074458194076008173.png 480w, /p/state_estimation_for_robotics/2_03/graph1_hu11398514835930632876.png 1024w"
 	loading="lazy"
 	
 		alt="概率分布图"
@@ -349,10 +349,10 @@
 	
 ></p>
 <p>其中，概率的“称”如下所示：
-<img src="/p/203/graph2.png"
+<img src="/p/state_estimation_for_robotics/2_03/graph2.png"
 	width="613"
 	height="402"
-	srcset="/p/203/graph2_hu1581581583894811490.png 480w, /p/203/graph2_hu3775081096410037377.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_03/graph2_hu1581581583894811490.png 480w, /p/state_estimation_for_robotics/2_03/graph2_hu3775081096410037377.png 1024w"
 	loading="lazy"
 	
 		alt="概率的称"
@@ -364,10 +364,10 @@
 	
 ></p>
 <p>此时我们称量一下中奖500万元：
-<img src="/p/203/graph3.png"
+<img src="/p/state_estimation_for_robotics/2_03/graph3.png"
 	width="613"
 	height="402"
-	srcset="/p/203/graph3_hu9993873231620659325.png 480w, /p/203/graph3_hu8003149627366197390.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_03/graph3_hu9993873231620659325.png 480w, /p/state_estimation_for_robotics/2_03/graph3_hu8003149627366197390.png 1024w"
 	loading="lazy"
 	
 		alt="500万元"
@@ -379,10 +379,10 @@
 	
 ></p>
 <p>上述结果表明：不确定的500万元等价于确定的0.5元。此时将所有的中奖概率刻画上去：
-<img src="/p/203/graph4.png"
+<img src="/p/state_estimation_for_robotics/2_03/graph4.png"
 	width="613"
 	height="402"
-	srcset="/p/203/graph4_hu8029704338762354472.png 480w, /p/203/graph4_hu18134410058688724433.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_03/graph4_hu8029704338762354472.png 480w, /p/state_estimation_for_robotics/2_03/graph4_hu18134410058688724433.png 1024w"
 	loading="lazy"
 	
 	
@@ -401,10 +401,10 @@ $$1.5 = 5\times 10\% + 100\times0.5\% + 5000000\times0.000001\% $$<p>
 $$
 E[X]=\sum p_{i}x_{i}
 $$<p>含义如下：
-<img src="/p/203/graph5.png"
+<img src="/p/state_estimation_for_robotics/2_03/graph5.png"
 	width="572"
 	height="402"
-	srcset="/p/203/graph5_hu18168430126999916666.png 480w, /p/203/graph5_hu8960376600484578208.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_03/graph5_hu18168430126999916666.png 480w, /p/state_estimation_for_robotics/2_03/graph5_hu8960376600484578208.png 1024w"
 	loading="lazy"
 	
 		alt="”期望含义“"
@@ -460,7 +460,7 @@ $$<h3 id="高阶矩">高阶矩
 
 
         <span>
-            最后更新于 2024-09-11  23:50  &#43;0800
+            最后更新于 2024-09-16  15:47  &#43;0800
         </span>
     </section></footer>
 
@@ -503,16 +503,16 @@ $$<h3 id="高阶矩">高阶矩
             
                 
 <article class="has-image">
-    <a href="/p/202/">
+    <a href="/p/state_estimation_for_robotics/2_02/">
         
         
             <div class="article-image">
-                <img src="/p/202/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
+                <img src="/p/state_estimation_for_robotics/2_02/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post 舒尔补"
-                        data-key="202" 
+                        data-key="state_estimation_for_robotics/2_02" 
                         data-hash="md5-n2wIJHhr/rn8S5K6wAGE/Q==">
                 
             </div>
@@ -527,16 +527,16 @@ $$<h3 id="高阶矩">高阶矩
             
                 
 <article class="has-image">
-    <a href="/p/201/">
+    <a href="/p/state_estimation_for_robotics/2_01/">
         
         
             <div class="article-image">
-                <img src="/p/201/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
+                <img src="/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post 边缘化"
-                        data-key="201" 
+                        data-key="state_estimation_for_robotics/2_01" 
                         data-hash="md5-n2wIJHhr/rn8S5K6wAGE/Q==">
                 
             </div>

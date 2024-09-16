@@ -4,16 +4,16 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="多雷达外参标定章节">
 <title>Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization</title>
 
-<link rel='canonical' href='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/'>
+<link rel='canonical' href='https://wzwan-developer.github.io/p/mlcc/01/'>
 
 <link rel="stylesheet" href="/scss/style.min.f23e6e2e1b61bc3ca6814f240b169170253bceb87b8130749f231f01dc0a6239.css"><meta property='og:title' content="Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization">
 <meta property='og:description' content="多雷达外参标定章节">
-<meta property='og:url' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/'>
+<meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-15T22:22:43&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-16T15:47:58&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
 <meta name="twitter:title" content="Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization">
 <meta name="twitter:description" content="多雷达外参标定章节"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel.png' />
+    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <meta name="referrer" content="no-referrer-when-downgrade">
@@ -247,9 +247,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/">
-                <img src="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel_hu6953859510362683865.png"
-                        srcset="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel_hu6953859510362683865.png 800w, /p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/lidar_voxel_hu11019935435565024287.png 1600w"
+            <a href="/p/mlcc/01/">
+                <img src="/p/mlcc/01/lidar_voxel_hu6953859510362683865.png"
+                        srcset="/p/mlcc/01/lidar_voxel_hu6953859510362683865.png 800w, /p/mlcc/01/lidar_voxel_hu11019935435565024287.png 1600w"
                         width="800" 
                         height="280" 
                         loading="lazy"
@@ -272,7 +272,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/">Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization</a>
+            <a href="/p/mlcc/01/">Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization</a>
         </h2>
     
         
@@ -349,10 +349,10 @@ in Fig. 4(a). Then, the base LiDAR trajectory and extrinsic are estimated by opt
 indicator $c_{l}(\cdot)$ would be the summed Euclidean distance between each $_{}^{G}P_{L_{i},t_{j}}$ the plane to be estimated (see Fig. 4(b)).
 Taking account of all such indicators within the voxel map, we could formulate the problem as </p>
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$<p>， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.
-<img src="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/graph1.png"
+<img src="/p/mlcc/01/graph1.png"
 	width="1976"
 	height="830"
-	srcset="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/graph1_hu4057890427085875171.png 480w, /p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/graph1_hu18239084144532588545.png 1024w"
+	srcset="/p/mlcc/01/graph1_hu4057890427085875171.png 480w, /p/mlcc/01/graph1_hu18239084144532588545.png 1024w"
 	loading="lazy"
 	
 		alt="Fig.4"
@@ -376,10 +376,10 @@ Fig.4 :(a) The $l-th$ factor item relating to $\mathcal{S}$ and $\mathcal{E}_{L}
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$<p>
 ，其中 $_{}^{G}p_{k}\in \mathcal{P}_{l}$，$N_{l}$ 是 $\mathcal{P}_{l}$中所有点的总点数, $n_{l}$ 是平面的
 法向量， $q_{l}$ 是平面中的一点。
-<img src="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/graph1.png"
+<img src="/p/mlcc/01/graph1.png"
 	width="1976"
 	height="830"
-	srcset="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/graph1_hu4057890427085875171.png 480w, /p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/graph1_hu18239084144532588545.png 1024w"
+	srcset="/p/mlcc/01/graph1_hu4057890427085875171.png 480w, /p/mlcc/01/graph1_hu18239084144532588545.png 1024w"
 	loading="lazy"
 	
 		alt="图4"
@@ -517,10 +517,10 @@ U^{T}U=I\\
 $$<p>
 由此可知，$U^{T}\frac{\partial{U}}{\partial{p}}$是一个<a class="link" href="https://baike.baidu.com/item/%E5%8F%8D%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5/9063240"  target="_blank" rel="noopener"
     >反对称矩阵</a>，其对角线元素和0。
-<img src="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix.png"
+<img src="/p/mlcc/01/skew-symmetric-matrix.png"
 	width="1640"
 	height="268"
-	srcset="/p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix_hu12682485345853843236.png 480w, /p/targetless-extrinsic-calibration-of-multiple-small-fov-lidars-and-cameras-using-adaptive-voxelization/skew-symmetric-matrix_hu16826235980269994892.png 1024w"
+	srcset="/p/mlcc/01/skew-symmetric-matrix_hu12682485345853843236.png 480w, /p/mlcc/01/skew-symmetric-matrix_hu16826235980269994892.png 1024w"
 	loading="lazy"
 	
 		alt="反对称矩阵的定义"
@@ -952,7 +952,7 @@ $$<p>
 
 
         <span>
-            最后更新于 2024-09-15  22:22  &#43;0800
+            最后更新于 2024-09-16  15:47  &#43;0800
         </span>
     </section></footer>
 

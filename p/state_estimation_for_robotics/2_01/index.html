@@ -4,16 +4,16 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="《机器人学中的状态估计》系列">
 <title>边缘化</title>
 
-<link rel='canonical' href='https://wzwan-developer.github.io/p/201/'>
+<link rel='canonical' href='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/'>
 
 <link rel="stylesheet" href="/scss/style.min.f23e6e2e1b61bc3ca6814f240b169170253bceb87b8130749f231f01dc0a6239.css"><meta property='og:title' content="边缘化">
 <meta property='og:description' content="《机器人学中的状态估计》系列">
-<meta property='og:url' content='https://wzwan-developer.github.io/p/201/'>
+<meta property='og:url' content='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-09T14:23:43&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/201/gaussian-normal-distribution-graph.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='机器人学中的状态估计' /><meta property='article:published_time' content='2024-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-09-16T15:47:58&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.png' />
 <meta name="twitter:title" content="边缘化">
 <meta name="twitter:description" content="《机器人学中的状态估计》系列"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/201/gaussian-normal-distribution-graph.png' />
+    <meta name="twitter:image" content='https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <meta name="referrer" content="no-referrer-when-downgrade">
@@ -230,9 +230,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/201/">
-                <img src="/p/201/gaussian-normal-distribution-graph_hu3391118883229197673.png"
-                        srcset="/p/201/gaussian-normal-distribution-graph_hu3391118883229197673.png 800w, /p/201/gaussian-normal-distribution-graph_hu11178713357505648039.png 1600w"
+            <a href="/p/state_estimation_for_robotics/2_01/">
+                <img src="/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph_hu3391118883229197673.png"
+                        srcset="/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph_hu3391118883229197673.png 800w, /p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph_hu11178713357505648039.png 1600w"
                         width="800" 
                         height="431" 
                         loading="lazy"
@@ -255,7 +255,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/201/">边缘化</a>
+            <a href="/p/state_estimation_for_robotics/2_01/">边缘化</a>
         </h2>
     
         
@@ -330,7 +330,7 @@ $ HX=b $
 $$\begin{bmatrix}H_{mm}&H_{mr}\\H_{rm}&H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$<p>
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。</p>
 <h3 id="过程">过程
-</h3><p>对$H$矩阵利用<a class="link" href="https://wzwan-developer.github.io/p/202/" >舒尔补</a> 进行三角化，如下所示：
+</h3><p>对$H$矩阵利用<a class="link" href="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/" >舒尔补</a> 进行三角化，如下所示：
 </p>
 $$\begin{bmatrix}I&0\\-H_{rm}H_{mm}^{-1}&I\end{bmatrix}\begin{bmatrix}H_{mm}&H_{mr}\\H_{rm}&H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&0\\-H_{rm}H_{mm}^{-1}&I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$<p>
 化简可得：
@@ -372,10 +372,10 @@ $$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&&\\-
 $$(H_{k}^{T}W_{k}^{-1}H_{k})\hat{x}=H_{k}^{T}W_{k}^{-1}z_k$$<p>，
 其中</p>
 $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
-<img src="/p/201/image00.png"
+<img src="/p/state_estimation_for_robotics/2_01/image00.png"
 	width="714"
 	height="352"
-	srcset="/p/201/image00_hu2802948725242621933.png 480w, /p/201/image00_hu16496475951586850660.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_01/image00_hu2802948725242621933.png 480w, /p/state_estimation_for_robotics/2_01/image00_hu16496475951586850660.png 1024w"
 	loading="lazy"
 	
 	
@@ -385,10 +385,10 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
 	
 >
 借助本文第一节，目标为从$x$变量中删除$\hat{x'}_{k-1}$，执行舒尔补可得
-<img src="/p/201/image01.png"
+<img src="/p/state_estimation_for_robotics/2_01/image01.png"
 	width="707"
 	height="463"
-	srcset="/p/201/image01_hu12842677403844977782.png 480w, /p/201/image01_hu10364658897043807725.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_01/image01_hu12842677403844977782.png 480w, /p/state_estimation_for_robotics/2_01/image01_hu10364658897043807725.png 1024w"
 	loading="lazy"
 	
 	
@@ -397,10 +397,10 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
 		data-flex-basis="366px"
 	
 >
-<img src="/p/201/image02.png"
+<img src="/p/state_estimation_for_robotics/2_01/image02.png"
 	width="1371"
 	height="694"
-	srcset="/p/201/image02_hu7680983322299133859.png 480w, /p/201/image02_hu10029282904931644770.png 1024w"
+	srcset="/p/state_estimation_for_robotics/2_01/image02_hu7680983322299133859.png 480w, /p/state_estimation_for_robotics/2_01/image02_hu10029282904931644770.png 1024w"
 	loading="lazy"
 	
 	
@@ -444,7 +444,7 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
 
 
         <span>
-            最后更新于 2024-09-09  14:23  &#43;0800
+            最后更新于 2024-09-16  15:47  &#43;0800
         </span>
     </section></footer>
 
@@ -487,16 +487,16 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
             
                 
 <article class="has-image">
-    <a href="/p/203/">
+    <a href="/p/state_estimation_for_robotics/2_03/">
         
         
             <div class="article-image">
-                <img src="/p/203/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
+                <img src="/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post 如何理解概率论中的“矩”"
-                        data-key="203" 
+                        data-key="state_estimation_for_robotics/2_03" 
                         data-hash="md5-n2wIJHhr/rn8S5K6wAGE/Q==">
                 
             </div>
@@ -511,16 +511,16 @@ $$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$<p>
             
                 
 <article class="has-image">
-    <a href="/p/202/">
+    <a href="/p/state_estimation_for_robotics/2_02/">
         
         
             <div class="article-image">
-                <img src="/p/202/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
+                <img src="/p/state_estimation_for_robotics/2_02/gaussian-normal-distribution-graph.9f6c0824786bfeb9fc4b92bac00184fd_hu18290811672530858294.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post 舒尔补"
-                        data-key="202" 
+                        data-key="state_estimation_for_robotics/2_02" 
                         data-hash="md5-n2wIJHhr/rn8S5K6wAGE/Q==">
                 
             </div>

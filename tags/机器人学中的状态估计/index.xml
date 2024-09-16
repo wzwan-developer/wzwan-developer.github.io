@@ -9,17 +9,17 @@
         <copyright>wzwan</copyright>
         <lastBuildDate>Mon, 09 Sep 2024 11:12:48 +0800</lastBuildDate><atom:link href="https://wzwan-developer.github.io/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>如何理解概率论中的“矩”</title>
-        <link>https://wzwan-developer.github.io/p/203/</link>
+        <link>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/</link>
         <pubDate>Mon, 09 Sep 2024 11:12:48 +0800</pubDate>
         
-        <guid>https://wzwan-developer.github.io/p/203/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/203/gaussian-normal-distribution-graph.png" alt="Featured image of post 如何理解概率论中的“矩”" /&gt;&lt;h2 id=&#34;概率论中的矩&#34;&gt;概率论中的“矩”
+        <guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.png" alt="Featured image of post 如何理解概率论中的“矩”" /&gt;&lt;h2 id=&#34;概率论中的矩&#34;&gt;概率论中的“矩”
 &lt;/h2&gt;&lt;h3 id=&#34;彩票的问题&#34;&gt;彩票的问题
 &lt;/h3&gt;&lt;p&gt;假设福利彩票，每一注两元钱，且中奖的概率分布如下：
-&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph1.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph1.png&#34;
 	width=&#34;359&#34;
 	height=&#34;402&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/203/graph1_hu7074458194076008173.png 480w, https://wzwan-developer.github.io/p/203/graph1_hu11398514835930632876.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph1_hu7074458194076008173.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph1_hu11398514835930632876.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;概率分布图&#34;
@@ -31,10 +31,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;其中，概率的“称”如下所示：
-&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph2.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph2.png&#34;
 	width=&#34;613&#34;
 	height=&#34;402&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/203/graph2_hu1581581583894811490.png 480w, https://wzwan-developer.github.io/p/203/graph2_hu3775081096410037377.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph2_hu1581581583894811490.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph2_hu3775081096410037377.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;概率的称&#34;
@@ -46,10 +46,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;此时我们称量一下中奖500万元：
-&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph3.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph3.png&#34;
 	width=&#34;613&#34;
 	height=&#34;402&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/203/graph3_hu9993873231620659325.png 480w, https://wzwan-developer.github.io/p/203/graph3_hu8003149627366197390.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph3_hu9993873231620659325.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph3_hu8003149627366197390.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;500万元&#34;
@@ -61,10 +61,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;上述结果表明：不确定的500万元等价于确定的0.5元。此时将所有的中奖概率刻画上去：
-&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph4.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph4.png&#34;
 	width=&#34;613&#34;
 	height=&#34;402&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/203/graph4_hu8029704338762354472.png 480w, https://wzwan-developer.github.io/p/203/graph4_hu18134410058688724433.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph4_hu8029704338762354472.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph4_hu18134410058688724433.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -83,10 +83,10 @@ $$1.5 = 5\times 10\% + 100\times0.5\% + 5000000\times0.000001\% $$&lt;p&gt;
 $$
 E[X]=\sum p_{i}x_{i}
 $$&lt;p&gt;含义如下：
-&lt;img src=&#34;https://wzwan-developer.github.io/p/203/graph5.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph5.png&#34;
 	width=&#34;572&#34;
 	height=&#34;402&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/203/graph5_hu18168430126999916666.png 480w, https://wzwan-developer.github.io/p/203/graph5_hu8960376600484578208.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph5_hu18168430126999916666.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph5_hu8960376600484578208.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;”期望含义“&#34;
@@ -111,11 +111,11 @@ $$&lt;h3 id=&#34;高阶矩&#34;&gt;高阶矩
         </item>
         <item>
         <title>舒尔补</title>
-        <link>https://wzwan-developer.github.io/p/202/</link>
+        <link>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/</link>
         <pubDate>Mon, 02 Sep 2024 23:51:06 +0800</pubDate>
         
-        <guid>https://wzwan-developer.github.io/p/202/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/202/gaussian-normal-distribution-graph.png" alt="Featured image of post 舒尔补" /&gt;&lt;h2 id=&#34;舒尔补定义&#34;&gt;舒尔补定义
+        <guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/gaussian-normal-distribution-graph.png" alt="Featured image of post 舒尔补" /&gt;&lt;h2 id=&#34;舒尔补定义&#34;&gt;舒尔补定义
 &lt;/h2&gt;&lt;p&gt;给定任意的矩阵块 $M$ ，如下所示：&lt;/p&gt;
 $$M=\begin{bmatrix} A &amp; B\\  C &amp;D\\ \end{bmatrix}$$&lt;ul&gt;
 &lt;li&gt;如果，矩阵块 $D$ 是可逆的，则 $A − B D^{-1}  C$称之为 $D$ 关于 $M$的舒尔补。&lt;/li&gt;
@@ -175,11 +175,11 @@ P(a,b) \\
         </item>
         <item>
         <title>边缘化</title>
-        <link>https://wzwan-developer.github.io/p/201/</link>
+        <link>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/</link>
         <pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://wzwan-developer.github.io/p/201/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/201/gaussian-normal-distribution-graph.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
+        <guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
 &lt;/h2&gt;&lt;h3 id=&#34;模型&#34;&gt;模型
 &lt;/h3&gt;&lt;p&gt;优化问题具有如下通用形式：
 $ HX=b $
@@ -188,7 +188,7 @@ $ HX=b $
 $$\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$&lt;p&gt;
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。&lt;/p&gt;
 &lt;h3 id=&#34;过程&#34;&gt;过程
-&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用&lt;a class=&#34;link&#34; href=&#34;https://wzwan-developer.github.io/p/202/&#34; &gt;舒尔补&lt;/a&gt; 进行三角化，如下所示：
+&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用&lt;a class=&#34;link&#34; href=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/&#34; &gt;舒尔补&lt;/a&gt; 进行三角化，如下所示：
 &lt;/p&gt;
 $$\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$&lt;p&gt;
 化简可得：
@@ -230,10 +230,10 @@ $$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&amp;
 $$(H_{k}^{T}W_{k}^{-1}H_{k})\hat{x}=H_{k}^{T}W_{k}^{-1}z_k$$&lt;p&gt;，
 其中&lt;/p&gt;
 $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
-&lt;img src=&#34;https://wzwan-developer.github.io/p/201/image00.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00.png&#34;
 	width=&#34;714&#34;
 	height=&#34;352&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/201/image00_hu2802948725242621933.png 480w, https://wzwan-developer.github.io/p/201/image00_hu16496475951586850660.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00_hu2802948725242621933.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00_hu16496475951586850660.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -243,10 +243,10 @@ $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
 	
 &gt;
 借助本文第一节，目标为从$x$变量中删除$\hat{x&#39;}_{k-1}$，执行舒尔补可得
-&lt;img src=&#34;https://wzwan-developer.github.io/p/201/image01.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image01.png&#34;
 	width=&#34;707&#34;
 	height=&#34;463&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/201/image01_hu12842677403844977782.png 480w, https://wzwan-developer.github.io/p/201/image01_hu10364658897043807725.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image01_hu12842677403844977782.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image01_hu10364658897043807725.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -255,10 +255,10 @@ $$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
 		data-flex-basis=&#34;366px&#34;
 	
 &gt;
-&lt;img src=&#34;https://wzwan-developer.github.io/p/201/image02.png&#34;
+&lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image02.png&#34;
 	width=&#34;1371&#34;
 	height=&#34;694&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/201/image02_hu7680983322299133859.png 480w, https://wzwan-developer.github.io/p/201/image02_hu10029282904931644770.png 1024w&#34;
+	srcset=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image02_hu7680983322299133859.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image02_hu10029282904931644770.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
