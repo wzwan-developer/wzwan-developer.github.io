@@ -10,7 +10,7 @@
 <meta property='og:description' content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/00/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-16T15:55:17&#43;08:00'/><meta property='article:modified_time' content='2024-09-16T21:26:06&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-16T15:55:17&#43;08:00'/><meta property='article:modified_time' content='2024-09-16T21:30:18&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
 <meta name="twitter:title" content="Chapter 00: Adaptive Voxelization">
 <meta name="twitter:description" content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
@@ -380,7 +380,7 @@ Fig. 3: A) LiDAR point cloud segmented with the adaptive voxelization. Points wi
 <ul>
 <li>如果一个体素内包含太多的特征点，则会导致文章<a class="link" href="https://wzwan-developer.github.io/p/mlcc/01/" >《Chapter 01: Multi-LiDAR Extrinsic Calibration》</a>中推导过程章节中二阶闭式导数中的Hessian矩阵维度过高，在这种情况下，我们可以将点进行平均，以实现降采样但不降低映射一致性；</li>
 <li>同时，二阶闭式导数中的Hessian矩阵推导过程中提到$\lambda_m\ne\lambda_n$,因此当遇到$\lambda$的代数多重性大于1的体素需要跳过（忽略）；</li>
-<li>只需检查像素所包含的点，是否位于同一平面时允许更大的方差，则能自然地扩展到非平面特征；</li>
+<li>只需检查体素所包含的点，是否位于同一平面时允许更大的方差，则能自然地扩展到非平面特征（BLAM只提到了平面特征和边缘特征）；</li>
 <li>设置了两个条件来停止递归体素化：一个是树的最大深度，另一个是体素的最小点数。</li>
 </ul>
 <p><span style="color:red">正在持续更新中！</span></p>
@@ -426,7 +426,7 @@ Fig. 3: A) LiDAR point cloud segmented with the adaptive voxelization. Points wi
 
 
         <span>
-            最后更新于 2024-09-16  21:26  &#43;0800
+            最后更新于 2024-09-16  21:30  &#43;0800
         </span>
     </section></footer>
 
