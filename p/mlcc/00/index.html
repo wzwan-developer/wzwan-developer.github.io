@@ -10,7 +10,7 @@
 <meta property='og:description' content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/00/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-16T15:55:17&#43;08:00'/><meta property='article:modified_time' content='2024-09-17T14:58:45&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-16T15:55:17&#43;08:00'/><meta property='article:modified_time' content='2024-09-17T20:43:54&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
 <meta name="twitter:title" content="Chapter 00: Adaptive Voxelization">
 <meta name="twitter:description" content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
@@ -302,7 +302,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 4 分钟
+                    阅读时长: 5 分钟
                 </time>
             </div>
         
@@ -401,13 +401,32 @@ C=\frac{1}{N}\sum_{i=1}^{N}\big(p_i - c\big)\big(p_i - c\big)^T\\
 =\frac{1}{N}\sum_{i=1}^{N}p_ip_i^T-cc^T
 \end{align*}
 $$<h3 id="八叉树数据结构">八叉树数据结构
-</h3><p><span style="color:red">正在持续更新中！</span></p>
+</h3><p><img src="/p/mlcc/00/octree.png"
+	width="431"
+	height="260"
+	srcset="/p/mlcc/00/octree_hu12793898556502101269.png 480w, /p/mlcc/00/octree_hu14844167966149893531.png 1024w"
+	loading="lazy"
+	
+		alt="八叉树结构示意图"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="397px"
+	
+></p>
+<p>        通过雷达获取的点云数据，具有数据量大、分布不均匀等特点。点云数据主要是表征目标表面的海量点集合，并不具备传统网格数据的集合拓扑信息。所以点云数据处理中最为核心的问题就是建立离散点间的拓扑关系，实现基于邻域关系的快速查找。</p>
+<p>        建立空间索引在点云数据处理中已被广泛应用，常见空间索引一般是自顶向下逐级划分空间的各种空间索引结构，比较有代表性的包括 BSP树、 KD树、 KDB树、 R树、 R+树、 CELL树、四叉树和八叉树等索引结构，而在这些结构中KD树和八叉树在3D点云数据组织中应用较为广泛。</p>
+<p>        八叉树（Octree）是一种用于描述三维空间的树状数据结构。八叉树的每个节点表示一个正方体的体积元素，每个节点有8个子节点，这八个子节点所表示的体积元素加在一起等于父节点的体积。一般中心点作为节点的分叉中心。八叉树若不为空树的话，树中任一节点的子节点恰好只会是8个或0个，不会是0或8以外的数目。八叉树叶子节点代表了分辨率最高的情况。例如分辨率设成0.01m，那么每个叶子就是一个1cm见方的小方块。</p>
 <h2 id="代码详解">代码详解
-</h2><h2 id="参考文献">参考文献
+</h2><p><span style="color:red">正在持续更新中！</span></p>
+<h2 id="参考文献">参考文献
 </h2><p>[1]<a class="link" href="https://arxiv.org/pdf/2109.06550"  target="_blank" rel="noopener"
     >《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》</a></p>
 <p>[2]<a class="link" href="https://www.arxiv.org/pdf/2010.08215"  target="_blank" rel="noopener"
     >《BALM: Bundle Adjustment for Lidar Mapping》</a></p>
+<p>[3]<a class="link" href="https://www.cnblogs.com/Glucklichste/p/11505743.html"  target="_blank" rel="noopener"
+    >《octree八叉树数据结构原理与实现》</a></p>
 
 </section>
 
@@ -443,7 +462,7 @@ $$<h3 id="八叉树数据结构">八叉树数据结构
 
 
         <span>
-            最后更新于 2024-09-17  14:58  &#43;0800
+            最后更新于 2024-09-17  20:43  &#43;0800
         </span>
     </section></footer>
 
