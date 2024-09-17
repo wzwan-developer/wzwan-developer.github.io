@@ -10,7 +10,7 @@
 <meta property='og:description' content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/00/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-16T15:55:17&#43;08:00'/><meta property='article:modified_time' content='2024-09-17T20:43:54&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-16T15:55:17&#43;08:00'/><meta property='article:modified_time' content='2024-09-17T22:17:44&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
 <meta name="twitter:title" content="Chapter 00: Adaptive Voxelization">
 <meta name="twitter:description" content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png' />
@@ -220,7 +220,13 @@
         <li><a href="#八叉树数据结构">八叉树数据结构</a></li>
       </ol>
     </li>
-    <li><a href="#代码详解">代码详解</a></li>
+    <li><a href="#代码详解">代码详解</a>
+      <ol>
+        <li><a href="#octo_tree类">OCTO_TREE类</a></li>
+        <li><a href="#downsample_voxel体素下采样函数">downsample_voxel体素下采样函数</a></li>
+        <li><a href="#cut_voxel体素裁剪函数">cut_voxel体素裁剪函数</a></li>
+      </ol>
+    </li>
     <li><a href="#参考文献">参考文献</a></li>
   </ol>
 </nav>
@@ -302,7 +308,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 5 分钟
+                    阅读时长: 10 分钟
                 </time>
             </div>
         
@@ -419,7 +425,634 @@ $$<h3 id="八叉树数据结构">八叉树数据结构
 <p>        建立空间索引在点云数据处理中已被广泛应用，常见空间索引一般是自顶向下逐级划分空间的各种空间索引结构，比较有代表性的包括 BSP树、 KD树、 KDB树、 R树、 R+树、 CELL树、四叉树和八叉树等索引结构，而在这些结构中KD树和八叉树在3D点云数据组织中应用较为广泛。</p>
 <p>        八叉树（Octree）是一种用于描述三维空间的树状数据结构。八叉树的每个节点表示一个正方体的体积元素，每个节点有8个子节点，这八个子节点所表示的体积元素加在一起等于父节点的体积。一般中心点作为节点的分叉中心。八叉树若不为空树的话，树中任一节点的子节点恰好只会是8个或0个，不会是0或8以外的数目。八叉树叶子节点代表了分辨率最高的情况。例如分辨率设成0.01m，那么每个叶子就是一个1cm见方的小方块。</p>
 <h2 id="代码详解">代码详解
-</h2><p><span style="color:red">正在持续更新中！</span></p>
+</h2><h3 id="octo_tree类">OCTO_TREE类
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">OCTO_TREE</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_vec3d</span> <span class="o">*&gt;</span> <span class="n">origin_pc</span><span class="p">;</span><span class="c1">//原始三维数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_vec3d</span> <span class="o">*&gt;</span> <span class="n">transform_pc</span><span class="p">;</span><span class="c1">//变换后的三维数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">OCTO_TREE</span> <span class="o">*</span><span class="n">leaves</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">win_size</span><span class="p">,</span><span class="c1">//帧数（旋转一圈）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="n">eigen_ratio</span><span class="p">;</span><span class="c1">//面特征的阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">OT_STATE</span> <span class="n">octo_state</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">points_size</span><span class="p">,</span> <span class="n">layer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">voxel_center</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">quater_length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">value_vector</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">OCTO_TREE</span><span class="p">(</span><span class="kt">int</span> <span class="n">window_size</span><span class="p">,</span> <span class="kt">double</span> <span class="n">eigen_limit</span><span class="p">)</span> <span class="o">:</span> <span class="n">win_size</span><span class="p">(</span><span class="n">window_size</span><span class="p">),</span> <span class="n">eigen_ratio</span><span class="p">(</span><span class="n">eigen_limit</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">octo_state</span> <span class="o">=</span> <span class="n">UNKNOWN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">layer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">origin_pc</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="k">new</span> <span class="n">vector_vec3d</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">transform_pc</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="k">new</span> <span class="n">vector_vec3d</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">OCTO_TREE</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">delete</span> <span class="p">(</span><span class="n">origin_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">delete</span> <span class="p">(</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">origin_pc</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">transform_pc</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="k">delete</span> <span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief recut函数用于对点云数据进行八叉树分割
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">recut</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果当前八叉树节点的状态未知，则进行分割决策
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">octo_state</span> <span class="o">==</span> <span class="n">UNKNOWN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 初始化点大小为0，将窗口内的所有点的大小相加
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">points_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">points_size</span> <span class="o">+=</span> <span class="n">origin_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 两个停止递归体素化的条件之一：如果点的总大小小于最小值，则将当前节点标记为中间节点并返回
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">points_size</span> <span class="o">&lt;</span> <span class="n">MIN_PS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">octo_state</span> <span class="o">=</span> <span class="n">MID_NODE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 判断是否满足平面条件，如果满足则将当前节点标记为平面节点并返回
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">judge_eigen</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">octo_state</span> <span class="o">=</span> <span class="n">PLANE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 两个停止递归体素化的条件之一： 如果当前层达到限制，则将当前节点标记为中间节点并返回
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">layer</span> <span class="o">==</span> <span class="n">LAYER_LIMIT</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">octo_state</span> <span class="o">=</span> <span class="n">MID_NODE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="c1">// 遍历窗口内的每个点云，根据点的位置将其分配到相应的子节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uint</span> <span class="n">pt_size</span> <span class="o">=</span> <span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">pt_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="kt">int</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">// 根据点的坐标确定它在当前八叉树节点的子节点中的位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                        <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">voxel_center</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                                <span class="n">xyz</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                        <span class="kt">int</span> <span class="n">leafnum</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">// 如果当前子节点为空，则创建一个新的八叉树节点，并设置其参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                        <span class="k">if</span> <span class="p">(</span><span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">OCTO_TREE</span><span class="p">(</span><span class="n">win_size</span><span class="p">,</span> <span class="n">eigen_ratio</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">voxel_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">voxel_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">quater_length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">voxel_center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">voxel_center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">quater_length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">voxel_center</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">voxel_center</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">quater_length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">quater_length</span> <span class="o">=</span> <span class="n">quater_length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                        <span class="c1">// 将当前点添加到相应的子节点中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                        <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">origin_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">((</span><span class="o">*</span><span class="n">origin_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">leaves</span><span class="p">[</span><span class="n">leafnum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">((</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 对每个子节点递归调用recut函数，继续进行分割
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">recut</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 计算和判断给定点云数据的协方差矩阵的特征值的比值
+</span></span></span><span class="line"><span class="cl"><span class="cm">                是本文2.1节的协方差矩阵计算的具体实现
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return bool 根据特征值的比值判断返回true或false
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">judge_eigen</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">covMat</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span><span class="o">::</span><span class="n">Zero</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">center</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">uint</span> <span class="n">pt_size</span> <span class="o">=</span> <span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">pt_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">covMat</span> <span class="o">+=</span> <span class="p">(</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">].</span><span class="n">transpose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">center</span> <span class="o">+=</span> <span class="p">(</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 计算中心点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">center</span> <span class="o">/=</span> <span class="n">points_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 计算协方差矩阵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">covMat</span> <span class="o">=</span> <span class="n">covMat</span> <span class="o">/</span> <span class="n">points_size</span> <span class="o">-</span> <span class="n">center</span> <span class="o">*</span> <span class="n">center</span><span class="p">.</span><span class="n">transpose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 使用Eigen库计算协方差矩阵的特征值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Eigen</span><span class="o">::</span><span class="n">SelfAdjointEigenSolver</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span><span class="o">&gt;</span> <span class="n">saes</span><span class="p">(</span><span class="n">covMat</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">value_vector</span> <span class="o">=</span> <span class="n">saes</span><span class="p">.</span><span class="n">eigenvalues</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 判断特征值的比值是否大于给定的阈值，是则返回true，否则返回false  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// Eigen::SelfAdjointEigenSolver 求解的特征值默认从小到大排序。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">eigen_ratio</span> <span class="o">&lt;</span> <span class="n">saes</span><span class="p">.</span><span class="n">eigenvalues</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">saes</span><span class="p">.</span><span class="n">eigenvalues</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 对点云根据特征分类进行颜色渲染
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param cloud 变换到世界坐标系的点云
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">tras_display</span><span class="p">(</span><span class="n">pcl</span><span class="o">::</span><span class="n">PointCloud</span><span class="o">&lt;</span><span class="n">pcl</span><span class="o">::</span><span class="n">PointXYZINormal</span><span class="o">&gt;::</span><span class="n">Ptr</span> <span class="o">&amp;</span><span class="n">cloud</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">ref</span> <span class="o">=</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">RAND_MAX</span> <span class="o">+</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pcl</span><span class="o">::</span><span class="n">PointXYZINormal</span> <span class="n">ap</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ap</span><span class="p">.</span><span class="n">intensity</span> <span class="o">=</span> <span class="n">ref</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">octo_state</span> <span class="o">==</span> <span class="n">PLANE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ap</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">](</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ap</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">](</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ap</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="n">j</span><span class="p">](</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ap</span><span class="p">.</span><span class="n">normal_x</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">value_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">value_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ap</span><span class="p">.</span><span class="n">normal_y</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">value_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">value_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ap</span><span class="p">.</span><span class="n">normal_z</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">value_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cloud</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">layer</span> <span class="o">==</span> <span class="n">LAYER_LIMIT</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">layer</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">tras_display</span><span class="p">(</span><span class="n">cloud</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">feed_pt</span><span class="p">(</span><span class="n">LM_OPTIMIZER</span> <span class="o">&amp;</span><span class="n">lm_opt</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">octo_state</span> <span class="o">==</span> <span class="n">PLANE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">lm_opt</span><span class="p">.</span><span class="n">push_voxel</span><span class="p">(</span><span class="n">origin_pc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">leaves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">feed_pt</span><span class="p">(</span><span class="n">lm_opt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="downsample_voxel体素下采样函数">downsample_voxel体素下采样函数
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @brief 基于体素网格对点云进行下采样
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *        本文自适应体素化章节提到，如果一个体素内包含太多点，
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *        则会导致二阶闭式导数中的Hessian矩阵维度过高，在这种
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *        情况下可以进行将点进行一下平均，以降低维度
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param pc 输入和输出的点云数据
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param voxel_size 体素网格的大小，决定了下采样的精度
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">downsample_voxel</span><span class="p">(</span><span class="n">pcl</span><span class="o">::</span><span class="n">PointCloud</span><span class="o">&lt;</span><span class="n">PointType</span><span class="o">&gt;&amp;</span> <span class="n">pc</span><span class="p">,</span> <span class="kt">double</span> <span class="n">voxel_size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 检查体素大小是否过小，如果小于0.01则不进行下采样
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">voxel_size</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 使用哈希表存储每个体素网格中的点，以实现快速查找和去重
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">VOXEL_LOC</span><span class="p">,</span> <span class="n">M_POINT</span><span class="o">&gt;</span> <span class="n">feature_map</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">pt_size</span> <span class="o">=</span> <span class="n">pc</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 遍历每个点，计算其在体素网格中的位置，并将点加入相应的体素网格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pt_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PointType</span> <span class="o">&amp;</span><span class="n">pt_trans</span> <span class="o">=</span> <span class="n">pc</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">loc_xyz</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 计算点在每个维度上所在的体素网格索引
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">loc_xyz</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">voxel_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 如果点的体素网格索引小于0，则减去1，保证索引非负
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">loc_xyz</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">loc_xyz</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 构造体素网格位置的键
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">VOXEL_LOC</span> <span class="n">position</span><span class="p">((</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">loc_xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">loc_xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">loc_xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 在哈希表中查找当前体素网格位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 如果当前体素网格已存在点，则累加点的坐标，并增加点的计数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 如果当前体素网格不存在点，则创建新的体素网格点，并加入哈希表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">M_POINT</span> <span class="n">anp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">anp</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">anp</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">anp</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">anp</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">feature_map</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">anp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 重新计算下采样后的点云大小，并清空原有数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">pt_size</span> <span class="o">=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pc</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pc</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">pt_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 遍历哈希表，计算每个体素网格点的平均坐标，并填充到输出点云数据中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">iter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pc</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pc</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pc</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="cut_voxel体素裁剪函数">cut_voxel体素裁剪函数
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @brief 对特征点云进行体素裁剪，根据给定的特征点云和变换参数，构建体素结构并更新特征地图。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param feature_map 特征地图，存储体素位置和对应的八叉树指针的哈希表。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param feature_pts 特征点云数据。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param q 旋转矩阵，表示特征点云相对于世界坐标的旋转。在本文中来源于初始可用的基准雷达的轨迹$\mathcal{S}$
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param t 平移向量，表示特征点云相对于世界坐标的平移。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param f_head 特征头索引，用于标识特征点云中的特定部分。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param window_size 窗口大小，用于体素中点云数据的窗口化处理。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param eigen_threshold 特征值阈值，用于体素中点云数据的特征提取。
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">cut_voxel</span><span class="p">(</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">VOXEL_LOC</span><span class="p">,</span> <span class="n">OCTO_TREE</span><span class="o">*&gt;&amp;</span> <span class="n">feature_map</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">               <span class="n">pcl</span><span class="o">::</span><span class="n">PointCloud</span><span class="o">&lt;</span><span class="n">PointType</span><span class="o">&gt;::</span><span class="n">Ptr</span> <span class="n">feature_pts</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">               <span class="n">Eigen</span><span class="o">::</span><span class="n">Quaterniond</span> <span class="n">q</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">f_head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">window_size</span><span class="p">,</span> <span class="kt">double</span> <span class="n">eigen_threshold</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">pt_size</span> <span class="o">=</span> <span class="n">feature_pts</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="p">(</span><span class="n">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pt_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PointType</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">feature_pts</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">pt_origin</span><span class="p">(</span><span class="n">pt</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 根据旋转和平移参数，将点从基准雷达坐标系转换到世界坐标系
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">pt_trans</span> <span class="o">=</span> <span class="n">q</span> <span class="o">*</span> <span class="n">pt_origin</span> <span class="o">+</span> <span class="n">t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">loc_xyz</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 计算点在体素空间中的位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">loc_xyz</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">voxel_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 确保体素位置为整数，因此对负值进行调整
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span><span class="p">(</span><span class="n">loc_xyz</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">loc_xyz</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">VOXEL_LOC</span> <span class="n">position</span><span class="p">((</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">loc_xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">loc_xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span><span class="n">loc_xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 在特征地图中查找当前体素位置对应的八叉树
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">feature_map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 将点添加到已存在的八叉树的原始点云和变换点云中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="o">-&gt;</span><span class="n">origin_pc</span><span class="p">[</span><span class="n">f_head</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">pt_origin</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="o">-&gt;</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">f_head</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">pt_trans</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 如果未找到，创建一个新的八叉树
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">OCTO_TREE</span><span class="o">*</span> <span class="n">ot</span> <span class="o">=</span> <span class="k">new</span> <span class="n">OCTO_TREE</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="n">eigen_threshold</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 将点添加到新的八叉树的原始点云和变换点云中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">origin_pc</span><span class="p">[</span><span class="n">f_head</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">pt_origin</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">transform_pc</span><span class="p">[</span><span class="n">f_head</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">pt_trans</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 设置八叉树的体素中心
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">voxel_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">voxel_center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">voxel_center</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">position</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 设置八叉树的特征体素长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">quater_length</span> <span class="o">=</span> <span class="n">voxel_size</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 初始化八叉树的层级
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">ot</span><span class="o">-&gt;</span><span class="n">layer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 将新的八叉树添加到特征地图中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">feature_map</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">ot</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><span style="color:red">正在持续更新中！</span></p>
 <h2 id="参考文献">参考文献
 </h2><p>[1]<a class="link" href="https://arxiv.org/pdf/2109.06550"  target="_blank" rel="noopener"
     >《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》</a></p>
@@ -462,7 +1095,7 @@ $$<h3 id="八叉树数据结构">八叉树数据结构
 
 
         <span>
-            最后更新于 2024-09-17  20:43  &#43;0800
+            最后更新于 2024-09-17  22:17  &#43;0800
         </span>
     </section></footer>
 
