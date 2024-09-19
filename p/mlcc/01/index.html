@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-16T20:21:55&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-19T11:06:33&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
@@ -796,7 +796,7 @@ $$<p>假设第$k$个点$^Gp_{k}$在时间$t_j$由雷达$L_i$扫描，则有：
 $$
 \begin{align*}
 ^Gp_k={^{G}_{L_i}T}_{t_j}p_k={^{G}_{L_0}T}_{t_j}\cdot {^{L_{0}}_{L_i}T}\cdot p_{k}\\
-={^{G}_{L_0}R_{t_j}}\left({^{L_0}_{L_i}R\cdot {p_k}+{^{L_0}_{L_i}t}}\right)+{^G_{L_i}t_{t_j}}
+={^{G}_{L_0}R_{t_j}}\left({^{L_0}_{L_i}R\cdot {p_k}+{^{L_0}_{L_i}t}}\right)+{^G_{L_0}t_{t_j}}
 \end{align*}
 \tag{式4}
 $$<p>
@@ -952,7 +952,7 @@ $$<p>
 
 
         <span>
-            最后更新于 2024-09-16  20:21  &#43;0800
+            最后更新于 2024-09-19  11:06  &#43;0800
         </span>
     </section></footer>
 
