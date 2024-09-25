@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-23T16:17:46&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-25T17:41:51&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
@@ -236,7 +236,6 @@
         <li><a href="#一阶段优化主雷达位姿">一阶段：优化主雷达位姿</a></li>
         <li><a href="#二阶段优化副雷达到主雷达的外参">二阶段：优化副雷达到主雷达的外参</a></li>
         <li><a href="#三阶段联合优化雷达外参和主激光雷达里程计">三阶段：联合优化雷达外参和主激光雷达里程计</a></li>
-        <li><a href="#heading"></a></li>
       </ol>
     </li>
     <li><a href="#参考文献">参考文献</a></li>
@@ -320,7 +319,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 19 分钟
+                    阅读时长: 21 分钟
                 </time>
             </div>
         
@@ -1060,7 +1059,7 @@ $$<p>
 </div>
 </div><ol start="2">
 <li>计算雅可比矩阵和海森矩阵
-由于仅主优化轨迹，$D=\frac{\delta p}{\delta T}$不同于2.2.4章节的公式7。具体如下
+由于仅优化轨迹，$D=\frac{\delta p}{\delta T}$不同于2.2.4章节的公式7。具体如下
 $$
 D=\begin{bmatrix}
 -{}^{G}_{L_0}R_{t_j}(p_k)^{T}&I
@@ -1077,7 +1076,7 @@ $$
 {}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}H_{k,j}\\H_{k,j}\end{bmatrix}\begin{bmatrix}-{}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}&I\end{bmatrix}\\
 =\begin{bmatrix}
 -{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}H_{k,j}{}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}&{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}H_{k,j}\\
-H_{k,j} {}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}& H_{k,j} 
+-H_{k,j} {}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}& H_{k,j} 
 \end{bmatrix}
 \end{align*}\tag{式2}
 $$</li>
@@ -1374,16 +1373,377 @@ $$</li>
 </div>
 </div><h3 id="二阶段优化副雷达到主雷达的外参">二阶段：优化副雷达到主雷达的外参
 </h3><p>将一阶段中优化出的主雷达里程计作为真值，对于每一个副雷达，使用主雷达里程计以及各副雷达到主雷达的外参将各个副雷达的点云投影回世界坐标系构成局部地图，并和一阶段中的地图叠在一起构成新的局部地图。和一阶段相同，对使用自适应体素化方法提取面特征，并对于每一个特征体素递归构建基于点面误差的一致性评价指标。</p>
-<div class="highlight"><div class="chroma">
+<p>由于主雷达轨迹固定，$D=\frac{\delta p}{\delta T}$不同于2.2.4章节的公式7。具体如下
+</p>
+$$
+\begin{align*}
+{}^{G}{p}_{k}+\delta^{G}{p}_{k}=
+{}_{L_{0}}^{G}R_{t_{j}}
+\bigg({}_{L_{i}}^{L_{0}}R\exp\big({}_{L_{i}}^{L_{0}}\phi^{\wedge}\big)p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}{}_{L_{0}}^{G}R_{t_{j}}
+\bigg({}_{L_{i}}^{L_{0}}R\big(I+{}_{L_{i}}^{L_{0}}\phi^{\wedge}\big)p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}{}_{L_{0}}^{G}{R}_{t_{j}}
+\bigg({}_{L_{i}}^{L_{0}}Rp_{k}+{}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++\delta_{L_{i}}^{L_{0}}{t}\big)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
++{}_{L_{0}}^{G}{t}_{t_{j}}
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++\delta_{L_{i}}^{L_{0}}{t}\big)\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
++{}_{L_{0}}^{G}{t}_{t_{j}}
++{}_{L_{0}}^{G}R_{t_{j}}\big(-{}_{L_{i}}^{L_{0}}R{p_k}^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++\delta_{L_{i}}^{L_{0}}{t}\big)
+\end{align*}
+\tag{式1}
+$$<p>
+则可推导对应$\delta^{G}{p}_{k}$的表达式：
+</p>
+$$
+\delta^{G}{p}_{k}={}_{L_{0}}^{G}R_{t_{j}}\big((-{}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++\delta_{L_{i}}^{L_{0}}{t}\big)\tag{式2}
+$$<p>
+因此可得：
+</p>
+$$
+D=\frac{\delta p}{\delta T}=\begin{bmatrix}
+-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}&
+{}_{L_{0}}^{G}R_{t_{j}}
+\end{bmatrix}
+$$<p>
+由于$\frac{\delta \lambda}{\delta p}$不变，所以$H$和$J$没有变换将其带入2.2.3章节的式9即可推导出$\bar{J}$和$\bar{H}$。
+其中关于Hessian矩阵块的更新，以点$P(k,j)$为例推导如下其对$\bar{H}_{00}$的更新如下：
+</p>
+$$
+\begin{align*}
+\bar{H}_{0,0}=D_{0,k}^{T}H_{k,j}D_{j,0}\\
+=\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}^{T}
+H_{k,j}
+\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}\\
+=\begin{bmatrix} ({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T} \\{{}_{L_{0}}^{G}R_{t_{j}}}^{T}\end{bmatrix}
+H_{k,j}
+\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}\\
+=\begin{bmatrix}
+({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T}H_{k,j}\\{{}_{L_{0}}^{G}R_{t_{j}}}^{T}H_{k,j}\end{bmatrix}
+\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}\\
+=\begin{bmatrix}
+-({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}\\
+-{{}_{L_{0}}^{G}R_{t_{j}}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge} & {{}_{L_{0}}^{G}R_{t_{j}}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}
+\end{bmatrix}
+\end{align*}\tag{式3}
+$$<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code></code></pre></td>
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 计算Hessian矩阵、梯度转置和残差的函数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param poses      输入的姿态向量
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param ts         输入的平移向量向量
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param refQs      参考帧的姿态向量
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param refTs      参考帧的平移向量向量
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param head       头部索引
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param end        结束索引
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param Hess       输出的Hessian矩阵
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param JacT       输出的梯度转置向量
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param residual   输出的残差
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">calculate_HJ</span><span class="p">(</span><span class="n">vector_quad</span> <span class="o">&amp;</span><span class="n">poses</span><span class="p">,</span> <span class="n">vector_vec3d</span> <span class="o">&amp;</span><span class="n">ts</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">vector_quad</span> <span class="o">&amp;</span><span class="n">refQs</span><span class="p">,</span> <span class="n">vector_vec3d</span> <span class="o">&amp;</span><span class="n">refTs</span><span class="p">,</span> <span class="kt">int</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">Eigen</span><span class="o">::</span><span class="n">MatrixXd</span> <span class="o">&amp;</span><span class="n">Hess</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">VectorXd</span> <span class="o">&amp;</span><span class="n">JacT</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">residual</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 初始化Hessian矩阵、梯度转置和残差
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Hess</span><span class="p">.</span><span class="n">setZero</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">JacT</span><span class="p">.</span><span class="n">setZero</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">residual</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Eigen</span><span class="o">::</span><span class="n">MatrixXd</span> <span class="n">_hess</span><span class="p">(</span><span class="n">Hess</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Eigen</span><span class="o">::</span><span class="n">MatrixXd</span> <span class="n">_jact</span><span class="p">(</span><span class="n">JacT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 遍历头部到结束之间的帧
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vector_vec3d</span> <span class="o">&amp;</span><span class="n">reforigin_pts</span> <span class="o">=</span> <span class="o">*</span><span class="n">refOriginPts</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">refwin_num</span> <span class="o">=</span> <span class="o">*</span><span class="n">refWinNums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">size_t</span> <span class="n">refpts_size</span> <span class="o">=</span> <span class="n">reforigin_pts</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">vec_tran</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vector_vec3d</span> <span class="n">pt_trans</span><span class="p">(</span><span class="n">refpts_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span><span class="o">&gt;</span> <span class="n">point_xis</span><span class="p">(</span><span class="n">refpts_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">center</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">Zero</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">covMat</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span><span class="o">::</span><span class="n">Zero</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 处理参考帧中的点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">refpts_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">vec_tran</span> <span class="o">=</span> <span class="n">refQs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">reforigin_pts</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="n">point_xis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">wedge</span><span class="p">(</span><span class="n">vec_tran</span><span class="p">);</span> <span class="c1">// 计算点的交叉积
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">vec_tran</span> <span class="o">=</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">*</span> <span class="n">vec_tran</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec_tran</span> <span class="o">+</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">*</span> <span class="n">refTs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ts</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">                <span class="n">center</span> <span class="o">+=</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="n">covMat</span> <span class="o">+=</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">transpose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 处理基础帧中的点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">vector_vec3d</span> <span class="o">&amp;</span><span class="n">baseorigin_pts</span> <span class="o">=</span> <span class="o">*</span><span class="n">baseOriginPts</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">basewin_num</span> <span class="o">=</span> <span class="o">*</span><span class="n">baseWinNums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">size_t</span> <span class="n">basepts_size</span> <span class="o">=</span> <span class="n">baseorigin_pts</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">basepts_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">vec_tran</span> <span class="o">=</span> <span class="n">poses</span><span class="p">[</span><span class="n">basewin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">*</span> <span class="n">baseorigin_pts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">ts</span><span class="p">[</span><span class="n">basewin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">                <span class="n">center</span> <span class="o">+=</span> <span class="n">vec_tran</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">covMat</span> <span class="o">+=</span> <span class="n">vec_tran</span> <span class="o">*</span> <span class="n">vec_tran</span><span class="p">.</span><span class="n">transpose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 计算均值和协方差矩阵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">double</span> <span class="n">N</span> <span class="o">=</span> <span class="n">refpts_size</span> <span class="o">+</span> <span class="n">basepts_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">covMat</span> <span class="o">=</span> <span class="n">covMat</span> <span class="o">-</span> <span class="n">center</span> <span class="o">*</span> <span class="n">center</span><span class="p">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">covMat</span> <span class="o">=</span> <span class="n">covMat</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">center</span> <span class="o">=</span> <span class="n">center</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 计算协方差矩阵的特征值和特征向量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Eigen</span><span class="o">::</span><span class="n">SelfAdjointEigenSolver</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span><span class="o">&gt;</span> <span class="n">saes</span><span class="p">(</span><span class="n">covMat</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">eigen_value</span> <span class="o">=</span> <span class="n">saes</span><span class="p">.</span><span class="n">eigenvalues</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">U</span> <span class="o">=</span> <span class="n">saes</span><span class="p">.</span><span class="n">eigenvectors</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">u</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">//损失函数降维之后优化的目标函数转为$\arg min_{\mathcal{S}，\mathcal{E}_L}\sum_{l}\lambda_{3}{(A_l)}$
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">//其中$\lambda_3$是矩阵A的最小特征值，u0即为最小特征值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">ukukT</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">transpose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">vec_Jt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">refpts_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">vec_Jt</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">N</span> <span class="o">*</span> <span class="n">ukukT</span> <span class="o">*</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 更新Jacobian矩阵 $\bar{J}=JD$
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">_jact</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-=</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">point_xis</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">vec_Jt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">_jact</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">0</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+=</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">vec_Jt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 计算Hessian矩阵的辅助变量            
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">Hessian33</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">F</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span><span class="o">&gt;</span> <span class="n">F_</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="c1">//定理2：公式10 $F_{m,n}^{p_j}$ n=0,m=0的情况
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">F_</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">setZero</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Hessian33</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">transpose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">//定理2：公式10 $F_{m,n}^{p_j}$ n=0,m!=0的情况
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="c1">//注意此辅助函数缺乏$(p_i-\bar{p})^T$，下面的公式会有补充
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">F_</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="p">(</span><span class="n">eigen_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">eigen_value</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">(</span><span class="n">Hessian33</span> <span class="o">+</span> <span class="n">Hessian33</span><span class="p">.</span><span class="n">transpose</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 计算Hessian矩阵的元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">h33</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">size_t</span> <span class="n">rownum</span><span class="p">,</span> <span class="n">colnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">refpts_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">f</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">//此时为完整的辅助变量F
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">F</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">pt_trans</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">F_</span><span class="p">[</span><span class="n">f</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">F</span> <span class="o">=</span> <span class="n">U</span> <span class="o">*</span> <span class="n">F</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">colnum</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">refpts_size</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Hessian33</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">pt_trans</span><span class="p">[</span><span class="n">k</span><span class="p">]).</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">F</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                                <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dot</span><span class="p">(</span><span class="n">pt_trans</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="n">F</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="n">rownum</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">Hessian33</span> <span class="o">+=</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span> <span class="o">*</span> <span class="n">ukukT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">Hessian33</span> <span class="o">-=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">N</span> <span class="o">*</span> <span class="n">ukukT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Hessian33</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">N</span> <span class="o">*</span> <span class="n">Hessian33</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">//公式推导见前文描述公式3
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">_hess</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rownum</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">colnum</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+=</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">k</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">Hessian33</span> <span class="o">*</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">_hess</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rownum</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">colnum</span><span class="p">)</span> <span class="o">+=</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">k</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">Hessian33</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">()</span> <span class="o">*</span> <span class="n">point_xis</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">_hess</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rownum</span><span class="p">,</span> <span class="n">colnum</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-=</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">point_xis</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">k</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">Hessian33</span> <span class="o">*</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">_hess</span><span class="p">.</span><span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rownum</span><span class="p">,</span> <span class="n">colnum</span><span class="p">)</span> <span class="o">-=</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">point_xis</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">k</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">Hessian33</span> <span class="o">*</span> <span class="n">poses</span><span class="p">[</span><span class="n">refwin_num</span><span class="p">[</span><span class="n">j</span><span class="p">]].</span><span class="n">toRotationMatrix</span><span class="p">()</span> <span class="o">*</span> <span class="n">point_xis</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 更新残差、Hessian矩阵和梯度转置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">residual</span> <span class="o">+=</span> <span class="n">eigen_value</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Hess</span> <span class="o">+=</span> <span class="n">_hess</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">JacT</span> <span class="o">+=</span> <span class="n">_jact</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_hess</span><span class="p">.</span><span class="n">setZero</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_jact</span><span class="p">.</span><span class="n">setZero</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="三阶段联合优化雷达外参和主激光雷达里程计">三阶段：联合优化雷达外参和主激光雷达里程计
 </h3><p>使用主雷达里程计以及各副雷达到主雷达的外参将各个副雷达的点云投影回世界坐标系构成局部地图，将所有雷达的局部地图堆叠在一起构成新的局部地图。同样的，对于这个局部地图构建基于点面误差的损失函数。</p>
-<h3 id="heading">
-</h3><h2 id="参考文献">参考文献
+<h2 id="参考文献">参考文献
 </h2><p>[1]<a class="link" href="https://arxiv.org/pdf/2109.06550"  target="_blank" rel="noopener"
     >《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》</a></p>
 <p>[2]<a class="link" href="https://www.arxiv.org/pdf/2010.08215"  target="_blank" rel="noopener"
@@ -1429,7 +1789,7 @@ $$</li>
 
 
         <span>
-            最后更新于 2024-09-23  16:17  &#43;0800
+            最后更新于 2024-09-25  17:41  &#43;0800
         </span>
     </section></footer>
 
