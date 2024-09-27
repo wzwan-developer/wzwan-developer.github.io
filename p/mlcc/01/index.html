@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-27T16:07:33&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-27T16:10:34&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png' />
@@ -1715,7 +1715,7 @@ $$<div class="highlight"><div class="chroma">
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">//以下代码选自第三阶段的计算雅可比和海森矩阵的代码
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm">* @brief 计算雅可比矩阵和海森矩阵并进行更新，推导过程见2.2.3章节ß
+</span></span></span><span class="line"><span class="cl"><span class="cm">* @brief 计算雅可比矩阵和海森矩阵并进行更新，推导过程见2.2.3章节
 </span></span></span><span class="line"><span class="cl"><span class="cm">* @param poses 基准雷达的轨迹的旋转变量
 </span></span></span><span class="line"><span class="cl"><span class="cm">* @param ts 基准雷达的轨迹的平移变量
 </span></span></span><span class="line"><span class="cl"><span class="cm">* @param refQs 参考雷达的轨迹的旋转变量
@@ -1746,7 +1746,7 @@ $$<div class="highlight"><div class="chroma">
 </span></span><span class="line"><span class="cl">      <span class="n">refpts_size_part</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">ref_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">      <span class="n">refpts_size_part</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">      <span class="c1">//计算所有点的个数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">ref_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span><span class="c1">//ref_size代表参考雷达的个数 ß
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">ref_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span><span class="c1">//ref_size代表参考雷达的个数
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>          <span class="n">vector_vec3d</span> <span class="o">&amp;</span><span class="n">reforigin_pts</span> <span class="o">=</span> <span class="o">*</span><span class="n">refOriginPts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">          <span class="n">refpts_size</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">reforigin_pts</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl">          <span class="n">refpts_size_all</span> <span class="o">+=</span> <span class="n">reforigin_pts</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
@@ -1963,7 +1963,7 @@ $$<div class="highlight"><div class="chroma">
 
 
         <span>
-            最后更新于 2024-09-27  16:07  &#43;0800
+            最后更新于 2024-09-27  16:10  &#43;0800
         </span>
     </section></footer>
 
