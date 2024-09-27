@@ -811,7 +811,7 @@ $$&lt;h3 id=&#34;八叉树数据结构&#34;&gt;八叉树数据结构
         <pubDate>Wed, 11 Sep 2024 09:05:20 +0800</pubDate>
         
         <guid>https://wzwan-developer.github.io/p/mlcc/01/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/lidar_voxel.png" alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration" /&gt;&lt;h2 id=&#34;文章内容&#34;&gt;文章内容
+        <description>&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg" alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration" /&gt;&lt;h2 id=&#34;文章内容&#34;&gt;文章内容
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;            With adaptive voxelization, we can obtain a set
 of voxels of different sizes. Each voxel contains points that are roughly on a plane and creates a planar constraint for
