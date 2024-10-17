@@ -200,9 +200,9 @@ $$&lt;h2 id=&#34;理论推导&#34;&gt;理论推导
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;平面整合
-选自calib_camera.hpp，将体素中属于同一平面的点云进行合并，判断条件是两个平面法向量相似性很高，且彼此法向量距离对方的平面中心点距离很近。&lt;/li&gt;
+&lt;li&gt;平面整合&lt;/li&gt;
 &lt;/ol&gt;
+&lt;p&gt;选自calib_camera.hpp，将体素中属于同一平面的点云进行合并，判断条件是两个平面法向量相似性很高，且彼此法向量距离对方的平面中心点距离很近。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
