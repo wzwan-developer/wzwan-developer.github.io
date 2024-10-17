@@ -10,7 +10,7 @@
 <meta property='og:description' content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/02/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-10-09T17:22:01&#43;08:00'/><meta property='article:modified_time' content='2024-10-17T08:53:32&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/02/camera_voxel.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-10-09T17:22:01&#43;08:00'/><meta property='article:modified_time' content='2024-10-17T16:17:58&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/02/camera_voxel.png' />
 <meta name="twitter:title" content="Chapter 02: LiDAR-Camera Extrinsic Calibration">
 <meta name="twitter:description" content="《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/02/camera_voxel.png' />
@@ -217,9 +217,10 @@
     <li><a href="#理论推导">理论推导</a></li>
     <li><a href="#代码详解">代码详解</a>
       <ol>
-        <li><a href="#平面处理">平面处理</a></li>
-        <li><a href="#平面交线边缘线处理">平面交线（边缘线）处理</a></li>
+        <li><a href="#提取平面">提取平面</a></li>
+        <li><a href="#提取边缘线">提取边缘线</a></li>
         <li><a href="#构建匹配对">构建匹配对</a></li>
+        <li><a href="#优化问题">优化问题</a></li>
       </ol>
     </li>
     <li><a href="#参考文献">参考文献</a></li>
@@ -303,7 +304,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 12 分钟
+                    阅读时长: 15 分钟
                 </time>
             </div>
         
@@ -405,14 +406,13 @@ $$<h2 id="理论推导">理论推导
 一帧，因为不同图像可能会看到同一个边缘线)，再通过cv::projectPoints()函数直接投到像素坐标系下，遍历每个边缘
 点，判断其距离最近的5个图像上的边缘点，如果5个点距离该点都小于一定的值则检索该点距离最近的5个点，拟合点云的方向
 向量，图像也是一样的处理，将那5个点拟合方向向量。需要注意的是图像的分辨率是有限的，尤其是在较低分辨率的相机中，多个三维点
-可能在投影到二维平面后，落在同一个像素上。因此那些投影之后落在同一个位置的三维点要取平均值。此时所有的三维点都将有
-其对应的二维点。</p>
+可能在投影到二维平面后，落在同一个像素上。因此那些投影之后落在同一个位置的三维点要取平均值。此时所有的三维点都将有其对应的二维点。</p>
 <h2 id="代码详解">代码详解
-</h2><h3 id="平面处理">平面处理
+</h2><h3 id="提取平面">提取平面
 </h3><ol>
-<li>体素化提取空间中的平面</li>
+<li>通过体素化提取空间中的平面</li>
 </ol>
-<p>下面代码选自ba.hpp,通过判断特征值的比值确认平面，核心内容与之前的雷达标定部分是一样的，但是多了一些细节处理，就是将平面拆分成8份后，将每一份的法向量与整体的法向量进行一致性评估。具体如下：</p>
+<p>下面代码选自ba.hpp,通过判断协方差矩阵的特征值比值确定平面，与之前的雷达标定部分关于平面的提取是一样的，但是多了一些细节处理，其额外将平面拆分成8份，将每一份的法向量与整体的法向量进行一致性评估。具体如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -518,7 +518,7 @@ $$<h2 id="理论推导">理论推导
 </div><ol start="2">
 <li>平面整合</li>
 </ol>
-<p>选自calib_camera.hpp，将体素中属于同一平面的点云进行合并，判断条件是两个平面法向量相似性很高，且彼此法向量距离对方的平面中心点距离很近。</p>
+<p>选自calib_camera.hpp，将体素中属于同一平面的点云进行合并，判断条件是两个平面法向量相似度很高，且彼此法向量距离对方的平面中心点距离很近。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -599,11 +599,11 @@ $$<h2 id="理论推导">理论推导
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="平面交线边缘线处理">平面交线（边缘线）处理
+</div><h3 id="提取边缘线">提取边缘线
 </h3><ol>
-<li>点云边缘线处理</li>
+<li>提取点云边缘线</li>
 </ol>
-<p>首先是通过两个平面法向量和中心点，计算交线上一点。假设$c_1$和$c_2$分别为平面1和2的中心点，$n_1$和$n_2$分别为平面1和2的法向量。而通过向量的叉乘很容易得到两个平面相交直线的法向量为$d=n1\times{n2}$。通过以下三个方程可以求得交线上的一点坐标$p$:
+<p>首先是通过两个平面法向量和中心点计算边缘线上一点。过程为假设$c_1$和$c_2$分别为平面1和2的中心点，$n_1$和$n_2$分别为平面1和2的法向量。通过向量的叉乘很容易得到两个平面相交直线的法向量为$d=n1\times{n2}$。通过以下三个方程可以求得交线上的一点坐标$p$:
 </p>
 $$
 \begin{align*}
@@ -612,7 +612,7 @@ n_2\cdot(p-c_2)=0\tag{2}\\
 d\cdot(p-c_1)=0\tag{3}
 \end{align*}
 $$<p>
-其中1式含义为交线上一点与平面1中心点$c_1$构成的向量垂直于$n_1$,式2同理，式3的含义为交线上一点与平面1中心点$c_1$构成的向量垂直于直线。因此我们设定：
+式1表示为边缘线上一点与$c_1$构成的向量垂直于$n_1$,式2同理，式3表示边缘线上一点与$c_1$构成的向量垂直于直线所在的法向量。由此可整理得到：
 </p>
 $$
 \begin{align*}
@@ -623,7 +623,7 @@ b=\begin{bmatrix}n_1\cdot{c_1}\quad{d}\cdot{c_1}\quad{n_2}\cdot{c_2}\end{bmatrix
 A\cdot{x}=b\tag{6}
 \end{align*}
 $$<p>
-对式6进行QR分解则能得到交线上一点，且该点与$c1$构成的向量是垂直于交线的。另外：
+对式6进行QR分解则能得到边缘线上一点，且该点与$c1$构成的向量是垂直于边缘线所在的法向量的。另外：
 </p>
 $$
 \begin{align*}
@@ -895,7 +895,7 @@ $$<p>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
-<li>图像交线处理
+<li>提取图像边缘线
 代码主要是通过opencv的cv::Canny()函数实现，没有太多额外的处理，有以下几点需要关注：</li>
 </ol>
 <div class="highlight"><div class="chroma">
@@ -1296,6 +1296,287 @@ $$<p>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
+</div><h3 id="优化问题">优化问题
+</h3><ol>
+<li>最小化重投影误差</li>
+</ol>
+<p>本文第一章节中提到了相机校准问题可以表达为：
+</p>
+$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{1}$$<p>
+<span style="color:red;">上式暂时还没理解,等后面再看！</span>，但是好在代码实现上与问题表达是有差异，代码是优化点到直线上的距离，与BLAM中关于边缘特征问题表述是一样的，具体如下所示：</p>
+<p><img src="/p/mlcc/02/edge_feature.png"
+	width="518"
+	height="456"
+	srcset="/p/mlcc/02/edge_feature_hu13040877973016550492.png 480w, /p/mlcc/02/edge_feature_hu6924721684517982466.png 1024w"
+	loading="lazy"
+	
+		alt="边缘特征"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="113"
+		data-flex-basis="272px"
+	
+></p>
+<p>注意图中关于边缘点的表达可以进行以下转化：
+$(I-nn^{T})(p_{f_i}-q)=(p_{f_i}-q)-nn^{T}(p_{f_i}-q)$
+其中，$nn^{T}(p_{f_i}-q)$表达将$p_{f_i}-q$向量投影到$n$向量上。
+现在将本文的相关变量带入式中可以得到表达式为：
+</p>
+$$
+\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left((I-\mathbf{n}_{i,l,j}\mathbf{n}_{i,l,j}^{T})\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{2}
+$$<p>。</p>
+<p>下面代码选自calib_camera.cpp,内容为ceres误差函数的建立：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">vpnp_calib</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">vpnp_calib</span><span class="p">(</span><span class="n">VPnPData</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span> <span class="n">pd</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span><span class="n">_q</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">*</span><span class="n">_t</span><span class="p">,</span> <span class="n">T</span> <span class="o">*</span><span class="n">residuals</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">innerT</span> <span class="o">=</span> <span class="n">inner</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">distorT</span> <span class="o">=</span> <span class="n">distor</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Quaternion</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">q_incre</span><span class="p">{</span><span class="n">_q</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">_q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_q</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">_q</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">t_incre</span><span class="p">{</span><span class="n">_t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">_t</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">p_l</span><span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">x</span><span class="p">),</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">p_c</span> <span class="o">=</span> <span class="n">q_incre</span><span class="p">.</span><span class="n">toRotationMatrix</span><span class="p">()</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">+</span> <span class="n">t_incre</span><span class="p">;</span><span class="c1">//将点云转换到相机坐标系下
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">p_2</span> <span class="o">=</span> <span class="n">innerT</span> <span class="o">*</span> <span class="n">p_c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">uo</span> <span class="o">=</span> <span class="n">p_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">p_2</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">vo</span> <span class="o">=</span> <span class="n">p_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">p_2</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="c1">//转化为像素坐标系下，并进行归一化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">fx</span> <span class="o">=</span> <span class="n">innerT</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">cx</span> <span class="o">=</span> <span class="n">innerT</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">fy</span> <span class="o">=</span> <span class="n">innerT</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">cy</span> <span class="o">=</span> <span class="n">innerT</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">xo</span> <span class="o">=</span> <span class="p">(</span><span class="n">uo</span> <span class="o">-</span> <span class="n">cx</span><span class="p">)</span> <span class="o">/</span> <span class="n">fx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">yo</span> <span class="o">=</span> <span class="p">(</span><span class="n">vo</span> <span class="o">-</span> <span class="n">cy</span><span class="p">)</span> <span class="o">/</span> <span class="n">fy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">r2</span> <span class="o">=</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">xo</span> <span class="o">+</span> <span class="n">yo</span> <span class="o">*</span> <span class="n">yo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">r4</span> <span class="o">=</span> <span class="n">r2</span> <span class="o">*</span> <span class="n">r2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">distortion</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">distorT</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">+</span> <span class="n">distorT</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">r4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">xd</span> <span class="o">=</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">distortion</span> <span class="o">+</span> <span class="p">(</span><span class="n">distorT</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">yo</span> <span class="o">+</span> <span class="n">distorT</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">yo</span><span class="p">)</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">        <span class="n">distorT</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">r2</span> <span class="o">+</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">xo</span> <span class="o">+</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">xo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">yd</span> <span class="o">=</span> <span class="n">yo</span> <span class="o">*</span> <span class="n">distortion</span> <span class="o">+</span> <span class="n">distorT</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">yo</span> <span class="o">+</span> <span class="n">distorT</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">xo</span> <span class="o">*</span> <span class="n">yo</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">        <span class="n">distorT</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">r2</span> <span class="o">+</span> <span class="n">yo</span> <span class="o">*</span> <span class="n">yo</span> <span class="o">+</span> <span class="n">yo</span> <span class="o">*</span> <span class="n">yo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">ud</span> <span class="o">=</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">xd</span> <span class="o">+</span> <span class="n">cx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span> <span class="n">vd</span> <span class="o">=</span> <span class="n">fy</span> <span class="o">*</span> <span class="n">yd</span> <span class="o">+</span> <span class="n">cy</span><span class="p">;</span><span class="c1">//使用针孔模型添加畸变
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">direction</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="n">T</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">direction</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="n">T</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">residuals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ud</span> <span class="o">-</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">residuals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">vd</span> <span class="o">-</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">v</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">residuals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ud</span> <span class="o">-</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">residuals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">vd</span> <span class="o">-</span> <span class="n">T</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">v</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">//NOTE:这里用了BALM中的误差公式，而非MLCC中的公式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">//构建向量$(I-nn^{T})({}^{I_{l,j}}p_{i}-q_{i,l,j})$以求点到直线的距离，然后最小化这个距离
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">I</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;::</span><span class="n">Identity</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">n</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">direction</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">nt</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">direction</span><span class="p">.</span><span class="n">transpose</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">V</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">nt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">V</span> <span class="o">=</span> <span class="n">I</span> <span class="o">-</span> <span class="n">V</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">R</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;::</span><span class="n">Zero</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="n">R</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">residuals</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="n">R</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">residuals</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="n">R</span> <span class="o">=</span> <span class="n">V</span> <span class="o">*</span> <span class="n">R</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">residuals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">residuals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="n">coeffRef</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="n">ceres</span><span class="o">::</span><span class="n">CostFunction</span> <span class="o">*</span><span class="n">Create</span><span class="p">(</span><span class="n">VPnPData</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="n">ceres</span><span class="o">::</span><span class="n">AutoDiffCostFunction</span><span class="o">&lt;</span><span class="n">vpnp_calib</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="n">vpnp_calib</span><span class="p">(</span><span class="n">p</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">VPnPData</span> <span class="n">pd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.粗标定</p>
+<p>代码中还实现了一个粗标定的方法，工作方式为调整初始参数，判断匹配对的数目是否增加，如果增加，则认为图像和点云配准更加准确，此时对参数进行更新，否则进入下一组值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">roughCalib</span><span class="p">(</span><span class="n">Calibration</span> <span class="o">&amp;</span><span class="n">calibra</span><span class="p">,</span> <span class="kt">double</span> <span class="n">search_resolution</span><span class="p">,</span> <span class="kt">int</span> <span class="n">max_iter</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">float</span> <span class="n">match_dis</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">fix_adjust_euler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;roughCalib ....&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span><span class="c1">//进行两轮
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">round</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">round</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">round</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span><span class="c1">//依次调整三个角度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">a</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span><span class="c1">//对所有相机进行优化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">rot</span> <span class="o">=</span> <span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">ext_R</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Vector3d</span> <span class="n">transation</span> <span class="o">=</span> <span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">ext_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">min_cost</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">iter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iter</span> <span class="o">&lt;</span> <span class="n">max_iter</span><span class="p">;</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">adjust_euler</span> <span class="o">=</span> <span class="n">fix_adjust_euler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">//正负交叉
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>          <span class="n">adjust_euler</span><span class="p">[</span><span class="n">round</span><span class="p">]</span> <span class="o">=</span> <span class="n">fix_adjust_euler</span><span class="p">[</span><span class="n">round</span><span class="p">]</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">iter</span><span class="p">)</span> <span class="o">*</span> <span class="kt">int</span><span class="p">(</span><span class="n">iter</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">search_resolution</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">adjust_rotation_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">adjust_rotation_matrix</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">              <span class="n">Eigen</span><span class="o">::</span><span class="n">AngleAxisd</span><span class="p">(</span><span class="n">adjust_euler</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">UnitZ</span><span class="p">())</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">Eigen</span><span class="o">::</span><span class="n">AngleAxisd</span><span class="p">(</span><span class="n">adjust_euler</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">UnitY</span><span class="p">())</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">Eigen</span><span class="o">::</span><span class="n">AngleAxisd</span><span class="p">(</span><span class="n">adjust_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">UnitX</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">          <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">test_rot</span> <span class="o">=</span> <span class="n">rot</span> <span class="o">*</span> <span class="n">adjust_rotation_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">test_euler</span> <span class="o">=</span> <span class="n">test_rot</span><span class="p">.</span><span class="n">eulerAngles</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="n">Vector6d</span> <span class="n">test_params</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">test_params</span>
+</span></span><span class="line"><span class="cl">              <span class="o">&lt;&lt;</span> <span class="n">test_euler</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">test_euler</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">test_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">transation</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">transation</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">transation</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VPnPData</span><span class="o">&gt;</span> <span class="n">pnp_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">//建立匹配对
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>          <span class="n">calibra</span><span class="p">.</span><span class="n">buildVPnp</span><span class="p">(</span><span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">test_params</span><span class="p">,</span> <span class="n">match_dis</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                            <span class="nb">false</span><span class="p">,</span> <span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">rgb_edge_clouds</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">calibra</span><span class="p">.</span><span class="n">lidar_edge_clouds</span><span class="p">,</span> <span class="n">pnp_list</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="kt">int</span> <span class="n">edge_size</span> <span class="o">=</span> <span class="n">calibra</span><span class="p">.</span><span class="n">lidar_edge_clouds</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">          <span class="kt">int</span> <span class="n">pnp_size</span> <span class="o">=</span> <span class="n">pnp_list</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">          <span class="kt">float</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">((</span><span class="kt">float</span><span class="p">)</span> <span class="p">(</span><span class="n">edge_size</span> <span class="o">-</span> <span class="n">pnp_size</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span> <span class="n">edge_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef DEBUG
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>          <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;n &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; round &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">round</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; a &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; iter &#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">&lt;&lt;</span> <span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; cost:&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>          <span class="c1">//NOTE:因为，edge_size是不变的，cost越小说明pnp_list数量多,说明pnp配准越好
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>          <span class="k">if</span> <span class="p">(</span><span class="n">cost</span> <span class="o">&lt;</span> <span class="n">min_cost</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;cost :&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;; edge size :  &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">calibra</span><span class="p">.</span><span class="n">lidar_edge_clouds</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                      <span class="o">&lt;&lt;</span> <span class="s">&#34;; pnp_list: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">pnp_list</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">min_cost</span> <span class="o">=</span> <span class="n">cost</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3d</span> <span class="n">rot</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">rot</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">AngleAxisd</span><span class="p">(</span><span class="n">test_params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">UnitZ</span><span class="p">())</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Eigen</span><span class="o">::</span><span class="n">AngleAxisd</span><span class="p">(</span><span class="n">test_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">UnitY</span><span class="p">())</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Eigen</span><span class="o">::</span><span class="n">AngleAxisd</span><span class="p">(</span><span class="n">test_params</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">::</span><span class="n">UnitX</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">//更新参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">update_Rt</span><span class="p">(</span><span class="n">rot</span><span class="p">,</span> <span class="n">transation</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">calibra</span><span class="p">.</span><span class="n">buildVPnp</span><span class="p">(</span><span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">test_params</span><span class="p">,</span> <span class="n">match_dis</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                              <span class="nb">true</span><span class="p">,</span> <span class="n">calibra</span><span class="p">.</span><span class="n">cams</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">rgb_edge_clouds</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                              <span class="n">calibra</span><span class="p">.</span><span class="n">lidar_edge_clouds</span><span class="p">,</span> <span class="n">pnp_list</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
 </div><p><span style="color:red">正在更新中&hellip;</span></p>
 <h2 id="参考文献">参考文献
 </h2><p>[1]<a class="link" href="https://arxiv.org/pdf/2109.06550"  target="_blank" rel="noopener"
@@ -1337,7 +1618,7 @@ $$<p>
 
 
         <span>
-            最后更新于 2024-10-17  08:53  &#43;0800
+            最后更新于 2024-10-17  16:17  &#43;0800
         </span>
     </section></footer>
 
