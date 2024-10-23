@@ -2,19 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
+  </url><url>
     <loc>https://wzwan-developer.github.io/categories/</loc>
-    <lastmod>2024-10-17T16:17:58+08:00</lastmod>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
+  </url><url>
+    <loc>https://wzwan-developer.github.io/post/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
+  </url><url>
+    <loc>https://wzwan-developer.github.io/tags/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
+  </url><url>
+    <loc>https://wzwan-developer.github.io/tags/%E6%9C%80%E8%BF%91%E9%82%BB%E9%97%AE%E9%A2%98/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
+  </url><url>
+    <loc>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
   </url><url>
     <loc>https://wzwan-developer.github.io/p/mlcc/02/</loc>
     <lastmod>2024-10-17T16:17:58+08:00</lastmod>
   </url><url>
     <loc>https://wzwan-developer.github.io/tags/mlcc/</loc>
-    <lastmod>2024-10-17T16:17:58+08:00</lastmod>
-  </url><url>
-    <loc>https://wzwan-developer.github.io/post/</loc>
-    <lastmod>2024-10-17T16:17:58+08:00</lastmod>
-  </url><url>
-    <loc>https://wzwan-developer.github.io/tags/</loc>
     <lastmod>2024-10-17T16:17:58+08:00</lastmod>
   </url><url>
     <loc>https://wzwan-developer.github.io/p/mlcc/00/</loc>
@@ -47,6 +56,9 @@
     <loc>https://wzwan-developer.github.io/categories/calibrate/</loc>
     <lastmod>2024-09-11T11:42:45+08:00</lastmod>
   </url><url>
+    <loc>https://wzwan-developer.github.io/categories/pointcloudprocessing/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
+  </url><url>
     <loc>https://wzwan-developer.github.io/categories/math/</loc>
     <lastmod>2024-09-09T14:23:43+08:00</lastmod>
   </url><url>
@@ -55,5 +67,8 @@
   </url><url>
     <loc>https://wzwan-developer.github.io/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/</loc>
     <lastmod>2024-09-01T00:13:40+08:00</lastmod>
+  </url><url>
+    <loc>https://wzwan-developer.github.io/categories/nearestneighborproblem/</loc>
+    <lastmod>2024-10-23T13:44:03+08:00</lastmod>
   </url>
 </urlset>

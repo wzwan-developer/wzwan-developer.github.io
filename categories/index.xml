@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>wzwan</copyright>
-        <lastBuildDate>Wed, 09 Oct 2024 17:22:01 +0800</lastBuildDate><atom:link href="https://wzwan-developer.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 22 Oct 2024 20:39:43 +0800</lastBuildDate><atom:link href="https://wzwan-developer.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>传感器标定</title>
         <link>https://wzwan-developer.github.io/categories/calibrate/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -16,12 +16,28 @@
         <description>&lt;img src="https://wzwan-developer.github.io/categories/calibrate/calibrate.png" alt="Featured image of post 传感器标定" /&gt;</description>
         </item>
         <item>
+        <title>基础点云处理</title>
+        <link>https://wzwan-developer.github.io/categories/pointcloudprocessing/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://wzwan-developer.github.io/categories/pointcloudprocessing/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/categories/pointcloudprocessing/math.png" alt="Featured image of post 基础点云处理" /&gt;</description>
+        </item>
+        <item>
         <title>数学理论</title>
         <link>https://wzwan-developer.github.io/categories/math/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://wzwan-developer.github.io/categories/math/</guid>
         <description>&lt;img src="https://wzwan-developer.github.io/categories/math/math.png" alt="Featured image of post 数学理论" /&gt;</description>
+        </item>
+        <item>
+        <title>最近邻问题</title>
+        <link>https://wzwan-developer.github.io/categories/nearestneighborproblem/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://wzwan-developer.github.io/categories/nearestneighborproblem/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/categories/nearestneighborproblem/title.png" alt="Featured image of post 最近邻问题" /&gt;</description>
         </item>
         
     </channel>
