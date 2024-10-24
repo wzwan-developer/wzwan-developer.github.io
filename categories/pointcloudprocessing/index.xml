@@ -12,7 +12,15 @@
         <pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate>
         
         <guid>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png" alt="Featured image of post 01" /&gt;&lt;h2 id=&#34;理论内容&#34;&gt;理论内容
+        <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png" alt="Featured image of post 01" /&gt;</description>
+        </item>
+        <item>
+        <title>暴力最近邻法</title>
+        <link>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</link>
+        <pubDate>Tue, 22 Oct 2024 20:29:04 +0800</pubDate>
+        
+        <guid>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</guid>
+        <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png" alt="Featured image of post 暴力最近邻法" /&gt;&lt;h2 id=&#34;理论内容&#34;&gt;理论内容
 &lt;/h2&gt;&lt;p&gt;暴力最近邻法(Brute-force Nearest Neighbour Search,BF 最近邻搜索)是最简单直观的最近邻计算方法,无须任何辅助的数据结构。
 如果我们搜索一个点的最近邻,不妨称为暴力最近邻搜索;如果搜索k个最近邻,不妨称为暴力k近邻搜索。整体而言,这是一种简单粗暴的思路。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;暴力最近邻搜索&lt;/strong&gt;   给定点云$\mathcal{X}$和待查找点$x_m$,计算$x_m$与$\mathcal{X}中每个点的距离,并给出最小距离。
@@ -104,14 +112,6 @@
 &lt;p&gt;[2]&lt;a class=&#34;link&#34; href=&#34;https://github.com/gaoxiang12/slam_in_autonomous_driving/tree/master&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;《slam_in_autonomous_driving》——高翔老师的开源仓库&lt;/a&gt;&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>暴力最近邻法</title>
-        <link>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</link>
-        <pubDate>Tue, 22 Oct 2024 20:29:04 +0800</pubDate>
-        
-        <guid>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png" alt="Featured image of post 暴力最近邻法" /&gt;</description>
         </item>
         
     </channel>

@@ -10,7 +10,7 @@
 <meta property='og:description' content="最近邻问题系列">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='最近邻问题' /><meta property='article:published_time' content='2024-10-22T20:29:04&#43;08:00'/><meta property='article:modified_time' content='2024-10-23T13:44:03&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='最近邻问题' /><meta property='article:published_time' content='2024-10-22T20:29:04&#43;08:00'/><meta property='article:modified_time' content='2024-10-24T17:52:59&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png' />
 <meta name="twitter:title" content="暴力最近邻法">
 <meta name="twitter:description" content="最近邻问题系列"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png' />
@@ -191,7 +191,40 @@
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#理论内容">理论内容</a></li>
+    <li><a href="#代码实践">代码实践</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="has-image main-article">
@@ -267,7 +300,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 0 分钟
+                    阅读时长: 2 分钟
                 </time>
             </div>
         
@@ -292,7 +325,98 @@
     <section class="article-content">
     
     
-    
+    <h2 id="理论内容">理论内容
+</h2><p>暴力最近邻法(Brute-force Nearest Neighbour Search,BF 最近邻搜索)是最简单直观的最近邻计算方法,无须任何辅助的数据结构。
+如果我们搜索一个点的最近邻,不妨称为暴力最近邻搜索;如果搜索k个最近邻,不妨称为暴力k近邻搜索。整体而言,这是一种简单粗暴的思路。</p>
+<p><strong>暴力最近邻搜索</strong>   给定点云$\mathcal{X}$和待查找点$x_m$,计算$x_m$与$\mathcal{X}中每个点的距离,并给出最小距离。
+同理,可以类似地给出暴力k近邻的搜索方法:</p>
+<p><strong>暴力k近邻（BF kNN）</strong></p>
+<ol>
+<li>对给定点云$\mathcal{X}$和查找点$x_m$,计算$x_m$对所有$\mathcal{X}$点的距离。</li>
+<li>对第1步的结果排序。</li>
+<li>选择$k$个最近的点。</li>
+<li>对所有$x_m$重复步骤1~3。</li>
+</ol>
+<h2 id="代码实践">代码实践
+</h2><ol>
+<li>暴力最近邻</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">//  单线程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @brief Brute-force Nearest Neighbour
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param cloud 点云
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param point 待查找点
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return 找到的最近点索引
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">bfnn_point</span><span class="p">(</span><span class="n">CloudPtr</span> <span class="n">cloud</span><span class="p">,</span> <span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">min_element</span><span class="p">(</span><span class="n">cloud</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">cloud</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span><span class="o">&amp;</span><span class="n">point</span><span class="p">](</span><span class="k">const</span> <span class="n">PointType</span><span class="o">&amp;</span> <span class="n">pt1</span><span class="p">,</span> <span class="k">const</span> <span class="n">PointType</span><span class="o">&amp;</span> <span class="n">pt2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="n">pt1</span><span class="p">.</span><span class="n">getVector3fMap</span><span class="p">()</span> <span class="o">-</span> <span class="n">point</span><span class="p">).</span><span class="n">squaredNorm</span><span class="p">()</span> <span class="o">&lt;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">(</span><span class="n">pt2</span><span class="p">.</span><span class="n">getVector3fMap</span><span class="p">()</span> <span class="o">-</span> <span class="n">point</span><span class="p">).</span><span class="n">squaredNorm</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">              <span class="p">})</span> <span class="o">-</span><span class="n">cloud</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @brief 对点云进行BF最近邻
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param cloud1  目标点云
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param cloud2  被查找点云
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param matches 两个点云内的匹配关系
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">void</span> <span class="nf">bfnn_cloud</span><span class="p">(</span><span class="n">CloudPtr</span> <span class="n">cloud1</span><span class="p">,</span> <span class="n">CloudPtr</span> <span class="n">cloud2</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">size_t</span><span class="p">,</span> <span class="n">size_t</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matches</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 单线程版本
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">size_t</span><span class="o">&gt;</span> <span class="n">index</span><span class="p">(</span><span class="n">cloud2</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">](</span><span class="n">size_t</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">)</span> <span class="k">mutable</span> <span class="p">{</span> <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span><span class="o">++</span><span class="p">;</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="n">matches</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">seq</span><span class="p">,</span> <span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">matches</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">second</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">matches</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">first</span> <span class="o">=</span> <span class="n">bfnn_point</span><span class="p">(</span><span class="n">cloud1</span><span class="p">,</span> <span class="n">ToVec3f</span><span class="p">(</span><span class="n">cloud2</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">[</span><span class="n">idx</span><span class="p">]));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考文献">参考文献
+</h2><p>[1]<a class="link" href="https://product.dangdang.com/11478791697.html"  target="_blank" rel="noopener"
+    >《自动驾驶与机器人中的 SLAM技术:从理论到实践》</a></p>
+<p>[2]<a class="link" href="https://github.com/gaoxiang12/slam_in_autonomous_driving/tree/master"  target="_blank" rel="noopener"
+    >《slam_in_autonomous_driving》——高翔老师的开源仓库</a></p>
+
 </section>
 
 
@@ -327,7 +451,7 @@
 
 
         <span>
-            最后更新于 2024-10-23  13:44  &#43;0800
+            最后更新于 2024-10-24  17:52  &#43;0800
         </span>
     </section></footer>
 
