@@ -7,12 +7,14 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>wzwan</copyright><atom:link href="https://wzwan-developer.github.io/categories/nearestneighborproblem/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>01</title>
+        <title>K-d树</title>
         <link>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</link>
         <pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate>
         
         <guid>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</guid>
-        <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png" alt="Featured image of post 01" /&gt;</description>
+        <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" /&gt;&lt;h2 id=&#34;理论内容&#34;&gt;理论内容
+&lt;/h2&gt;&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;正在更新中&amp;hellip;&lt;/span&gt;&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>暴力最近邻法</title>
