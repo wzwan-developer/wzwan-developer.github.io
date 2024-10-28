@@ -10,7 +10,7 @@
 <meta property='og:description' content="最近邻问题系列">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='最近邻问题' /><meta property='article:published_time' content='2024-10-22T20:29:04&#43;08:00'/><meta property='article:modified_time' content='2024-10-24T17:52:59&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='最近邻问题' /><meta property='article:published_time' content='2024-10-22T20:29:04&#43;08:00'/><meta property='article:modified_time' content='2024-10-28T11:42:23&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png' />
 <meta name="twitter:title" content="暴力最近邻法">
 <meta name="twitter:description" content="最近邻问题系列"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png' />
@@ -375,6 +375,20 @@
 </span><span class="lnt">30
 </span><span class="lnt">31
 </span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">//  单线程
@@ -404,7 +418,21 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">size_t</span><span class="o">&gt;</span> <span class="n">index</span><span class="p">(</span><span class="n">cloud2</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">](</span><span class="n">size_t</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">)</span> <span class="k">mutable</span> <span class="p">{</span> <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span><span class="o">++</span><span class="p">;</span> <span class="p">});</span>
 </span></span><span class="line"><span class="cl">    <span class="n">matches</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">seq</span><span class="p">,</span> <span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//参数std::execution::seq表示使用单线程,顺序化的方式执行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">seq</span><span class="p">,</span> <span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">matches</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">second</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">matches</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">first</span> <span class="o">=</span> <span class="n">bfnn_point</span><span class="p">(</span><span class="n">cloud1</span><span class="p">,</span> <span class="n">ToVec3f</span><span class="p">(</span><span class="n">cloud2</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">[</span><span class="n">idx</span><span class="p">]));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//多线程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">bfnn_cloud_mt</span><span class="p">(</span><span class="n">CloudPtr</span> <span class="n">cloud1</span><span class="p">,</span> <span class="n">CloudPtr</span> <span class="n">cloud2</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">size_t</span><span class="p">,</span> <span class="n">size_t</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matches</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 先生成索引
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">size_t</span><span class="o">&gt;</span> <span class="n">index</span><span class="p">(</span><span class="n">cloud2</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">](</span><span class="n">size_t</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">)</span> <span class="k">mutable</span> <span class="p">{</span> <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span><span class="o">++</span><span class="p">;</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 并行化for_each
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">matches</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">par_unseq</span><span class="p">,</span> <span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">matches</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">second</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">matches</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">first</span> <span class="o">=</span> <span class="n">bfnn_point</span><span class="p">(</span><span class="n">cloud1</span><span class="p">,</span> <span class="n">ToVec3f</span><span class="p">(</span><span class="n">cloud2</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">[</span><span class="n">idx</span><span class="p">]));</span>
 </span></span><span class="line"><span class="cl">    <span class="p">});</span>
@@ -451,7 +479,7 @@
 
 
         <span>
-            最后更新于 2024-10-24  17:52  &#43;0800
+            最后更新于 2024-10-28  11:42  &#43;0800
         </span>
     </section></footer>
 
