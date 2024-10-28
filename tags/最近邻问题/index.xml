@@ -14,7 +14,61 @@
         
         <guid>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</guid>
         <description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" /&gt;&lt;h2 id=&#34;理论内容&#34;&gt;理论内容
-&lt;/h2&gt;&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;正在更新中&amp;hellip;&lt;/span&gt;&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;        K-d树最早由Bentley Jon Louis提出,是二分树的高维度版本。
+K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组成。在二分树里,可以用单个维度的信息来区分左右,但在 K-d 树里,由于要分割高维数据,会用超平面(Hyperplane)来区分左右侧(不过,对于三维点,实际上的超平面就是普通的二维平面)。在如何分割方面,则存在一些方法上的差异。下文介绍的是沿轴超平面分割(Axis-aligned Splitting Plane)。只需要沿着所有维度中任意一个轴将点云分开即可,实现起来十分简单。&lt;/p&gt;
+&lt;p&gt;        我们可以对一个任意维度的点云建立 K-d 树,称为 K-d树的构建过程,或者叫建树。随后, 可以对空间中任意一点进行k近邻查找,称为查找过程。根据查找方法的不同,K-d树也分按范围查找(Search by Range)和按 k 最近邻查找(Search by k Nearest Neighbours),二者的具体实现方法大同小异。在K-d树中,以树状结构来表达点云的结构关系,规定:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;每个点云有左右两个分枝；&lt;/li&gt;
+&lt;li&gt;叶子节点表示原始点云中的点。当然在实际存储时，可以存储点的索引而非点云本身，这样可以节省空间。&lt;/li&gt;
+&lt;li&gt;非叶子节点存储一个分割轴和分割阈值，来表达如何分割左分枝和右分枝。例如，x=1可以存储为按第一个轴，阈值为1的方式来分割。规定左侧分枝取小于号，右侧分枝取大于等于号。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;        按照上述约定,就可以实现 K-d树的构建算法和查找算法。下面简单描述其算法步骤,然后给出实现和结果。由于 K-d 树在数据结构上还是一种树,所以大部分算法都可以用递归的形式很简洁地实现。&lt;/p&gt;
+&lt;h3 id=&#34;k-d树的构建&#34;&gt;K-d树的构建
+&lt;/h3&gt;&lt;p&gt;        在K-d树的构建过程中,主要考虑如何对给定点云进行分割。不同分割方法的策略不同。传统的做法,或是以固定顺序来交替坐标轴1099,或是计算当前点云在各轴上的分散程度,取分散程度最大的轴作为分割轴。这里介绍后一种方法&lt;/p&gt;
+&lt;p&gt;K-d树的构建步骤如下:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;输入:点云数据 $X={x_1,\cdots,x_n}$,其中$x_i\in\mathbb{R}^{k}$。&lt;/li&gt;
+&lt;li&gt;考虑将子集$X_n\subset X$插人节点$n$。&lt;/li&gt;
+&lt;li&gt;如果$X_n$为空,则退出。&lt;/li&gt;
+&lt;li&gt;如果$X_n$只有一个点,则记为叶子节点,退出。&lt;/li&gt;
+&lt;li&gt;计算$X_n$在各轴的方差,挑选分布最大的一个轴,记为j;取平均数$m_j = X_n[j]$作为分割阈值。&lt;/li&gt;
+&lt;li&gt;遍历 $x\in{X_n}$,对于$x[j]&lt;m_j$的,插入左节点;否则插入右节点。&lt;/li&gt;
+&lt;li&gt;递归上述步骤直到所有点都被插人树中。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;k-d树的查找&#34;&gt;K-d树的查找
+&lt;/h3&gt;&lt;p&gt;K-d 树的最近邻查找步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;输人:K-d 树$T$,查找点$x$。&lt;/li&gt;
+&lt;li&gt;输出:$x$的最近邻。&lt;/li&gt;
+&lt;li&gt;记当前节点为$n_c$,最初取$n_c$为根节点。记$d$为当前搜索到的最小距离。&lt;br&gt;
+(a) 如果$n_c$是叶子,则计算$n_c$与$x$的距离。看它是否小于$d$;若是,记$n_c$为最近邻,回退到它的父节点。&lt;br&gt;
+(b) 如果$n_c$不是叶子,则计算$x$落在$n_c$的哪一侧。若$n_c$所在的一侧未被展开,则优先展开$n_c$所在的一侧。&lt;br&gt;
+(c) 计算是否需要展开$n_c$的另一侧。记$x$与$n_c$分割面的距离为$d&#39; $。若$d&#39; &lt;d$,则必须展开另一侧;否则跳过另一侧分枝。&lt;br&gt;
+(d) 如果两侧都已经展开,或者不必展开,则返回上一节点,直到$n_c$变为根节点。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;K-d树的最近邻查找步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;输人:K-d树$T$,查找点$x$,最近邻数$k$。&lt;/li&gt;
+&lt;li&gt;输出:k 近邻集合$ N$。&lt;/li&gt;
+&lt;li&gt;记当前节点为$n_c$,最初取 $n_c$ 为根节点。令函数$S(n_c)$表示在 $n_c$ 下进行k近邻搜索: &lt;br&gt;
+(a) 如果 $n_c$ 是叶子,则计算 $n_c$ 与 $x$ 的距离是否小于 $N$ 中的最大距离;若是,则将$n_c$放入N。若此时$|N|&gt;k$,则删除 $N$ 中距离最大的匹配点。&lt;br&gt;
+(b) 计算 $x$ 落在 $n_c$ 的哪一侧。递归调用 $S(n_c.left)$或 $S(n_c.right)$。&lt;br&gt;
+(c) 计算是否需要展开$n_c$的另一侧。展开的条件判定:$|N|&lt;k$时,必须展开;$|N|=k$且$x$与$n_c$的分割面距离小于$N$中最大匹配距离，也进行展开。&lt;br&gt;
+(d) 若 $n_c$ 的令一侧不需要展开，则函数返回；否则继续调用另一侧的近邻搜索算法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;代码实践&#34;&gt;代码实践
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C++&#34; data-lang=&#34;C++&#34;&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;正在更新中&amp;hellip;&lt;/span&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考文献&#34;&gt;参考文献
+&lt;/h2&gt;&lt;p&gt;[1]&lt;a class=&#34;link&#34; href=&#34;https://product.dangdang.com/11478791697.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;《自动驾驶与机器人中的 SLAM技术:从理论到实践》&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[2]&lt;a class=&#34;link&#34; href=&#34;https://github.com/gaoxiang12/slam_in_autonomous_driving/tree/master&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;《slam_in_autonomous_driving》——高翔老师的开源仓库&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
