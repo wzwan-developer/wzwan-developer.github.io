@@ -745,8 +745,7 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;遗留内容：如何删除K-d树中的一个点，如何对K-d树进行平衡。&lt;/span&gt;&lt;/p&gt;
-&lt;h2 id=&#34;参考文献&#34;&gt;参考文献
+&lt;/div&gt;&lt;h2 id=&#34;参考文献&#34;&gt;参考文献
 &lt;/h2&gt;&lt;p&gt;[1]&lt;a class=&#34;link&#34; href=&#34;https://product.dangdang.com/11478791697.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;《自动驾驶与机器人中的 SLAM技术:从理论到实践》&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;[2]&lt;a class=&#34;link&#34; href=&#34;https://github.com/gaoxiang12/slam_in_autonomous_driving/tree/master&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
