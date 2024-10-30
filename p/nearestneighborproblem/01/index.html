@@ -10,7 +10,7 @@
 <meta property='og:description' content="最近邻问题系列，摘录自高翔博士的《自动驾驶与机器人中的 SLAM技术:从理论到实践》">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/nearestneighborproblem/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='最近邻问题' /><meta property='article:published_time' content='2024-10-22T20:39:43&#43;08:00'/><meta property='article:modified_time' content='2024-10-29T18:06:46&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='最近邻问题' /><meta property='article:published_time' content='2024-10-22T20:39:43&#43;08:00'/><meta property='article:modified_time' content='2024-10-30T16:05:54&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png' />
 <meta name="twitter:title" content="K-d树">
 <meta name="twitter:description" content="最近邻问题系列，摘录自高翔博士的《自动驾驶与机器人中的 SLAM技术:从理论到实践》"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png' />
@@ -592,6 +592,131 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span><span class="lnt">214
 </span><span class="lnt">215
 </span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span><span class="lnt">273
+</span><span class="lnt">274
+</span><span class="lnt">275
+</span><span class="lnt">276
+</span><span class="lnt">277
+</span><span class="lnt">278
+</span><span class="lnt">279
+</span><span class="lnt">280
+</span><span class="lnt">281
+</span><span class="lnt">282
+</span><span class="lnt">283
+</span><span class="lnt">284
+</span><span class="lnt">285
+</span><span class="lnt">286
+</span><span class="lnt">287
+</span><span class="lnt">288
+</span><span class="lnt">289
+</span><span class="lnt">290
+</span><span class="lnt">291
+</span><span class="lnt">292
+</span><span class="lnt">293
+</span><span class="lnt">294
+</span><span class="lnt">295
+</span><span class="lnt">296
+</span><span class="lnt">297
+</span><span class="lnt">298
+</span><span class="lnt">299
+</span><span class="lnt">300
+</span><span class="lnt">301
+</span><span class="lnt">302
+</span><span class="lnt">303
+</span><span class="lnt">304
+</span><span class="lnt">305
+</span><span class="lnt">306
+</span><span class="lnt">307
+</span><span class="lnt">308
+</span><span class="lnt">309
+</span><span class="lnt">310
+</span><span class="lnt">311
+</span><span class="lnt">312
+</span><span class="lnt">313
+</span><span class="lnt">314
+</span><span class="lnt">315
+</span><span class="lnt">316
+</span><span class="lnt">317
+</span><span class="lnt">318
+</span><span class="lnt">319
+</span><span class="lnt">320
+</span><span class="lnt">321
+</span><span class="lnt">322
+</span><span class="lnt">323
+</span><span class="lnt">324
+</span><span class="lnt">325
+</span><span class="lnt">326
+</span><span class="lnt">327
+</span><span class="lnt">328
+</span><span class="lnt">329
+</span><span class="lnt">330
+</span><span class="lnt">331
+</span><span class="lnt">332
+</span><span class="lnt">333
+</span><span class="lnt">334
+</span><span class="lnt">335
+</span><span class="lnt">336
+</span><span class="lnt">337
+</span><span class="lnt">338
+</span><span class="lnt">339
+</span><span class="lnt">340
+</span><span class="lnt">341
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">/// Kd树节点，二叉树结构，内部用祼指针，对外一个root的shared_ptr
@@ -674,10 +799,52 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">/// 获取k最近邻
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="nf">GetClosestPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">PointType</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">closest_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="nf">GetClosestPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">PointType</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">closest_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;</span> <span class="n">size_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;cannot set k larger than cloud size: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">k</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">size_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">k_</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;</span> <span class="n">knn_result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Knn</span><span class="p">(</span><span class="n">ToVec3f</span><span class="p">(</span><span class="n">pt</span><span class="p">),</span> <span class="n">root_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">knn_result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 排序并返回结果
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">closest_idx</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">knn_result</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">closest_idx</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 倒序插入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">closest_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">knn_result</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">node_</span><span class="o">-&gt;</span><span class="n">point_idx_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">knn_result</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>  
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">/// 并行为点云寻找最近邻
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="nf">GetClosestPointMT</span><span class="p">(</span><span class="k">const</span> <span class="n">CloudPtr</span><span class="o">&amp;</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">size_t</span><span class="p">,</span> <span class="n">size_t</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matches</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="nf">GetClosestPointMT</span><span class="p">(</span><span class="k">const</span> <span class="n">CloudPtr</span><span class="o">&amp;</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">size_t</span><span class="p">,</span> <span class="n">size_t</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matches</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">         <span class="n">matches</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">cloud</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="n">k</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 索引
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">index</span><span class="p">(</span><span class="n">cloud</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">cloud</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">par_unseq</span><span class="p">,</span> <span class="n">index</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">index</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cloud</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">matches</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">k</span><span class="p">](</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">closest_idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">GetClosestPoint</span><span class="p">(</span><span class="n">cloud</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">closest_idx</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">matches</span><span class="p">[</span><span class="n">idx</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="n">i</span><span class="p">].</span><span class="n">second</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">closest_idx</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">matches</span><span class="p">[</span><span class="n">idx</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="n">i</span><span class="p">].</span><span class="n">first</span> <span class="o">=</span> <span class="n">closest_idx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">//NOTE: 非法定义 constexpr size_t kINVALID_ID = std::numeric_limits&lt;size_t&gt;::max();
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">matches</span><span class="p">[</span><span class="n">idx</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="n">i</span><span class="p">].</span><span class="n">first</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">kINVALID_ID</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">/// 这个被用于计算最近邻的倍数
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">SetEnableANN</span><span class="p">(</span><span class="kt">bool</span> <span class="n">use_ann</span> <span class="o">=</span> <span class="nb">true</span><span class="p">,</span> <span class="kt">float</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">{</span>
@@ -689,10 +856,30 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">size_t</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">size_</span><span class="p">;</span> <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">/// 清理数据
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">Clear</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">Clear</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">np</span> <span class="p">:</span> <span class="n">nodes_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">second</span> <span class="o">!=</span> <span class="n">root_</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">delete</span> <span class="n">np</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">nodes_</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">root_</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">size_</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tree_node_id_</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">/// 打印所有节点信息
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">PrintAll</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">PrintAll</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">np</span> <span class="p">:</span> <span class="n">nodes_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="n">node</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left_</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right_</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">LOG</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;leaf node: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">id_</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, idx: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">point_idx_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">LOG</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;node: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">id_</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, axis: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">axis_index_</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, th: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">split_thresh_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">   <span class="k">private</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">/// kdtree 构建相关
@@ -770,7 +957,12 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Reset</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Reset</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tree_node_id_</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">root_</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="k">new</span> <span class="n">KdTreeNode</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">root_</span><span class="o">-&gt;</span><span class="n">id_</span> <span class="o">=</span> <span class="n">tree_node_id_</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">size_</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">/// 两个点的平方距离
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">Dis2</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">p1</span><span class="p">,</span> <span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">p2</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p2</span><span class="p">).</span><span class="n">squaredNorm</span><span class="p">();</span> <span class="p">}</span>
@@ -781,14 +973,50 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * @param pt     查询点
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * @param node   kdtree 节点
 </span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Knn</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">KdTreeNode</span><span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Knn</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">KdTreeNode</span><span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">IsLeaf</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果是叶子，检查叶子是否能插入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">ComputeDisForLeaf</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">knn_result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 看pt落在左还是右，优先搜索pt所在的子树
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 然后再看另一侧子树是否需要搜索
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">KdTreeNode</span> <span class="o">*</span><span class="n">this_side</span><span class="p">,</span> <span class="o">*</span><span class="n">that_side</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">axis_index_</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">split_thresh_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">this_side</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">that_side</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">this_side</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">that_side</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Knn</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">this_side</span><span class="p">,</span> <span class="n">knn_result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//判断是否需要展开
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">NeedExpand</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">knn_result</span><span class="p">))</span> <span class="p">{</span>  <span class="c1">// 注意这里是跟自己比
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Knn</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">that_side</span><span class="p">,</span> <span class="n">knn_result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/**
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * 对叶子节点，计算它和查询点的距离，尝试放入结果中
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * @param pt    查询点
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * @param node  Kdtree 节点
 </span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">ComputeDisForLeaf</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">KdTreeNode</span><span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">ComputeDisForLeaf</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">KdTreeNode</span><span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 比较与结果队列的差异，如果优于最远距离，则插入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">float</span> <span class="n">dis2</span> <span class="o">=</span> <span class="n">Dis2</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">cloud_</span><span class="p">[</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">point_idx_</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">knn_result</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">k_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// results 不足k
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">knn_result</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">dis2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// results等于k，比较current与max_dis_iter之间的差异
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">dis2</span> <span class="o">&lt;</span> <span class="n">knn_result</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">distance2_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">knn_result</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">dis2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">knn_result</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/**
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * 检查node下是否需要展开
@@ -796,7 +1024,29 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * @param node Kdtree 节点
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * @return true if 需要展开
 </span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">NeedExpand</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">KdTreeNode</span><span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;&amp;</span> <span class="n">knn_result</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">NeedExpand</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3f</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">KdTreeNode</span><span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">NodeAndDistance</span><span class="o">&gt;&amp;</span> <span class="n">knn_result</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">knn_result</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">k_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//前面也说过,判断另一侧的是否展开的条件是判断当前找到最小的距离是否小于到分界线的距离，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//如果是，则说明另一侧的点肯定是更远的，则不用展开
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">approximate_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">d</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">axis_index_</span><span class="p">]</span> <span class="o">-</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">split_thresh_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">knn_result</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">distance2_</span> <span class="o">*</span> <span class="n">alpha_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 检测切面距离，看是否有比现在更小的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">float</span> <span class="n">d</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">axis_index_</span><span class="p">]</span> <span class="o">-</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">split_thresh_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">knn_result</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">distance2_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">k_</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>                                   <span class="c1">// knn最近邻数量
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">KdTreeNode</span><span class="o">&gt;</span> <span class="n">root_</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>  <span class="c1">// 根节点
@@ -812,7 +1062,7 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><span style="color:red;">正在更新中&hellip;</span></p>
+</div><p><span style="color:red;">遗留内容：如何删除K-d树中的一个点，如何对K-d树进行平衡。</span></p>
 <h2 id="参考文献">参考文献
 </h2><p>[1]<a class="link" href="https://product.dangdang.com/11478791697.html"  target="_blank" rel="noopener"
     >《自动驾驶与机器人中的 SLAM技术:从理论到实践》</a></p>
@@ -853,7 +1103,7 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 
 
         <span>
-            最后更新于 2024-10-29  18:06  &#43;0800
+            最后更新于 2024-10-30  16:05  &#43;0800
         </span>
     </section></footer>
 
