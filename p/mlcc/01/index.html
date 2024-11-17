@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-09-27T16:16:25&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-17T16:53:30&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
@@ -486,7 +486,20 @@ $$\begin{align*}\
 =\lambda_{3}(A_{l})\end{align*}$$<p>
 将其带入</p>
 $$\begin{align*}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)}\\
-=\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align*}$$<h4 id="推导二该论文中的推导思路">推导二：该论文中的推导思路
+=\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align*}$$<p>补充内容：由上述图4可知，$n_{l}^{T}({}^{G}p_{k}-q_{l})$表达了点${}^{G}p_{k}$到平面$\pi$的距离，其推导来源于向量法求点到平面的距离。如下图所示：
+<img src="/p/mlcc/01/distance.jpeg"
+	width="830"
+	height="570"
+	srcset="/p/mlcc/01/distance_hu4242366416134835914.jpeg 480w, /p/mlcc/01/distance_hu1847709023545538150.jpeg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="349px"
+	
+></p>
+<h4 id="推导二该论文中的推导思路">推导二：该论文中的推导思路
 </h4><p><span style="color:red;">后续补充！</span></p>
 <h3 id="二阶闭式导数的推导">二阶闭式导数的推导
 </h3><p>首先引入BALM中两个定理，如下所示:</p>
@@ -1928,6 +1941,8 @@ $$<div class="highlight"><div class="chroma">
     >《A micro Lie theory for state estimation in robotics》</a></p>
 <p>[5]<a class="link" href="https://blog.csdn.net/CV_Autobot/article/details/134173441"  target="_blank" rel="noopener"
     >《多个LiDAR-Camera无目标跨视角联合标定方法》</a></p>
+<p>[6]<a class="link" href="https://blog.csdn.net/weixin_36444661/article/details/112768144"  target="_blank" rel="noopener"
+    >《如何用法向量求点到平面距离_【立体几何】用空间向量求点到面的距离》</a></p>
 
 </section>
 
@@ -1963,7 +1978,7 @@ $$<div class="highlight"><div class="chroma">
 
 
         <span>
-            最后更新于 2024-09-27  16:16  &#43;0800
+            最后更新于 2024-11-17  16:53  &#43;0800
         </span>
     </section></footer>
 
