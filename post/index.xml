@@ -2201,7 +2201,7 @@ Fig. 3: A) LiDAR point cloud segmented with the adaptive voxelization. Points wi
 &lt;ul&gt;
 &lt;li&gt;如果一个体素内包含太多的特征点，则会导致文章&lt;a class=&#34;link&#34; href=&#34;https://wzwan-developer.github.io/p/mlcc/01/&#34; &gt;《Chapter 01: Multi-LiDAR Extrinsic Calibration》&lt;/a&gt;中推导过程章节中二阶闭式导数中的Hessian矩阵维度过高，在这种情况下，我们可以将点进行平均，以实现降采样但不降低映射一致性；&lt;/li&gt;
 &lt;li&gt;同时，二阶闭式导数中的Hessian矩阵推导过程中提到$\lambda_m\ne\lambda_n$,因此当遇到$\lambda$的代数多重性大于1的体素需要跳过（忽略）；&lt;/li&gt;
-&lt;li&gt;只需检查体素所包含的点，是否位于同一平面时允许更大的方差，则能自然地扩展到非平面特征（BLAM只提到了平面特征和边缘特征）；&lt;/li&gt;
+&lt;li&gt;只需检查体素所包含的点，是否位于同一平面时允许更大的方差，则能自然地扩展到非平面特征（BALM只提到了平面特征和边缘特征）；&lt;/li&gt;
 &lt;li&gt;设置了两个条件来停止递归体素化：一个是树的最大深度，另一个是体素的最小点数。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;        其中，判断体素是否为平面的方法是计算体素内所有的点云的协方差矩阵，判断最大特征值与最小特征值的比值是否大于一定的阈值，如果大于则为平面：&lt;/p&gt;
