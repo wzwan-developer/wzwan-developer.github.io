@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-23T20:13:24&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-23T22:20:49&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
@@ -867,6 +867,8 @@ $$<p>
 $$
 D=\begin{bmatrix}
 -{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}&I
+\end{bmatrix}=\begin{bmatrix}
+-({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}&I
 \end{bmatrix}\tag{式1}
 $$
 由于$\frac{\delta \lambda}{\delta p}$不变，所以$H$和$J$没有变换将其带入2.2.3章节的式9即可推导出$\bar{J}$和$\bar{H}$。
@@ -874,13 +876,13 @@ $$
 $$
 \begin{align*}
 \bar{H}_{0,0}=D_{0,k}^{T}H_{k,j}D_{j,0}\\
-=\begin{bmatrix}-{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}&I\end{bmatrix}^{T}H_{k,j}\begin{bmatrix}-{}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}&I\end{bmatrix}\\
-=\begin{bmatrix} {}^{G}_{L_0}R_{t_j}(p_k)^{\wedge} \\I\end{bmatrix}H_{k,j}\begin{bmatrix}-{}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}&I\end{bmatrix}\\
+=\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}&I\end{bmatrix}^{T}H_{k,j}\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&I\end{bmatrix}\\
+=\begin{bmatrix}( {}^{G}_{L_0}R_{t_j}p_k)^{\wedge} \\I\end{bmatrix}H_{k,j}\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&I\end{bmatrix}\\
+=\begin{bmatrix}(
+{}^{G}_{L_0}R_{t_j}p_k)^{\wedge}H_{k,j}\\H_{k,j}\end{bmatrix}\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&I\end{bmatrix}\\
 =\begin{bmatrix}
-{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}H_{k,j}\\H_{k,j}\end{bmatrix}\begin{bmatrix}-{}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}&I\end{bmatrix}\\
-=\begin{bmatrix}
--{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}H_{k,j}{}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}&{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}H_{k,j}\\
--H_{k,j} {}^{G}_{L_0}R_{t_j}(p_j)^{\wedge}& H_{k,j} 
+-({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}H_{k,j}({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}H_{k,j}\\
+-H_{k,j} ({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}& H_{k,j} 
 \end{bmatrix}
 \end{align*}\tag{式2}
 $$</li>
@@ -1750,7 +1752,7 @@ $$<div class="highlight"><div class="chroma">
 
 
         <span>
-            最后更新于 2024-11-23  20:13  &#43;0800
+            最后更新于 2024-11-23  22:20  &#43;0800
         </span>
     </section></footer>
 
