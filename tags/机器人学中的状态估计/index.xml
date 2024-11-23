@@ -73,7 +73,6 @@
 		data-flex-basis=&#34;365px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;上述结果等于&lt;/p&gt;
 $$1.5 = 5\times 10\% + 100\times0.5\% + 5000000\times0.000001\% $$&lt;p&gt;
 结果表明一张彩票成本两元，但是期望获得的收益为1.5元，每买一张都会亏损0.5元。&lt;/p&gt;
 &lt;h2 id=&#34;矩&#34;&gt;“矩”
@@ -98,9 +97,7 @@ $$&lt;p&gt;含义如下：
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;二阶矩&#34;&gt;二阶矩
-&lt;/h3&gt;&lt;p&gt;二阶矩是广为认知的协方差矩阵$\Sigma$
-&lt;/p&gt;
-$$
+&lt;/h3&gt;$$
     \Sigma=E[(X-\mu)^{2}]=\sum_{i}p_{i}(x_{i}-\mu)^{2}
 $$&lt;h3 id=&#34;高阶矩&#34;&gt;高阶矩
 &lt;/h3&gt;&lt;p&gt;三阶矩称为偏度，四阶矩称为峰度。各有用途但是共同的特点为称量之后才能使用。&lt;/p&gt;
@@ -122,46 +119,27 @@ $$M=\begin{bmatrix} A &amp; B\\  C &amp;D\\ \end{bmatrix}$$&lt;ul&gt;
 &lt;li&gt;如果，矩阵块 $A$ 是可逆的，则 $D − CA^{-1}  B$称之为 $A$ 关于 $M$的舒尔补。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;舒尔补的定理推导&#34;&gt;舒尔补的定理推导
-&lt;/h2&gt;&lt;p&gt;将$M$矩阵分别变成上三角或者下三角：
-&lt;/p&gt;
-$$\begin{bmatrix}I &amp; 0\\ -CA^{-1} &amp;I\\\end{bmatrix}
+&lt;/h2&gt;$$\begin{bmatrix}I &amp; 0\\ -CA^{-1} &amp;I\\\end{bmatrix}
 \begin{bmatrix}A &amp; B\\ C &amp; D\end{bmatrix}=\begin{bmatrix}A &amp; B\\ 0 &amp; \Delta _{A}\end{bmatrix}$$$$\begin{bmatrix}A &amp; B\\ C&amp;D\end{bmatrix}
 \begin{bmatrix}I &amp; -A^{-1}B\\  0&amp;I\\\end{bmatrix}=
-\begin{bmatrix}A &amp; 0\\ C &amp; \Delta _{A}\end{bmatrix}$$&lt;p&gt;其中${\Delta _{A} =D-CA^{-1}B }$。联合起来，将${M}$变形为对角形：
-&lt;/p&gt;
-$$\begin{bmatrix}I &amp; 0\\ -CA^{-1} &amp;I\\\end{bmatrix}
+\begin{bmatrix}A &amp; 0\\ C &amp; \Delta _{A}\end{bmatrix}$$$$\begin{bmatrix}I &amp; 0\\ -CA^{-1} &amp;I\\\end{bmatrix}
 \begin{bmatrix}A &amp; B\\ C &amp; D\end{bmatrix}
 \begin{bmatrix}I &amp; -A^{-1}B\\  0&amp;I\\\end{bmatrix}=
 \begin{bmatrix}A &amp; 0\\ 0 &amp; \Delta _{A}\end{bmatrix}
-$$&lt;p&gt;
-反过来亦可从对角矩阵恢复${M}$:
-&lt;/p&gt;
-$$\begin{bmatrix}I &amp; 0\\ CA^{-1} &amp;I\\\end{bmatrix}
+$$$$\begin{bmatrix}I &amp; 0\\ CA^{-1} &amp;I\\\end{bmatrix}
 \begin{bmatrix}A &amp; 0\\ 0&amp; \Delta _{A}\end{bmatrix}
 \begin{bmatrix}I &amp; A^{-1}B\\  0&amp;I\\\end{bmatrix}=
 \begin{bmatrix}A &amp; B\\ C &amp; D\ \end{bmatrix}
 $$&lt;h2 id=&#34;用途&#34;&gt;用途
 &lt;/h2&gt;&lt;h3 id=&#34;快速求矩阵的逆&#34;&gt;快速求矩阵的逆
-&lt;/h3&gt;&lt;p&gt;矩阵${M}$可以改写为：
-&lt;/p&gt;
-$$M=\begin{bmatrix}A &amp; B\\ C&amp;D\end{bmatrix}=\begin{bmatrix}I &amp; 0\\ CA^{-1} &amp;I\\\end{bmatrix}
+&lt;/h3&gt;$$M=\begin{bmatrix}A &amp; B\\ C&amp;D\end{bmatrix}=\begin{bmatrix}I &amp; 0\\ CA^{-1} &amp;I\\\end{bmatrix}
 \begin{bmatrix}A &amp; 0\\ 0&amp; \Delta _{A}\end{bmatrix}
 \begin{bmatrix}I &amp; A^{-1}B\\  0&amp;I\\\end{bmatrix}$$$$M^{-1}=\begin{bmatrix}A &amp; B\\ C&amp;D\end{bmatrix}^{-1}=\begin{bmatrix}I &amp; 0\\ CA^{-1} &amp;I\\\end{bmatrix}^{-1}\begin{bmatrix}A^{-1} &amp; 0\\ 0&amp; \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I &amp; A^{-1}B\\  0&amp;I\\\end{bmatrix}^{-1}\\  =\begin{bmatrix}I &amp; 0\\ -CA^{-1} &amp;I\\\end{bmatrix}\begin{bmatrix}A^{-1} &amp; 0\\ 0&amp; \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I &amp; -A^{-1}B\\  0&amp;I\\\end{bmatrix}\\=\begin{bmatrix}A^{-1}+A^{-1}B{\Delta _A}^{-1}CA^{-1}&amp;-A^{-1}B{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&amp;{\Delta _A}^{-1} \end{bmatrix}
 $$&lt;h3 id=&#34;舒尔补在信息矩阵求解中的使用&#34;&gt;舒尔补在信息矩阵求解中的使用
-&lt;/h3&gt;&lt;p&gt;协方差矩阵&lt;/p&gt;
-$$\sum=\begin{bmatrix}A &amp; C^{T}\\C&amp;D\end{bmatrix}$$&lt;p&gt;,
-则信息矩阵&lt;/p&gt;
-$$\sum^{-1}=\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\\=\begin{bmatrix}A^{-1}+A^{-1}C^{T}{\Delta _A}^{-1}CA^{-1}&amp;-A^{-1}C^{T}{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&amp;{\Delta _A}^{-1} \end{bmatrix}\\\stackrel{\triangle}{=}\begin{bmatrix}\Lambda_{aa}&amp;\Lambda _{ab}\\\Lambda _{ba}&amp;\Lambda _{bb} \end{bmatrix}$$&lt;p&gt;
+&lt;/h3&gt;$$\sum=\begin{bmatrix}A &amp; C^{T}\\C&amp;D\end{bmatrix}$$$$\sum^{-1}=\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\\=\begin{bmatrix}A^{-1}+A^{-1}C^{T}{\Delta _A}^{-1}CA^{-1}&amp;-A^{-1}C^{T}{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&amp;{\Delta _A}^{-1} \end{bmatrix}\\\stackrel{\triangle}{=}\begin{bmatrix}\Lambda_{aa}&amp;\Lambda _{ab}\\\Lambda _{ba}&amp;\Lambda _{bb} \end{bmatrix}$$&lt;p&gt;
 其中，由上式可推导得$A^{-1}=\Lambda _{aa}-\Lambda _{ab}\Lambda _{bb}^{-1}\Lambda _{ba}$, 以及$D^{-1}=\Lambda _{bb}-\Lambda _{ba}\Lambda _{aa}^{-1}\Lambda _{ab}$，它们即为下次优化会使用的先验信息矩阵（边际概率的信息矩阵）。&lt;/p&gt;
 &lt;h3 id=&#34;通过舒尔补分解多元高斯分布&#34;&gt;通过舒尔补分解多元高斯分布
-&lt;/h3&gt;&lt;p&gt;假设多元变量$M$服从高斯分布，且由两部分组成：&lt;/p&gt;
-$$ x=\begin{bmatrix}a\\b\end{bmatrix} $$&lt;p&gt;,变量构成的协方差矩阵等于&lt;/p&gt;
-$$\sum=\begin{bmatrix} A &amp; C^{T} \\C&amp;D \end{bmatrix}$$&lt;p&gt;,其中$A=cov(a,a)$,$C=cov(a,b)$,$D=cov(b,b)$。
-则$x$的概率分布为：
-&lt;/p&gt;
-$$P(a,b)=P(a)P(b|a)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\begin{bmatrix}a&amp;b\end{bmatrix})$$&lt;p&gt;。使用上一节内容将矩阵转化为对角矩阵
-&lt;/p&gt;
-$$ \begin{align}
+&lt;/h3&gt;$$ x=\begin{bmatrix}a\\b\end{bmatrix} $$$$\sum=\begin{bmatrix} A &amp; C^{T} \\C&amp;D \end{bmatrix}$$$$P(a,b)=P(a)P(b|a)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\begin{bmatrix}a&amp;b\end{bmatrix})$$$$ \begin{align}
 P(a,b) \\ 
 \propto  exp\left (  -\frac{1}{2}\begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&amp;C^{T}\\C&amp;D\end{bmatrix}^{-1}\begin{bmatrix}a&amp;b\end{bmatrix}\right) \\
   \propto exp \left( -\frac{1}{2}\begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}I &amp; 0\\ -CA^{-1} &amp;I\\\end{bmatrix}\begin{bmatrix}A^{-1} &amp; 0\\ 0&amp; \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I &amp; -A^{-1}B\\  0&amp;I\\\end{bmatrix}\begin{bmatrix}a&amp;b\end{bmatrix})\right )\\
@@ -181,55 +159,21 @@ P(a,b) \\
         <guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/</guid>
         <description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.png" alt="Featured image of post 边缘化" /&gt;&lt;h2 id=&#34;从优化角度理解边缘化&#34;&gt;从优化角度理解边缘化
 &lt;/h2&gt;&lt;h3 id=&#34;模型&#34;&gt;模型
-&lt;/h3&gt;&lt;p&gt;优化问题具有如下通用形式：
-$ HX=b $
-并且可以拆解成如下的形式：
-&lt;/p&gt;
-$$\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$&lt;p&gt;
+&lt;/h3&gt;$$\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$&lt;p&gt;
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。&lt;/p&gt;
 &lt;h3 id=&#34;过程&#34;&gt;过程
-&lt;/h3&gt;&lt;p&gt;对$H$矩阵利用&lt;a class=&#34;link&#34; href=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/&#34; &gt;舒尔补&lt;/a&gt; 进行三角化，如下所示：
-&lt;/p&gt;
-$$\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$&lt;p&gt;
-化简可得：
-&lt;/p&gt;
-$$\begin{bmatrix}H_{mm}&amp;H_{mr}\\0&amp;H_{rr}-H_{rm}H_{mm}^{-1}H_{mr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r-H_{rm}H_{mm}^{-1}b_m\end{bmatrix}$$&lt;p&gt;
-由上式可得：
-&lt;/p&gt;
-$$(H_{rr}-H_{rm}H_{mm}^{-1}H_{mr})X_r=b_r-H_{rm}H_{mm}^{-1}b_{m}$$&lt;p&gt;
+&lt;/h3&gt;$$\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}I&amp;0\\-H_{rm}H_{mm}^{-1}&amp;I\end{bmatrix}\begin{bmatrix}b_m\\b_r\end{bmatrix}$$$$\begin{bmatrix}H_{mm}&amp;H_{mr}\\0&amp;H_{rr}-H_{rm}H_{mm}^{-1}H_{mr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r-H_{rm}H_{mm}^{-1}b_m\end{bmatrix}$$$$(H_{rr}-H_{rm}H_{mm}^{-1}H_{mr})X_r=b_r-H_{rm}H_{mm}^{-1}b_{m}$$&lt;p&gt;
 意义：此时可以不依赖$X_m$求解出$X_r$,若我们只关心$X_r$的值，则可以把$X_m$从模型中删除。&lt;/p&gt;
 &lt;h2 id=&#34;从滤波角度理解边缘化&#34;&gt;从滤波角度理解边缘化
 &lt;/h2&gt;&lt;h3 id=&#34;模型-1&#34;&gt;模型
-&lt;/h3&gt;&lt;p&gt;运动模型和观测模型定义（可见《机器人学中的状态估计》3.3.1 ”问题定义“章节）
-如下：
-&lt;/p&gt;
-$$\begin{align}
+&lt;/h3&gt;$$\begin{align}
 x_k=A_{k-1}x_{k-1}+v_k+w_k,&amp;k=1...K\\
 y_k=C_kx_k+n_k,&amp;k=0...K
 \end{align}$$&lt;h3 id=&#34;map估计角度&#34;&gt;MAP估计角度
-&lt;/h3&gt;&lt;p&gt;优化目标函数定义（详情参考《机器人学中的状态估计》3.1.2 &amp;ldquo;最大后验估计&amp;rdquo; 章节）如下：
-&lt;/p&gt;
-$$\hat{x}=arg\underset{x}{min} J(x)$$&lt;p&gt;
-其中$J(x)=\sum_{k=0}^{K}(J_{v,k}(x)+J_{y,k}(x)$,$J_{v,k}(x))$见式(3.9.a),$J_{y,k}(x)$见式(3.9.b)。
-再次对形式进行以下提升，将所有时刻的状态整理为向量x,并把所有时刻已知数据整理为z。对问题进行一定的简化，可得
-$J(x)=\frac{1}{2}\left(z-Hx \right)^{T}W^{-1}(z-Hx)$（式3.14）
-对其进行求解最小值，可求解它的一阶导数，并使一阶导为0；
-&lt;/p&gt;
-$${\frac{\partial J(x)}{\partial x^{T}}}|_x=-H^{T}W^{-1}(z-H\hat{x})=0 \Rightarrow (H^{T}W^{-1}H)\hat{x}=H^{T}W^{-1}z$$&lt;p&gt;
+&lt;/h3&gt;$$\hat{x}=arg\underset{x}{min} J(x)$$$${\frac{\partial J(x)}{\partial x^{T}}}|_x=-H^{T}W^{-1}(z-H\hat{x})=0 \Rightarrow (H^{T}W^{-1}H)\hat{x}=H^{T}W^{-1}z$$&lt;p&gt;
 &lt;em&gt;注：此时形式以及是接近优化角度的$HX=b$。&lt;/em&gt;&lt;/p&gt;
 &lt;h3 id=&#34;滤波角度&#34;&gt;滤波角度
-&lt;/h3&gt;&lt;p&gt;由于马尔可夫性，当前时刻仅与前一时刻有关，由此再次参考 3.3.2章节 &amp;ldquo;通过MAP推导卡尔曼滤波&amp;rdquo;，
-假设已经有了k-1时刻的后验估计&lt;/p&gt;
-$$ \{ \hat {x}_{k-1} ,\hat{P}_{k-1}\}$$&lt;p&gt;,目标是计算&lt;/p&gt;
-$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$&lt;p&gt;，我们使用k-1时刻的后验估计加上k时刻的$v_k$,$y_k$来估计&lt;/p&gt;
-$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$&lt;p&gt;。
-为了推导该过程，定义
-&lt;/p&gt;
-$$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&amp;&amp;\\-A_{k-1}&amp;I\\&amp;&amp;C_{k}\end{bmatrix},W=\begin{bmatrix}\hat {P}_{k-1}&amp;&amp;\\&amp;Q_k&amp;\\&amp;&amp;R_k\end{bmatrix}$$&lt;p&gt;
-则模型的解为&lt;/p&gt;
-$$(H_{k}^{T}W_{k}^{-1}H_{k})\hat{x}=H_{k}^{T}W_{k}^{-1}z_k$$&lt;p&gt;，
-其中&lt;/p&gt;
-$$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
+&lt;/h3&gt;$$ \{ \hat {x}_{k-1} ,\hat{P}_{k-1}\}$$$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$$$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&amp;&amp;\\-A_{k-1}&amp;I\\&amp;&amp;C_{k}\end{bmatrix},W=\begin{bmatrix}\hat {P}_{k-1}&amp;&amp;\\&amp;Q_k&amp;\\&amp;&amp;R_k\end{bmatrix}$$$$(H_{k}^{T}W_{k}^{-1}H_{k})\hat{x}=H_{k}^{T}W_{k}^{-1}z_k$$$$\hat{x}=\begin{bmatrix}\hat{x&#39;}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p&gt;
 &lt;img src=&#34;https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00.png&#34;
 	width=&#34;714&#34;
 	height=&#34;352&#34;

@@ -304,7 +304,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 15 分钟
+                    阅读时长: 12 分钟
                 </time>
             </div>
         
@@ -339,27 +339,11 @@
 </blockquote>
 <p>        在文献[28]中，LiDAR点云被分割成大小均匀的体素，然后通过<strong>RANSAC</strong>算法估计每个体素内的平面。相比之下，我们的方法使用了在第III-B节中获得的自适应体素地图。我们计算每两个相邻体素中包含平面法线之间的夹角。如果该夹角超过某一阈值，则提取这两个平面的交线作为深度连续边缘，如图5所示。我们选择使用Canny算法来检测并提取图像中的边缘特征。</p>
 <blockquote>
-<p>        Suppose ${}^{G}p_{i}$ represents the $i$-th point from a LiDAR edge feature extracted above in global frame. With pin-hole camera and its distortion model,${}^{G}p_{i}$ projected onto the image taken by camera $C_l$ at $t_j$, i.e., $I_{i,j}$
-by </p>
-$${}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}=\mathbf{f}\left(\boldsymbol{\pi}\left({{}^{C_l}_{L_{0}}}\mathbf{T}\left({}^{G}_{L_0}\mathbf{T}_{t_{j}}\right)^{-1}{}^{G}\mathbf{p}_{i}\\\right)\right)\tag{7}$$<p>
-where f(·) is the camera distortion model and π(·) is the projection model. Let $\mathcal{I}_i$ represent the set of images that capture the point ${}^{G}p_{i}$, i.e., $\mathcal{I}_i = {I_{l,j}}$. For each ${}^{I_{l,j}}p_i$, the $\kappa $ nearest image edge feature points  $q_k$ on $I_{l,j}$ are searched. The normal vector $n_{i,l,j}$ of the edge formed by these $\kappa $ points is thus the eigenvector corresponding to the minimum eigenvalue of $A_{i,l,j}$ that </p>
-$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$<p>.
-The residual originated from this LiDAR camera correspondence is defined as </p>
-$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$<p>
-Collecting all such correspondences, the extrinsic ECcalibration problem could be formulated as </p>
-$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$<p>.</p>
+$${}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}=\mathbf{f}\left(\boldsymbol{\pi}\left({{}^{C_l}_{L_{0}}}\mathbf{T}\left({}^{G}_{L_0}\mathbf{T}_{t_{j}}\right)^{-1}{}^{G}\mathbf{p}_{i}\\\right)\right)\tag{7}$$$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$<p>.</p>
 </blockquote>
-<p>        假设${}^{G}p_{i}$是从全局坐标系中提取的第i个激光雷达边缘特征点。利用针孔相机及其畸变模型，将${}^{G}p_{i}$投影到 $C_l$在时刻$t_j$时刻拍摄的图像$I_{i,j}$上，数学表达如下:
-</p>
 $$
 {}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}=\mathbf{f}\left(\boldsymbol{\pi}\left({{}^{C_l}_{L_{0}}}\mathbf{T}\left({}^{G}_{L_0}\mathbf{T}_{t_{j}}\right)^{-1}{}^{G}\mathbf{p}_{i}\\\right)\right)\tag{7}
-$$<p>。
-其中$\mathbf{f}(\cdot)$是相机畸变模型，$\boldsymbol{\pi}(\cdot)$是投影模型.令$\mathcal{I}_i$表示捕捉到了点${}^{G}p_{i}$的图像集合，即$\mathcal{I}_i = {I_{l,j}}$。对于每个 ${}^{I_{l,j}}p_i$，在图像上搜索其$\kappa $个最近邻的图像边缘特征点$q_k$.由于这$\kappa$个点形成的边缘的法向量$n_{i,l,j}$即为矩阵$A_{i,l,j}$的最小特征值对应的特征向量，其中</p>
-$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$<p>.
-由此对应激光雷达与相机对应关系产生的残差定义为：</p>
-$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$<p>
-收集所有的这样的对应关系，相机外参校准问题可以表述为</p>
-$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$<p>.</p>
+$$$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$<p>.</p>
 <blockquote>
 <p>        Inspecting the residual in (9), we find the ${}^{I_{l,j}}p_i$ is dependent on LiDAR poses ${}^{G}_{L_0}T_{t_j}$. This is due to the reason that LiDARs may have FoV overlap with cameras at different times (as in Fig. 2). Since ${}^{G}_{L_0}T_{t_j}\in\mathcal{S}$ has been well estimated from Sec. III-C, we keep them fixed in this step. Moreover, the $n_{i,l,j}$ and $q_{i,l,j}$ are also implicitly dependent on $\mathcal{E}_C$, since both ni,l,jand qi,l,jare related with nearest neighbor search.
 The complete derivative of (10) to the variable $\mathcal{E}_C$ would be too complicated. In this paper, to simplify the optimization problem, we ignore the influence of camera extrinsic on $n_{i,l,j}$ and $q_{i,l,j}$. This strategy works well in practice as detailed in Sec. IV-B.</p>
@@ -367,33 +351,22 @@ The complete derivative of (10) to the variable $\mathcal{E}_C$ would be too com
 <p>        检查公式 (9) 中的残差，我们发现 ${}^{I_{l,j}}p_i$ 依赖于激光雷达的姿态 ${}^{G}_{L_0}T_{t_j}$。这是由于激光雷达可能在不同时间与相机存在视场重叠（如图2所示）。因为 ${}^{G}_{L_0}T_{t_j}\in\mathcal{S}$ 已经根据第三节C部分很好地估计出来了，在此步骤中我们将它们固定不变。此外，$n_{i,l,j}$ 和 $q_{i,l,j}$ 也隐式地依赖于外参 $\mathcal{E}_C$，因为两者都与最近邻搜索相关。
 对变量 $\mathcal{E}_C$ 完整求导将会过于复杂。在本文中，为了简化优化问题，我们忽略了相机外参对 $n_{i,l,j}$ 和 $q_{i,l,j}$ 的影响。如第四节B部分详细说明的那样，这一策略在实践中表现良好。</p>
 <blockquote>
-<p>        The non-linear optimization (10) is solved with <strong>LM</strong> method by approximating the residuals with their first order derivatives (11). The optimal $\mathcal{E}^{\ast}_{C}$ is then obtained by iteratively solving (11) and updating $\delta{x}$ to $x$ using the $\boxplus$ operation [31].</p>
-$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$<p> where </p>
-$$
+$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$$$
 \begin{align*}
 \delta{x}=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}\phi^{T}\quad\delta{{}^{C_1}_{L_0}t^{T}}\quad\cdots\end{bmatrix}\in\mathbb{R}^{6h}\\
 x=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}R\quad{}^{C_1}_{L_0}t\quad\cdots\end{bmatrix}\\
 J=\begin{bmatrix}\cdots\quad J^{T}_{p}\quad\cdots\end{bmatrix}^{T},r=\begin{bmatrix}\cdots\quad{r_p}\quad\cdots\end{bmatrix}^{T},
-\end{align*} $$<p>
-with $J_p$ and $r_p$ begin the sum of $J_{i,l,j}$ and $r_{i,l,j}$ when $l = p$: </p>
-$$ \begin{align*}
+\end{align*} $$$$ \begin{align*}
 &\mathbf{J}_{i,l,j} =\mathbf{n}_{i,l,j}^T\frac{\partial\mathbf{f}(\mathbf{p})}{\partial\mathbf{p}}\frac{\partial\boldsymbol{\pi}(\mathbf{P})}{\partial\mathbf{P}}\left[-_{L_0}^{C_l}\mathbf{R}\left(^{L_0}\mathbf{p}_i\right)^{\wedge}\quad\mathbf{I}\right]\in\mathbb{R}^{1\times6} \\
 &^{L_0}\mathbf{p}_i =\left({}_{L_0}^G\mathbf{T}_{t_j}\right)^{-1}{}^G\mathbf{p}_i. 
 \end{align*}\tag{12} $$</blockquote>
-<p>        非线性优化问题 (10) 通过使用 <strong>LM</strong>（Levenberg-Marquardt）方法并用一阶导数 (11) 近似残差来求解。通过迭代求解 (11) 并使用 $\boxplus$ 操作更新 $\delta{x}$ 到 $x$ 来获得最优的 $\mathcal{E}^{\ast}_{C}$：</p>
-$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$<p>
-其中，
-</p>
-$$
+$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$$$
 \begin{align*}
 \delta{x}=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}\phi^{T}\quad\delta{{}^{C_1}_{L_0}t^{T}}\quad\cdots\end{bmatrix}\in\mathbb{R}^{6h}\\
 x=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}R\quad{}^{C_1}_{L_0}t\quad\cdots\end{bmatrix}\\
 J=\begin{bmatrix}\cdots\quad J^{T}_{p}\quad\cdots\end{bmatrix}^{T},r=\begin{bmatrix}\cdots\quad{r_p}\quad\cdots\end{bmatrix}^{T},
 \end{align*} 
-$$<p>
-并且当 $l = p$ 时，$J_p$ 和 $r_p$ 分别为 $J_{i,l,j}$ 和 $r_{i,l,j}$ 的和：
-</p>
-$$ \begin{align*}
+$$$$ \begin{align*}
 &\mathbf{J}_{i,l,j} =\mathbf{n}_{i,l,j}^T\frac{\partial\mathbf{f}(\mathbf{p})}{\partial\mathbf{p}}\frac{\partial\boldsymbol{\pi}(\mathbf{P})}{\partial\mathbf{P}}\left[-_{L_0}^{C_l}\mathbf{R}\left(^{L_0}\mathbf{p}_i\right)^{\wedge}\quad\mathbf{I}\right]\in\mathbb{R}^{1\times6} \\
 &^{L_0}\mathbf{p}_i =\left({}_{L_0}^G\mathbf{T}_{t_j}\right)^{-1}{}^G\mathbf{p}_i. 
 \end{align*}\tag{12} 
@@ -603,18 +576,13 @@ $$<h2 id="理论推导">理论推导
 </h3><ol>
 <li>提取点云边缘线</li>
 </ol>
-<p>首先是通过两个平面法向量和中心点计算边缘线上一点。过程为假设$c_1$和$c_2$分别为平面1和2的中心点，$n_1$和$n_2$分别为平面1和2的法向量。通过向量的叉乘很容易得到两个平面相交直线的法向量为$d=n1\times{n2}$。通过以下三个方程可以求得交线上的一点坐标$p$:
-</p>
 $$
 \begin{align*}
 n_1\cdot(p-c_1)=0\tag{1}\\
 n_2\cdot(p-c_2)=0\tag{2}\\
 d\cdot(p-c_1)=0\tag{3}
 \end{align*}
-$$<p>
-式1表示为边缘线上一点与$c_1$构成的向量垂直于$n_1$,式2同理，式3表示边缘线上一点与$c_1$构成的向量垂直于直线所在的法向量。由此可整理得到：
-</p>
-$$
+$$$$
 \begin{align*}
 A=\begin{bmatrix}
 n_1^{T}\\d^{T}\\n_2^{T}
@@ -622,10 +590,7 @@ n_1^{T}\\d^{T}\\n_2^{T}
 b=\begin{bmatrix}n_1\cdot{c_1}\quad{d}\cdot{c_1}\quad{n_2}\cdot{c_2}\end{bmatrix}\tag{5}\\
 A\cdot{x}=b\tag{6}
 \end{align*}
-$$<p>
-对式6进行QR分解则能得到边缘线上一点，且该点与$c1$构成的向量是垂直于边缘线所在的法向量的。另外：
-</p>
-$$
+$$$$
 \begin{align*}
 (c_2-O)\cdot{d}\times{d}\tag{7}\\
 (c_2-0)-(c_2-O)\cdot{d}\times{d}\tag{8}
@@ -1300,8 +1265,6 @@ $$<p>
 </h3><ol>
 <li>最小化重投影误差</li>
 </ol>
-<p>本文第一章节中提到了相机校准问题可以表达为：
-</p>
 $$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{1}$$<p>
 <span style="color:red;">上式暂时还没理解,等后面再看！</span>，但是好在代码实现上与问题表达是有差异，代码是优化点到直线上的距离，与BLAM中关于边缘特征问题表述是一样的，具体如下所示：</p>
 <p><img src="/p/mlcc/02/edge_feature.png"
@@ -1318,11 +1281,6 @@ $$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\i
 		data-flex-basis="272px"
 	
 ></p>
-<p>注意图中关于边缘点的表达可以进行以下转化：
-$(I-nn^{T})(p_{f_i}-q)=(p_{f_i}-q)-nn^{T}(p_{f_i}-q)$
-其中，$nn^{T}(p_{f_i}-q)$表达将$p_{f_i}-q$向量投影到$n$向量上。
-现在将本文的相关变量带入式中可以得到表达式为：
-</p>
 $$
 \mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left((I-\mathbf{n}_{i,l,j}\mathbf{n}_{i,l,j}^{T})\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{2}
 $$<p>。</p>

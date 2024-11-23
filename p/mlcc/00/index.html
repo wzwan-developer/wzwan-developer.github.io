@@ -390,14 +390,9 @@ Fig. 3: A) LiDAR point cloud segmented with the adaptive voxelization. Points wi
 <li>设置了两个条件来停止递归体素化：一个是树的最大深度，另一个是体素的最小点数。</li>
 </ul>
 <p>        其中，判断体素是否为平面的方法是计算体素内所有的点云的协方差矩阵，判断最大特征值与最小特征值的比值是否大于一定的阈值，如果大于则为平面：</p>
-<p>首先计算中心点$p_c$,即所有点的均值点,如下所示：
-</p>
 $$
 p_c=\frac{1}{N}\sum_{i=1}^{N}p_i
-$$<p>
-接着计算协方差矩阵：
-</p>
-$$
+$$$$
 \begin{align*}
 C=\frac{1}{N}\sum_{i=1}^{N}\big(p_i - c\big)\big(p_i - c\big)^T\\
 =\frac{1}{N}\sum_{i=1}^{N}\big(p_ip_i^T-p_ic^T-cp_i^T+cc^T\big)\\

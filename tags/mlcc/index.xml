@@ -23,27 +23,11 @@
 &lt;/blockquote&gt;
 &lt;p&gt;        在文献[28]中，LiDAR点云被分割成大小均匀的体素，然后通过&lt;strong&gt;RANSAC&lt;/strong&gt;算法估计每个体素内的平面。相比之下，我们的方法使用了在第III-B节中获得的自适应体素地图。我们计算每两个相邻体素中包含平面法线之间的夹角。如果该夹角超过某一阈值，则提取这两个平面的交线作为深度连续边缘，如图5所示。我们选择使用Canny算法来检测并提取图像中的边缘特征。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;        Suppose ${}^{G}p_{i}$ represents the $i$-th point from a LiDAR edge feature extracted above in global frame. With pin-hole camera and its distortion model,${}^{G}p_{i}$ projected onto the image taken by camera $C_l$ at $t_j$, i.e., $I_{i,j}$
-by &lt;/p&gt;
-$${}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}=\mathbf{f}\left(\boldsymbol{\pi}\left({{}^{C_l}_{L_{0}}}\mathbf{T}\left({}^{G}_{L_0}\mathbf{T}_{t_{j}}\right)^{-1}{}^{G}\mathbf{p}_{i}\\\right)\right)\tag{7}$$&lt;p&gt;
-where f(·) is the camera distortion model and π(·) is the projection model. Let $\mathcal{I}_i$ represent the set of images that capture the point ${}^{G}p_{i}$, i.e., $\mathcal{I}_i = {I_{l,j}}$. For each ${}^{I_{l,j}}p_i$, the $\kappa $ nearest image edge feature points  $q_k$ on $I_{l,j}$ are searched. The normal vector $n_{i,l,j}$ of the edge formed by these $\kappa $ points is thus the eigenvector corresponding to the minimum eigenvalue of $A_{i,l,j}$ that &lt;/p&gt;
-$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$&lt;p&gt;.
-The residual originated from this LiDAR camera correspondence is defined as &lt;/p&gt;
-$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$&lt;p&gt;
-Collecting all such correspondences, the extrinsic ECcalibration problem could be formulated as &lt;/p&gt;
-$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$&lt;p&gt;.&lt;/p&gt;
+$${}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}=\mathbf{f}\left(\boldsymbol{\pi}\left({{}^{C_l}_{L_{0}}}\mathbf{T}\left({}^{G}_{L_0}\mathbf{T}_{t_{j}}\right)^{-1}{}^{G}\mathbf{p}_{i}\\\right)\right)\tag{7}$$$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$&lt;p&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;        假设${}^{G}p_{i}$是从全局坐标系中提取的第i个激光雷达边缘特征点。利用针孔相机及其畸变模型，将${}^{G}p_{i}$投影到 $C_l$在时刻$t_j$时刻拍摄的图像$I_{i,j}$上，数学表达如下:
-&lt;/p&gt;
 $$
 {}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}=\mathbf{f}\left(\boldsymbol{\pi}\left({{}^{C_l}_{L_{0}}}\mathbf{T}\left({}^{G}_{L_0}\mathbf{T}_{t_{j}}\right)^{-1}{}^{G}\mathbf{p}_{i}\\\right)\right)\tag{7}
-$$&lt;p&gt;。
-其中$\mathbf{f}(\cdot)$是相机畸变模型，$\boldsymbol{\pi}(\cdot)$是投影模型.令$\mathcal{I}_i$表示捕捉到了点${}^{G}p_{i}$的图像集合，即$\mathcal{I}_i = {I_{l,j}}$。对于每个 ${}^{I_{l,j}}p_i$，在图像上搜索其$\kappa $个最近邻的图像边缘特征点$q_k$.由于这$\kappa$个点形成的边缘的法向量$n_{i,l,j}$即为矩阵$A_{i,l,j}$的最小特征值对应的特征向量，其中&lt;/p&gt;
-$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$&lt;p&gt;.
-由此对应激光雷达与相机对应关系产生的残差定义为：&lt;/p&gt;
-$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$&lt;p&gt;
-收集所有的这样的对应关系，相机外参校准问题可以表述为&lt;/p&gt;
-$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$&lt;p&gt;.&lt;/p&gt;
+$$$$ \mathbf{A}_{i,l,j}=\sum_{k=1}^\kappa(\mathbf{q}_k-\mathbf{q}_{i,l,j})(\mathbf{q}_k-\mathbf{q}_{i,l,j})^T,\mathbf{q}_{i,l,j}=\frac1\kappa\sum_{k=1}^\kappa\mathbf{q}_k\tag{8}$$$$\mathbf{r}_{i,l,j}=\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right).\tag{9}$$$$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{10}$$&lt;p&gt;.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;        Inspecting the residual in (9), we find the ${}^{I_{l,j}}p_i$ is dependent on LiDAR poses ${}^{G}_{L_0}T_{t_j}$. This is due to the reason that LiDARs may have FoV overlap with cameras at different times (as in Fig. 2). Since ${}^{G}_{L_0}T_{t_j}\in\mathcal{S}$ has been well estimated from Sec. III-C, we keep them fixed in this step. Moreover, the $n_{i,l,j}$ and $q_{i,l,j}$ are also implicitly dependent on $\mathcal{E}_C$, since both ni,l,jand qi,l,jare related with nearest neighbor search.
 The complete derivative of (10) to the variable $\mathcal{E}_C$ would be too complicated. In this paper, to simplify the optimization problem, we ignore the influence of camera extrinsic on $n_{i,l,j}$ and $q_{i,l,j}$. This strategy works well in practice as detailed in Sec. IV-B.&lt;/p&gt;
@@ -51,33 +35,22 @@ The complete derivative of (10) to the variable $\mathcal{E}_C$ would be too com
 &lt;p&gt;        检查公式 (9) 中的残差，我们发现 ${}^{I_{l,j}}p_i$ 依赖于激光雷达的姿态 ${}^{G}_{L_0}T_{t_j}$。这是由于激光雷达可能在不同时间与相机存在视场重叠（如图2所示）。因为 ${}^{G}_{L_0}T_{t_j}\in\mathcal{S}$ 已经根据第三节C部分很好地估计出来了，在此步骤中我们将它们固定不变。此外，$n_{i,l,j}$ 和 $q_{i,l,j}$ 也隐式地依赖于外参 $\mathcal{E}_C$，因为两者都与最近邻搜索相关。
 对变量 $\mathcal{E}_C$ 完整求导将会过于复杂。在本文中，为了简化优化问题，我们忽略了相机外参对 $n_{i,l,j}$ 和 $q_{i,l,j}$ 的影响。如第四节B部分详细说明的那样，这一策略在实践中表现良好。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;        The non-linear optimization (10) is solved with &lt;strong&gt;LM&lt;/strong&gt; method by approximating the residuals with their first order derivatives (11). The optimal $\mathcal{E}^{\ast}_{C}$ is then obtained by iteratively solving (11) and updating $\delta{x}$ to $x$ using the $\boxplus$ operation [31].&lt;/p&gt;
-$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$&lt;p&gt; where &lt;/p&gt;
-$$
+$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$$$
 \begin{align*}
 \delta{x}=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}\phi^{T}\quad\delta{{}^{C_1}_{L_0}t^{T}}\quad\cdots\end{bmatrix}\in\mathbb{R}^{6h}\\
 x=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}R\quad{}^{C_1}_{L_0}t\quad\cdots\end{bmatrix}\\
 J=\begin{bmatrix}\cdots\quad J^{T}_{p}\quad\cdots\end{bmatrix}^{T},r=\begin{bmatrix}\cdots\quad{r_p}\quad\cdots\end{bmatrix}^{T},
-\end{align*} $$&lt;p&gt;
-with $J_p$ and $r_p$ begin the sum of $J_{i,l,j}$ and $r_{i,l,j}$ when $l = p$: &lt;/p&gt;
-$$ \begin{align*}
+\end{align*} $$$$ \begin{align*}
 &amp;\mathbf{J}_{i,l,j} =\mathbf{n}_{i,l,j}^T\frac{\partial\mathbf{f}(\mathbf{p})}{\partial\mathbf{p}}\frac{\partial\boldsymbol{\pi}(\mathbf{P})}{\partial\mathbf{P}}\left[-_{L_0}^{C_l}\mathbf{R}\left(^{L_0}\mathbf{p}_i\right)^{\wedge}\quad\mathbf{I}\right]\in\mathbb{R}^{1\times6} \\
 &amp;^{L_0}\mathbf{p}_i =\left({}_{L_0}^G\mathbf{T}_{t_j}\right)^{-1}{}^G\mathbf{p}_i. 
 \end{align*}\tag{12} $$&lt;/blockquote&gt;
-&lt;p&gt;        非线性优化问题 (10) 通过使用 &lt;strong&gt;LM&lt;/strong&gt;（Levenberg-Marquardt）方法并用一阶导数 (11) 近似残差来求解。通过迭代求解 (11) 并使用 $\boxplus$ 操作更新 $\delta{x}$ 到 $x$ 来获得最优的 $\mathcal{E}^{\ast}_{C}$：&lt;/p&gt;
-$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$&lt;p&gt;
-其中，
-&lt;/p&gt;
-$$
+$$\delta\mathbf{x}=-\left(\mathbf{J}^{T}\mathbf{J}+\mu\mathbf{I}\right)^{-1}\mathbf{J}^{T}\mathbf{r},\tag{11}$$$$
 \begin{align*}
 \delta{x}=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}\phi^{T}\quad\delta{{}^{C_1}_{L_0}t^{T}}\quad\cdots\end{bmatrix}\in\mathbb{R}^{6h}\\
 x=\begin{bmatrix}\cdots\quad{}^{C_1}_{L_0}R\quad{}^{C_1}_{L_0}t\quad\cdots\end{bmatrix}\\
 J=\begin{bmatrix}\cdots\quad J^{T}_{p}\quad\cdots\end{bmatrix}^{T},r=\begin{bmatrix}\cdots\quad{r_p}\quad\cdots\end{bmatrix}^{T},
 \end{align*} 
-$$&lt;p&gt;
-并且当 $l = p$ 时，$J_p$ 和 $r_p$ 分别为 $J_{i,l,j}$ 和 $r_{i,l,j}$ 的和：
-&lt;/p&gt;
-$$ \begin{align*}
+$$$$ \begin{align*}
 &amp;\mathbf{J}_{i,l,j} =\mathbf{n}_{i,l,j}^T\frac{\partial\mathbf{f}(\mathbf{p})}{\partial\mathbf{p}}\frac{\partial\boldsymbol{\pi}(\mathbf{P})}{\partial\mathbf{P}}\left[-_{L_0}^{C_l}\mathbf{R}\left(^{L_0}\mathbf{p}_i\right)^{\wedge}\quad\mathbf{I}\right]\in\mathbb{R}^{1\times6} \\
 &amp;^{L_0}\mathbf{p}_i =\left({}_{L_0}^G\mathbf{T}_{t_j}\right)^{-1}{}^G\mathbf{p}_i. 
 \end{align*}\tag{12} 
@@ -287,18 +260,13 @@ $$&lt;h2 id=&#34;理论推导&#34;&gt;理论推导
 &lt;/h3&gt;&lt;ol&gt;
 &lt;li&gt;提取点云边缘线&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;首先是通过两个平面法向量和中心点计算边缘线上一点。过程为假设$c_1$和$c_2$分别为平面1和2的中心点，$n_1$和$n_2$分别为平面1和2的法向量。通过向量的叉乘很容易得到两个平面相交直线的法向量为$d=n1\times{n2}$。通过以下三个方程可以求得交线上的一点坐标$p$:
-&lt;/p&gt;
 $$
 \begin{align*}
 n_1\cdot(p-c_1)=0\tag{1}\\
 n_2\cdot(p-c_2)=0\tag{2}\\
 d\cdot(p-c_1)=0\tag{3}
 \end{align*}
-$$&lt;p&gt;
-式1表示为边缘线上一点与$c_1$构成的向量垂直于$n_1$,式2同理，式3表示边缘线上一点与$c_1$构成的向量垂直于直线所在的法向量。由此可整理得到：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 A=\begin{bmatrix}
 n_1^{T}\\d^{T}\\n_2^{T}
@@ -306,10 +274,7 @@ n_1^{T}\\d^{T}\\n_2^{T}
 b=\begin{bmatrix}n_1\cdot{c_1}\quad{d}\cdot{c_1}\quad{n_2}\cdot{c_2}\end{bmatrix}\tag{5}\\
 A\cdot{x}=b\tag{6}
 \end{align*}
-$$&lt;p&gt;
-对式6进行QR分解则能得到边缘线上一点，且该点与$c1$构成的向量是垂直于边缘线所在的法向量的。另外：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 (c_2-O)\cdot{d}\times{d}\tag{7}\\
 (c_2-0)-(c_2-O)\cdot{d}\times{d}\tag{8}
@@ -984,8 +949,6 @@ $$&lt;p&gt;
 &lt;/h3&gt;&lt;ol&gt;
 &lt;li&gt;最小化重投影误差&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;本文第一章节中提到了相机校准问题可以表达为：
-&lt;/p&gt;
 $$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{1}$$&lt;p&gt;
 &lt;span style=&#34;color:red;&#34;&gt;上式暂时还没理解,等后面再看！&lt;/span&gt;，但是好在代码实现上与问题表达是有差异，代码是优化点到直线上的距离，与BLAM中关于边缘特征问题表述是一样的，具体如下所示：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://wzwan-developer.github.io/p/mlcc/02/edge_feature.png&#34;
@@ -1002,11 +965,6 @@ $$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\i
 		data-flex-basis=&#34;272px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;注意图中关于边缘点的表达可以进行以下转化：
-$(I-nn^{T})(p_{f_i}-q)=(p_{f_i}-q)-nn^{T}(p_{f_i}-q)$
-其中，$nn^{T}(p_{f_i}-q)$表达将$p_{f_i}-q$向量投影到$n$向量上。
-现在将本文的相关变量带入式中可以得到表达式为：
-&lt;/p&gt;
 $$
 \mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left((I-\mathbf{n}_{i,l,j}\mathbf{n}_{i,l,j}^{T})\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{2}
 $$&lt;p&gt;。&lt;/p&gt;
@@ -1332,14 +1290,9 @@ Fig. 3: A) LiDAR point cloud segmented with the adaptive voxelization. Points wi
 &lt;li&gt;设置了两个条件来停止递归体素化：一个是树的最大深度，另一个是体素的最小点数。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;        其中，判断体素是否为平面的方法是计算体素内所有的点云的协方差矩阵，判断最大特征值与最小特征值的比值是否大于一定的阈值，如果大于则为平面：&lt;/p&gt;
-&lt;p&gt;首先计算中心点$p_c$,即所有点的均值点,如下所示：
-&lt;/p&gt;
 $$
 p_c=\frac{1}{N}\sum_{i=1}^{N}p_i
-$$&lt;p&gt;
-接着计算协方差矩阵：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 C=\frac{1}{N}\sum_{i=1}^{N}\big(p_i - c\big)\big(p_i - c\big)^T\\
 =\frac{1}{N}\sum_{i=1}^{N}\big(p_ip_i^T-p_ic^T-cp_i^T+cc^T\big)\\
@@ -2076,14 +2029,6 @@ $$&lt;h3 id=&#34;八叉树数据结构&#34;&gt;八叉树数据结构
         <guid>https://wzwan-developer.github.io/p/mlcc/01/</guid>
         <description>&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg" alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration" /&gt;&lt;h2 id=&#34;文章内容&#34;&gt;文章内容
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;            With adaptive voxelization, we can obtain a set
-of voxels of different sizes. Each voxel contains points that are roughly on a plane and creates a planar constraint for
-all LiDAR poses that  have points in this voxel. More specifically, considering the $l-th$ voxel consisting of a group of
-points $\mathcal{P}_{l}={_{}^{G}P_{L_{i},t_{j}}}$ scanned by $L_{i} \in \mathcal{L}$ at times $t_{j} \in \mathcal{T}$.
-We define a point cloud consistency  indicator $_{c_{l}}(_{L_{i}}^{G}T_{t_{j}})$ which forms a factor on $\mathcal{S}$ and $\mathcal{E}_{L}$ shown
-in Fig. 4(a). Then, the base LiDAR trajectory and extrinsic are estimated by optimizing the factor graph. A natural choice   for the consistency
-indicator $c_{l}(\cdot)$ would be the summed Euclidean distance between each $_{}^{G}P_{L_{i},t_{j}}$ the plane to be estimated (see Fig. 4(b)).
-Taking account of all such indicators within the voxel map, we could formulate the problem as &lt;/p&gt;
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p&gt;， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.
 &lt;img src=&#34;https://wzwan-developer.github.io/p/mlcc/01/graph1.png&#34;
 	width=&#34;1976&#34;
@@ -2101,14 +2046,6 @@ $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\
 &gt;
 Fig.4 :(a) The $l-th$ factor item relating to $\mathcal{S}$ and $\mathcal{E}_{L}$ with $L_{i} \in \mathcal{L}$ and $t_{j} \in \mathcal{T}$ . (b) The distance from the point $_{}^{G}p_{k}$ to the plane $\pi$.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;         通过自适应体素化，我们可以获得一组不同大小的体素。
-每个体素包含大致在一个平面上的点，并为所有包含在此体素内的雷达姿态创建一个平面约束。
-更具体地说，考虑由$L_{i} \in \mathcal{L}$在时刻$t_{j} \in \mathcal{T}$扫描的一组点组成的第$l$个体素。
-我们定义了一个点云一致性指标$_{c_{l}}(_{L_{i}}^{G}T_{t_{j}})$ ，
-它在图4(a)中形成了$\mathcal{S}$ 和 $\mathcal{E}_{L}$上的因子。然后，通过优化因子图来估计基准雷达的轨迹和外参。
-对于一致性指标$c_{l}(\cdot)$的一个自然选择是计算每个$_{}^{G}P_{L_{i},t_{j}}$到平面的欧几里得距离之和（见图4(b)）。
-考虑到体素图中所有这样的指标，我们可以将问题表述为
-&lt;/p&gt;
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p&gt;
 ，其中 $_{}^{G}p_{k}\in \mathcal{P}_{l}$，$N_{l}$ 是 $\mathcal{P}_{l}$中所有点的总点数, $n_{l}$ 是平面的
 法向量， $q_{l}$ 是平面中的一点。
@@ -2129,93 +2066,30 @@ $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\
 Fig.4 :(a) 第$l$ 个因子项，涉及$\mathcal{S}$ 和 $\mathcal{E}_{L}$，其中  $L_{i} \in \mathcal{L}$
 且 $t_{j} \in \mathcal{T}$ 。 (b)点 $_{}^{G}p_{k}$到平面$\pi$的距离.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;              It is noticed
-that the optimization variables $(n_{l}, q_{l})$ in (2) could be analytically solved (see Appendix A
-and the resultant cost function (3) is over the LiDAR pose $_{L_{i}}^{G}T_{t_{j}}$ (hence the base
-LiDAR trajectory $\mathcal{S}$ and extrinsic $\mathcal{E}_{L}$) only, as follows
-&lt;/p&gt;
-$$ \arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l}) $$&lt;p&gt;
-where $\lambda_{3}(A_{l})$ denotes the minimal eigenvalue of matrix $A_{l}$ defined as
-&lt;/p&gt;
-$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}
-$$&lt;p&gt;
-. To allow efficient optimization in (3), we derive the closedform derivatives w.r.t the optimization
-variable $x$ up to secondorder (the detailed derivation from (3) to (5) is elaborated in Appendix B):
-&lt;/p&gt;
-$$\lambda_3({x}\boxplus\delta{x})\approx\lambda_3({x})+{\bar{J}}\delta{x}+\frac12\delta{x}^T{\bar{H}}\delta{x}$$&lt;p&gt;
-,where $\bar{J}$ is the Jacobian matrix, and $\bar{H}$  is the Hessian matrix.
-The $\delta{x}$  is a small perturbation of the optimization variable $x$:
-&lt;/p&gt;
-$${x}=[\underbrace{\cdots_{L_{0}}^{G}{R}_{t_{j}}\quad L_{0}^{G}{t}_{t_{j}}\cdots}_{\mathcal{S}}\underbrace{\cdots {}_{L_{i}}^{L_{0}}{R}\quad{}_{L_{i}}^{L_{0}}{t}\cdots}_{\mathcal{E}_{L}}]$$&lt;p&gt;
-.Then the optimal $x^{\ast}$ could be determined by iteratively solving (6) with the LM method
-and updating the $\delta{x}$ to $x$.
-&lt;/p&gt;
-$$(\bar{{H}}+\mu{I}) \delta{x}=-\bar{{J}}^T$$&lt;/blockquote&gt;
-&lt;p&gt;         注意到优化变量$(n_{l}, q_{l})$在方程(2)中可以解析求解（详见附录A）,由此得到的损失函数(3)仅关于雷达姿态$_{L_{i}}^{G}T_{t_{j}}$(即基准雷达轨迹$\mathcal{S}$和外参$\mathcal{E}_{L}$),如下所示：
-&lt;/p&gt;
-$$ \arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l}) $$&lt;p&gt;
-其中$\lambda_{3}(A_{l})$表示矩阵 $A_{l}$的最小特征值， $A_{l}$定义为&lt;/p&gt;
-$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$&lt;p&gt;
-。为了使式(3)中的优化高效，我们推导了优化变量$x$的二阶闭式导数(从(3)到(5)的详细推导见附录B)：
-&lt;/p&gt;
-$$\lambda_3({x}\boxplus\delta{x})\approx\lambda_3({x})+{\bar{J}}\delta{x}+\frac12\delta{x}^T{\bar{H}}\delta{x}$$&lt;p&gt;
-。其中$\bar{J}$是雅可比矩阵，$\bar{H}$是海森矩阵。$\delta{x}$是优化变量$x$的小扰动：
-&lt;/p&gt;
-$${x}=[\underbrace{\cdots_{L_{0}}^{G}{R}_{t_{j}}\quad L_{0}^{G}{t}_{t_{j}}\cdots}_{\mathcal{S}}\underbrace{\cdots_{L_{i}}^{L_{0}}{R}\quad {}_{L_{i}}^{L_{0}}{t}\cdots}_{\mathcal{E}_{L}}]$$&lt;p&gt;
-。然后，最优解$x^{\ast}$可以通过迭代求解公式(6)并使用LM的方法更新$\delta{x}$到$x$来确定。
-&lt;/p&gt;
-$$(\bar{{H}}+\mu{I}) \delta{x}=-{\bar{{J}}}^T$$&lt;h2 id=&#34;理论推导&#34;&gt;理论推导
+$$ \arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l}) $$$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}
+$$$$\lambda_3({x}\boxplus\delta{x})\approx\lambda_3({x})+{\bar{J}}\delta{x}+\frac12\delta{x}^T{\bar{H}}\delta{x}$$$${x}=[\underbrace{\cdots_{L_{0}}^{G}{R}_{t_{j}}\quad L_{0}^{G}{t}_{t_{j}}\cdots}_{\mathcal{S}}\underbrace{\cdots {}_{L_{i}}^{L_{0}}{R}\quad{}_{L_{i}}^{L_{0}}{t}\cdots}_{\mathcal{E}_{L}}]$$$$(\bar{{H}}+\mu{I}) \delta{x}=-\bar{{J}}^T$$&lt;/blockquote&gt;
+$$ \arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l}) $$$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$$$\lambda_3({x}\boxplus\delta{x})\approx\lambda_3({x})+{\bar{J}}\delta{x}+\frac12\delta{x}^T{\bar{H}}\delta{x}$$$${x}=[\underbrace{\cdots_{L_{0}}^{G}{R}_{t_{j}}\quad L_{0}^{G}{t}_{t_{j}}\cdots}_{\mathcal{S}}\underbrace{\cdots_{L_{i}}^{L_{0}}{R}\quad {}_{L_{i}}^{L_{0}}{t}\cdots}_{\mathcal{E}_{L}}]$$$$(\bar{{H}}+\mu{I}) \delta{x}=-{\bar{{J}}}^T$$&lt;h2 id=&#34;理论推导&#34;&gt;理论推导
 &lt;/h2&gt;&lt;h3 id=&#34;损失函数的降维&#34;&gt;损失函数的降维
 &lt;/h3&gt;&lt;h4 id=&#34;推导一balm论文的思路&#34;&gt;推导一：BALM论文的思路
-&lt;/h4&gt;$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p&gt;
-观察上式可知，由于对于平面参数$\pi=(n_{l},q_{l})$的依赖，原始误差函数优化的维度很高。因为平面参数$(n_{l},q_{l})$对于不同的平面是有区别的。我们可以对它们进行优化，如下式所示：
-&lt;/p&gt;
-$$\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)} $$&lt;p&gt;
-在$(n_{l},q_{l})$两个平面参数优化过程中可以优先优化$q_{l}$，再优化$n_{l}$，下式为优化$q_{l}$。
-&lt;/p&gt;
-$$\begin{align*}\arg\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \\
+&lt;/h4&gt;$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$$$\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)} $$$$\begin{align*}\arg\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \\
 = \arg\min_{n_{l}}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}}\right)\\
 =\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}
- \end{align*}$$&lt;p&gt;
-继续简化关于$q_{l}$参数的优化
-&lt;/p&gt;
-$$\begin{align*}\arg\min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\\
- =\min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)\left( {^{G}p_{k}-q_{l}}\right)^{T}}}\end{align*}$$&lt;p&gt;
-需要求当上式最小化是$q_{l}$的最优解，我们需要找到上式梯度为0的$q_{l}$的值，因此我们对上式求关于$q_{l}$的导数，如下所示：
-&lt;/p&gt;
-$$\begin{align*}\frac{\partial}{\partial{q_{l}}} \left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)\left( {^{G}p_{k}-q_{l}}\right)^{T}}}\right) \\
+ \end{align*}$$$$\begin{align*}\arg\min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\\
+ =\min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)\left( {^{G}p_{k}-q_{l}}\right)^{T}}}\end{align*}$$$$\begin{align*}\frac{\partial}{\partial{q_{l}}} \left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)\left( {^{G}p_{k}-q_{l}}\right)^{T}}}\right) \\
 ={\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}}  {-({^{G}p_{k}-q_{l})}^{T}}-\left( {^{G}p_{k}-q_{l}}\right)}}\\
 = {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}}  {-2({^{G}p_{k}-q_{l})}}}}\\
 =-{\frac{2}{N_{l}}{\sum_{k=1}^{N_{l}}  {({^{G}p_{k}-q_{l})}}}}
-\end{align*}$$&lt;p&gt;
-令上式等于0：
-&lt;/p&gt;
-$$\begin{align*}-{\frac{2}{N_{l}}{\sum_{k=1}^{N_{l}}  {({^{G}p_{k}}-q_{l})}}}=0 \\
+\end{align*}$$$$\begin{align*}-{\frac{2}{N_{l}}{\sum_{k=1}^{N_{l}}  {({^{G}p_{k}}-q_{l})}}}=0 \\
  \sum_{k=1}^{N_{l}}{({^{G}p_{k}-q_{l}})} =0\\
  \sum_{k=1}^{N_{l}}{^{G}p_{k}}-N_{l}q_{l}=0\\
  N_{l}q_{l}=\sum_{k=1}^{N_{l}}{^{G}p_{k}}\\
  q_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{^{G}p_{k}}
- \end{align*}$$&lt;p&gt;
-由此可知，最优的$q_{l}$是所有$^{G}p_{k}$的均值$q_{l}^{\ast}$,接下来继续简化$n_{l}$
-&lt;/p&gt;
-$$\begin{align*}\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}\\
-=\arg\min_{n_{l}}n_{l}^{T}\left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\right)n_{l}\end{align*}$$&lt;p&gt;
-其中，&lt;/p&gt;
-$${\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\\
-\Leftrightarrow \frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}} $$&lt;p&gt;
-需要注意的是上式中$q_{l}^{\ast} \cdot_{}^{G}p_{k}^{T}$与$_{}^{G}p_{k}\cdot{q_{l}^{\ast}}^{T}$两个交叉项在最小化过程中不会对优化结果产生影响，所以两式等价。
-所以，带入&lt;/p&gt;
-$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$$$\begin{align*}\arg\min_{n_{l}}n_{l}^{T}\left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\right)n_{l}\\
-=\arg\min_{n_{l}}n_{l}^{T}A_{l}n_{l}\end{align*}$$&lt;p&gt;
-根据瑞利商定理，对矩阵$M$满足如下性质：
-&lt;/p&gt;
-$$\lambda_{min}(M)\le \frac{x^{T}Mx}{x^{T}x}\le\lambda_{max}(M),\forall{x}\ne0$$&lt;p&gt;
-则关于误差函数，取得最小化，变量$(n_{l}, q_{l})$的优化为公式&lt;/p&gt;
-$$\begin{align*}\
+ \end{align*}$$$$\begin{align*}\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}\\
+=\arg\min_{n_{l}}n_{l}^{T}\left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\right)n_{l}\end{align*}$$$${\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\\
+\Leftrightarrow \frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}} $$$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$$$\begin{align*}\arg\min_{n_{l}}n_{l}^{T}\left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\right)n_{l}\\
+=\arg\min_{n_{l}}n_{l}^{T}A_{l}n_{l}\end{align*}$$$$\lambda_{min}(M)\le \frac{x^{T}Mx}{x^{T}x}\le\lambda_{max}(M),\forall{x}\ne0$$$$\begin{align*}\
 =\lambda_{min}(A_{l})\\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}\\
-=\lambda_{3}(A_{l})\end{align*}$$&lt;p&gt;
-将其带入&lt;/p&gt;
-$$\begin{align*}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)}\\
+=\lambda_{3}(A_{l})\end{align*}$$$$\begin{align*}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)}\\
 =\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align*}$$&lt;p&gt;补充内容：由上述图4可知，$n_{l}^{T}({}^{G}p_{k}-q_{l})$表达了点${}^{G}p_{k}$到平面$\pi$的距离，其推导来源于向量法求点到平面的距离。如下图所示：
 &lt;img src=&#34;https://wzwan-developer.github.io/p/mlcc/01/distance.jpeg&#34;
 	width=&#34;830&#34;
@@ -2235,10 +2109,7 @@ $$\begin{align*}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{
 &lt;/h3&gt;&lt;p&gt;首先引入BALM中两个定理，如下所示:&lt;/p&gt;
 &lt;h4 id=&#34;定理1&#34;&gt;定理1
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;已知：&lt;/p&gt;
-$${A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T,\bar{{p}}=\frac{1}{N}\sum_{i=1}^{N}{p}_{i}$$&lt;p&gt;
-对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有&lt;/p&gt;
-$$\frac{\partial\lambda_k}{\partial{p}_i}=\frac2N({p}_i-\bar{{p}})^T{u}_k{u}_k^T$$&lt;p&gt;其中,$\bar{p}$是$N$个点的均值。&lt;/p&gt;
+$${A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T,\bar{{p}}=\frac{1}{N}\sum_{i=1}^{N}{p}_{i}$$$$\frac{\partial\lambda_k}{\partial{p}_i}=\frac2N({p}_i-\bar{{p}})^T{u}_k{u}_k^T$$&lt;p&gt;其中,$\bar{p}$是$N$个点的均值。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;证明如下&lt;/strong&gt;：假设点$p_i= [x_{i} \quad y_{i} \quad z_{i}]^{T}$以及对应的特征向量矩阵$U={[u_{1} \quad u_{2} \quad u_{3} ]}^{T}$。进一步定义$p$是$p_{i}$的一个元素，$p$是$x_{i},y_{i},z_{i}$中其中一个。协方差矩阵$A$可以分解为
 $\Lambda=U^{T}AU$,其中:&lt;/p&gt;
@@ -2247,66 +2118,26 @@ $\Lambda=U^{T}AU$,其中:&lt;/p&gt;
 $\lambda_{1},\lambda_{2},\lambda_{3}$。&lt;/li&gt;
 &lt;li&gt;$U$是一个正交矩阵，其列是$A$的特征向量$u_{1},u_{2},u_{3}$。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;对$\Lambda$求导可得下式：
-&lt;/p&gt;
 $$
 \frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}AU+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+U^{T}A\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式1}
-$$&lt;p&gt;
-又因为$\Lambda=U^{T}AU$,可以推导得到&lt;/p&gt;
-$$U^{T}A=\Lambda{}U^{T},AU=U\Lambda\tag{式2}$$&lt;p&gt;,将式1带入式2，可得：
-&lt;/p&gt;
-$$
+$$$$U^{T}A=\Lambda{}U^{T},AU=U\Lambda\tag{式2}$$$$
 \frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式3}
-$$&lt;p&gt;
-又因为：
-&lt;/p&gt;
-$$
+$$$$
 U^{T}U=I\\
 \Longrightarrow {U^{T}\frac{\partial{U}}{\partial{p}}+\left(\frac{\partial{U}}{\partial{p}}\right)^{T}U=0}\tag{式4}
-$$&lt;p&gt;
-由此可知，$U^{T}\frac{\partial{U}}{\partial{p}}$是一个&lt;a class=&#34;link&#34; href=&#34;https://baike.baidu.com/item/%E5%8F%8D%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5/9063240&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;反对称矩阵&lt;/a&gt;，其对角线元素和0。
-&lt;img src=&#34;https://wzwan-developer.github.io/p/mlcc/01/skew-symmetric-matrix.png&#34;
-	width=&#34;1640&#34;
-	height=&#34;268&#34;
-	srcset=&#34;https://wzwan-developer.github.io/p/mlcc/01/skew-symmetric-matrix_hu12682485345853843236.png 480w, https://wzwan-developer.github.io/p/mlcc/01/skew-symmetric-matrix_hu16826235980269994892.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;反对称矩阵的定义&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;611&#34;
-		data-flex-basis=&#34;1468px&#34;
-	
-&gt;
-因此可得:
-&lt;/p&gt;
-$$
+$$$$
 \left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)=0\tag{式5}
-$$&lt;p&gt;
-将式5带入式3中，可得：
-&lt;/p&gt;
-$$
+$$$$
 \frac{\partial{}\Lambda}{\partial{p}}=U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U\tag{式6}
-$$&lt;p&gt;
-又因为$\lambda_{k}={u_{k}}^{T}Au_{k}$,代入式6可得：
-&lt;/p&gt;
-$$
+$$$$
 \frac{\partial{}\lambda_{k}}{\partial{p}}={u_{k}}^{T}\left(\frac{\partial{A}}{\partial{p}}\right)u_{k}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p}}\tag{式7}
-$$&lt;p&gt;
-此时将标量$p$换回为向量$p_{i}$,得到下式
-&lt;/p&gt;
-$$
+$$$$
 \frac{\partial{}\lambda_{k}}{\partial{p_{i}}}=\begin{bmatrix} 
 \frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{x_{i}}}&amp;
 \frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{y_{i}}}&amp;
 \frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{z_{i}}}
 \end{bmatrix}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p_{i}}}\tag{式8}
-$$&lt;p&gt;
-带入矩阵$A$和$\bar{p}$的定义可得：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align}
 \frac{\partial{}\lambda_{k}}{\partial{p_{j}}}=\frac1N\sum_{i=1}^N{\frac{\partial{{u_{k}}^{T}\left({p}_j-\bar{p}\right)\left(p_j-\bar{p}\right)^Tu_{k}}}{\partial{p_{i}}}}\\
 =\frac1N\sum_{j=1}^N{\frac{\partial{\left({p}_j-\bar{p}\right)^{T}{u_{k}}{u_{k}}^{T}\left(p_j-\bar{p}\right)}}{\partial{p_{i}}}}\\
@@ -2320,44 +2151,18 @@ $$
 =\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(0-\left(p_i-\bar{p}\right)^{T}\right)\\
 =\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}
 \end{align}\tag{式9}
-$$&lt;p&gt;
-其中涉及到以下公式：
-&lt;/p&gt;
-$$
+$$$$
 \frac{\partial{p}_j}{\partial{p}_i}={I},(i=j)\quad\frac{\partial{p}_j}{\partial{p}_i}={0},(i\neq j)
 \tag{式10}
 $$&lt;h4 id=&#34;定理2&#34;&gt;定理2
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;已知：&lt;/p&gt;
-$${A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T,\bar{{p}}=\frac{1}{N}\sum_{i=1}^{N}{p}_{i}$$&lt;p&gt;
-对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有&lt;/p&gt;
-$$\begin{aligned}\frac{\partial^{2}\lambda_{k}}{\partial{p}_{j}\partial{p}_{i}}=\begin{cases}\frac{2}{N}\biggl(\frac{N-1}{N}{u}_{k}{u}_{k}^{T}+{u}_{k}({p}_{i}-\bar{{p}})^{T}{U}{F}_{k}^{{p}_{j}}\\\\+{U}{F}_{k}^{{p}_{j}}\biggl({u}_{k}^{T}({p}_{i}-\bar{{p}})\biggr)\biggr),\quad i=j\\\\\frac{2}{N}\biggl(-\frac{1}{N}{u}_{k}{u}_{k}^{T}+{u}_{k}({p}_{i}-\bar{{p}})^{T}{U}{F}_{k}^{{p}_{j}}\\\\+{U}{F}_{k}^{{p}_{j}}\biggl({u}_{k}^{T}({p}_{i}-\bar{{p}})\biggr)\biggr),\quad i\neq j\end{cases}\end{aligned}$$&lt;p&gt; &lt;/p&gt;
-$${F}_{k}^{{P}_{j}}=\begin{bmatrix}{F}_{1,k}^{{P}_{j}}\\{F}_{2,k}^{{P}_{j}}\\{F}_{3,k}^{{P}_{j}}\end{bmatrix}\in\mathbb{R}^{3\times3},\quad{U}=\begin{bmatrix}{u}_{1}&amp;{u}_{2}&amp;{u}_{3}\end{bmatrix}$$&lt;p&gt; &lt;/p&gt;
-$$\left.{F}_{m,n}^{{P}_{j}}=\left\{\begin{matrix}\frac{({p}_{j}-\bar{{p}})^{T}}{N(\lambda_{n}-\lambda_{m})}({u}_{m}{u}_{n}^{T}+{u}_{n}{u}_{m}^{T}),m\neq n\\{0}_{1\times3}&amp;,m=n\end{matrix}\right.\right.$$&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;证明如下&lt;/strong&gt;：
-已知协方差矩阵可被分解，且设$q$是点$p_{i}$的一个标量$x_{i},y_{i},z_{i}$之一，如下所示：
-&lt;/p&gt;
-$${A}={U}{\Lambda}{U}^{T} \tag{式1}$$&lt;p&gt;
-首先对其求关于$q$的导数：
-&lt;/p&gt;
-$$\frac{\partial{A}}{\partial q}=\frac{\partial}{\partial q}\left({U}{\Lambda}{U}^{T}\right)\tag{式2}$$&lt;p&gt;
-根据链式法则，右侧可以写为：
-&lt;/p&gt;
-$${\frac{\partial{A}}{\partial q}}={\frac{\partial{U}}{\partial q}}{\Lambda}{U}^{T}+{U}{\frac{\partial{\Lambda}}{\partial q}}{U}^{T}+{U}{\Lambda}{\frac{\partial{U}^{T}}{\partial q}} $$&lt;p&gt;
-由于$\frac{\partial{U}^{T}}{\partial{q}}=\left({\frac{\partial{U}}{\partial q}}\right)^{T}$,因此式2可以变为
-&lt;/p&gt;
-$$\begin{align}
+$${A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T,\bar{{p}}=\frac{1}{N}\sum_{i=1}^{N}{p}_{i}$$$$\begin{aligned}\frac{\partial^{2}\lambda_{k}}{\partial{p}_{j}\partial{p}_{i}}=\begin{cases}\frac{2}{N}\biggl(\frac{N-1}{N}{u}_{k}{u}_{k}^{T}+{u}_{k}({p}_{i}-\bar{{p}})^{T}{U}{F}_{k}^{{p}_{j}}\\\\+{U}{F}_{k}^{{p}_{j}}\biggl({u}_{k}^{T}({p}_{i}-\bar{{p}})\biggr)\biggr),\quad i=j\\\\\frac{2}{N}\biggl(-\frac{1}{N}{u}_{k}{u}_{k}^{T}+{u}_{k}({p}_{i}-\bar{{p}})^{T}{U}{F}_{k}^{{p}_{j}}\\\\+{U}{F}_{k}^{{p}_{j}}\biggl({u}_{k}^{T}({p}_{i}-\bar{{p}})\biggr)\biggr),\quad i\neq j\end{cases}\end{aligned}$$$${F}_{k}^{{P}_{j}}=\begin{bmatrix}{F}_{1,k}^{{P}_{j}}\\{F}_{2,k}^{{P}_{j}}\\{F}_{3,k}^{{P}_{j}}\end{bmatrix}\in\mathbb{R}^{3\times3},\quad{U}=\begin{bmatrix}{u}_{1}&amp;{u}_{2}&amp;{u}_{3}\end{bmatrix}$$$$\left.{F}_{m,n}^{{P}_{j}}=\left\{\begin{matrix}\frac{({p}_{j}-\bar{{p}})^{T}}{N(\lambda_{n}-\lambda_{m})}({u}_{m}{u}_{n}^{T}+{u}_{n}{u}_{m}^{T}),m\neq n\\{0}_{1\times3}&amp;,m=n\end{matrix}\right.\right.$$&lt;/blockquote&gt;
+$${A}={U}{\Lambda}{U}^{T} \tag{式1}$$$$\frac{\partial{A}}{\partial q}=\frac{\partial}{\partial q}\left({U}{\Lambda}{U}^{T}\right)\tag{式2}$$$${\frac{\partial{A}}{\partial q}}={\frac{\partial{U}}{\partial q}}{\Lambda}{U}^{T}+{U}{\frac{\partial{\Lambda}}{\partial q}}{U}^{T}+{U}{\Lambda}{\frac{\partial{U}^{T}}{\partial q}} $$$$\begin{align}
 \frac{\partial{A}}{\partial q}=\frac{\partial{U}}{\partial q}{\Lambda}{U}^T+{U}\frac{\partial{\Lambda}}{\partial q}{U}^T+{U}{\Lambda}\left(\frac{\partial{U}}{\partial q}\right)^T\\
 \Longrightarrow {U}^{T}{\frac{\partial{A}}{\partial q}}{U}={U}^{T}{\frac{\partial{U}}{\partial q}}{\Lambda}+{\frac{\partial{\Lambda}}{\partial q}}+{\Lambda}\left({\frac{\partial{U}}{\partial q}}\right)^{T}{U} 
-\end{align}\tag{式3}$$&lt;p&gt;
-设$C^{q}=U^{T}\frac{\partial{U}}{\partial q} $,因为$C^{q}$是反对称矩阵(由定理1的证明可知),所以有以下$C^{q}+{C^{q}}^{T}=0$,即${C^{q}}^{T}=-C^{q}$。代入式3可得：
-&lt;/p&gt;
-$$
+\end{align}\tag{式3}$$$$
 {U}^{T}{\frac{\partial{A}}{\partial q}}{U}={C}^{q}{\Lambda}+{\frac{\partial{\Lambda}}{\partial q}}-{\Lambda}{C}^{q}
-\tag{式4}$$&lt;p&gt;
-取$C^{q}$的m行，n列可得：
-&lt;/p&gt;
-$$
+\tag{式4}$$$$
 \begin{align}
 \left({U}^T\frac{\partial{A}}{\partial q}{U}\right)_{m,n}=\left(\frac{\partial\boldsymbol{\Lambda}}{\partial q}\right)_{m,n}-\left({\Lambda}{C}^q-{C}^q{\Lambda}\right)_{m,n}\\
 \Longrightarrow 
@@ -2371,36 +2176,24 @@ C_{m,n}^{q}\left(\lambda_{m}-\lambda_{n}\right)=-u_{m}^{T}{\frac{\partial{A}}{\p
 \Longrightarrow 
 {C}_{m,n}^q=\frac{{u}_m^T\frac{\partial{A}}{\partial q}{u}_n}{\lambda_n-\lambda_m}&amp;,(\lambda_{m}\ne\lambda_{n})
 \end{align}
-\tag{式5}$$&lt;p&gt;
-取$C^{q}$的m行，m列,由于它是反对称矩阵，所以它的对角线元素为0，即：
-&lt;/p&gt;
-$$\begin{align}
+\tag{式5}$$$$\begin{align}
 {C}_{m,m}^q={u}_m^T\frac{\partial{u}_m}{\partial q}\\
 \Longrightarrow 
 {C}_{m,m}^q=0&amp;,(m=n)
-\end{align}\tag{式6}$$&lt;p&gt;
-接下来求解$u_{k}$对$p_{j}$的三个分量的微积分：
-&lt;/p&gt;
-$$
+\end{align}\tag{式6}$$$$
 \begin{align}
 \frac{\partial u_{k}}{\partial{q}}=\frac{\partial Ue_{k}}{\partial q}
 =UU^{T}\frac{\partial U}{\partial q}e_{k}
 =UC^{q}e_{k}
 \end{align}
 \tag{式7}
-$$&lt;p&gt;
-其中$e_{k}$是3x1的向量，其中第k个元素是1，其它元素是0，这意味着：
-&lt;/p&gt;
-$$
+$$$$
 C^{q}e_{k}=\begin{bmatrix}
  C_{1,k}^{q}\\
  C_{2,k}^{q}\\
 C_{3,k}^{q}
 \end{bmatrix}
-\tag{式8}$$&lt;p&gt;
-将$q$替换为$p_{j}$,并将式8代入可得：
-&lt;/p&gt;
-$$
+\tag{式8}$$$$
 \begin{align}
 \begin{aligned}
 \frac{\partial{u}_k}{\partial{p}_j}&amp; =\begin{bmatrix}\frac{\partial{U}{e}_k}{\partial x_j}&amp;\frac{\partial{U}{e}_k}{\partial y_j}&amp;\frac{\partial{U}{e}_k}{\partial z_j}\end{bmatrix} \\
@@ -2410,10 +2203,7 @@ $$
 \end{aligned}
 \end{align}
 \tag{式9}
-$$&lt;p&gt;
-结合式9和式5、6可有如下定义：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 {F}_{m,n}^{{p}_{j}}=
 \begin{bmatrix}{C}_{m,n}^{x_{j}}&amp;{C}_{m,n}^{y_{j}}&amp;{C}_{m,n}^{z_{j}}\end{bmatrix}\in\mathbb{R}^{1\times3},\quad m,n\in\{1,2,3\}.\\
@@ -2422,19 +2212,14 @@ $$
 0,\quad m=n
 \end{cases}
 \end{align*}
-\tag{式10}$$&lt;p&gt;将式10带入式9中可得：
-&lt;/p&gt;
-$$
+\tag{式10}$$$$
 \frac{\partial{u_{k}}}{\partial{p_{j}}}=
 U\begin{bmatrix}
 F_{1,k}^{p_{j}}\\
 F_{2,k}^{p_{j}}\\
 F_{3,k}^{p_{j}}
 \end{bmatrix}
-=UF_{k}^{p_{j}}\tag{式11}$$&lt;p&gt;
-接下来对式10做以下化简，首先考虑$m\ne n$的情况，过程如下所示：
-&lt;/p&gt;
-$$
+=UF_{k}^{p_{j}}\tag{式11}$$$$
 \begin{align*}
 \frac{u_{m}^{T} \frac{\partial A }{\partial p_{j}} u_{n}}{\lambda_n -\lambda_m}\\
 =\frac{1}{\lambda_n -\lambda_m}\cdot u_{m}^{T} \frac{\partial A }{\partial p_{j}} u_{n}\\
@@ -2479,26 +2264,17 @@ $$
 \frac{1}{N}\left(p_{j}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\\
 =\frac{\left(p_{j}-\bar{p}\right)^{T}}{\left(\lambda_n -\lambda_m\right)N}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)
 \end{align*}
-\tag{式12}$$&lt;p&gt;
-其中涉及到以下公式：
-&lt;/p&gt;
-$$
+\tag{式12}$$$$
 \frac{\partial{p}_j}{\partial{p}_i}={I},(i=j)\quad\frac{\partial{p}_j}{\partial{p}_i}={0},(i\neq j)
 \tag{式13}$$$$
 \frac{\partial {a}^\top{x}{x}^\top{b}}{\partial {x}}={x}^\top\left({a}{b}^\top+{b}{a}^\top\right)
-\tag{式14}$$&lt;p&gt;
-结合$m=n$的情况，${F}_{m,n}^{{p}_{j}}$的简化结果如下所示：
-&lt;/p&gt;
-$$
+\tag{式14}$$$$
 F_{m,n}^{p_{j}}=
 \begin{cases}
  \frac{\left(p_{j}-\bar{p}\right)^{T}}{\left(\lambda_n -\lambda_m\right)N}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right),\quad m\ne n\\
 0,\quad m=n
 \end{cases}
-\tag{式15}$$&lt;p&gt;
-此时，开始求解二阶导数：
-&lt;/p&gt;
-$$
+\tag{式15}$$$$
 \begin{align*}
 \frac{\partial}{\partial{p_{j}}}\left(\frac{\partial{\lambda_k}}{\partial{p_{i}}}\right)
 =\frac{\partial{\frac2N\left({{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}\right)^{T}}}{\partial{p_{j}}}\\
@@ -2526,41 +2302,22 @@ $$
 $$&lt;p&gt;
 其中同样涉及到式13。&lt;/p&gt;
 &lt;h4 id=&#34;推导过程&#34;&gt;推导过程
-&lt;/h4&gt;&lt;p&gt;回顾代价函数为&lt;/p&gt;
-$$\arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l})\tag{式1}$$&lt;p&gt;
-，优化问题是非线性的，通过迭代求解，每次迭代中，代价函数被二阶近似，具体的说，我们将$\lambda_3$视为包含所有点${^G}p$的函数，其中
-$^{G}p$是一个列向量，每个点$^{G}p_{k}\in\mathcal{P}_{l}$，即：
-&lt;/p&gt;
-$$
+&lt;/h4&gt;$$\arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l})\tag{式1}$$$$
 ^{G}p=\begin{bmatrix}{^{G}p_{1}^{T}} \quad {^{G}p_{2}^{T}} \quad \cdots \quad {^{G}p_{N_{l}}^{T}} \end{bmatrix}\in\mathbb{R} ^{3N_{l}}
 \tag{式2}
-$$&lt;p&gt;
-。$\lambda{(^Gp)}$可被近似为：
-&lt;/p&gt;
-$$
+$$$$
 \lambda_{3}\left(^{G}{p}+\delta^{G}{p}\right)\approx\lambda_{3}\left(^{G}{p}\right)+{J}\cdot\delta^{G}{p}+\frac{1}{2} \delta^{G}{p}^{T}\cdot{H}\cdot\delta^{G}{p}
 \tag{式3}
-$$&lt;p&gt;假设第$k$个点$^Gp_{k}$在时间$t_j$由雷达$L_i$扫描，则有：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 ^Gp_k={^{G}_{L_i}T}_{t_j}p_k={^{G}_{L_0}T}_{t_j}\cdot {^{L_{0}}_{L_i}T}\cdot p_{k}\\
 ={^{G}_{L_0}R_{t_j}}\left({^{L_0}_{L_i}R\cdot {p_k}+{^{L_0}_{L_i}t}}\right)+{^G_{L_0}t_{t_j}}
 \end{align*}
 \tag{式4}
-$$&lt;p&gt;
-表明$^Gp_k$依赖于$\mathcal{S}$和$\mathcal{E}_L$。为了扰动$^Gp_k$,我们在位姿$T$的进行扰动，
-记为$\delta{T}=\begin{bmatrix}\phi{^T}\quad\delta{t}^T \end{bmatrix}^T\in\mathbb{R}^6$，
-于在流形上的扰动可以参考论文&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/pdf/1812.01537&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;《A micro Lie theory for state estimation in robotics》&lt;/a&gt;。
-&lt;/p&gt;
-$$
+$$$$
 T=(R,t)\quad ,T \boxplus\delta{T}=\left(R\exp(\phi^{\wedge} ),t+\delta{t}\right)
 \tag{式5}
-$$&lt;p&gt;
-。将上式带入到代价函数式1中，可得：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 {}^{G}{p}_{k}+\delta^{G}{p}_{k}=
 {}_{L_{0}}^{G}R_{t_{j}}\exp\big({}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}\big)
@@ -2596,10 +2353,7 @@ $$
 +{}_{L_{i}}^{L_{0}}{t}\bigg)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}
 \end{align*}
 \tag{式6}
-$$&lt;p&gt;
-然后，结合式4和式6可得$\delta{^Gp_k}$，如下所示：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 \delta^{G}{p}_{k}\approx-{}_{L_{0}}^{G}R_{t_{j}}
 \big({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\big)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}
@@ -2611,8 +2365,6 @@ $$
 $$&lt;p&gt;
 其中$\delta{x}=\begin{bmatrix}\cdots \quad {^G_{L_0}\phi_{t_j}^{T}\quad\delta_{L_0}^{G}t_{t_j}^T}\cdots{^{L_{0}}_{L_i}\phi^{T}\quad\delta_{L_i}^{L_0}t^T} \cdots\end{bmatrix}^{T}
 \ne\mathbb{R}^{6\left(m+n-2\right)}$是优化变量$x=\begin{bmatrix}\cdots{_{L_0}^GR_{t_j} }\quad{_{L_0}^{G}t_{t_j}}\cdots{_{L_0}^{L_i}R}\quad{_{L_0}^{L_i}t}\cdots\end{bmatrix}$的微小扰动。&lt;/p&gt;
-&lt;p&gt;并且
-&lt;/p&gt;
 $$\begin{align*}
 D =\begin{bmatrix}\vdots&amp;\vdots\\\cdots {D}_{k,p}^{\mathcal{S}}&amp;\cdots {D}_{k,q}^{\varepsilon_{L}}&amp;\cdots\\\vdots&amp;\vdots\end{bmatrix}\in\mathbb{R}^{3N_{l}\times6(m+n-2)} \\
 \mathrm{D}_{k,p}^{\mathcal{S}}
@@ -2626,20 +2378,12 @@ D =\begin{bmatrix}\vdots&amp;\vdots\\\cdots {D}_{k,p}^{\mathcal{S}}&amp;\cdots {
 {0}_{3\times6},\quad {else}
 \end{cases}
 \end{align*}
-$$&lt;p&gt;
-&lt;em&gt;&lt;span style=&#34;color:red&#34;&gt;注意：&lt;/span&gt;&lt;/em&gt; 论文中的结果与推导有差异，下面是论文给的结果，&lt;span style=&#34;color:blue;&#34;&gt;待排查！&lt;/span&gt;
-&lt;/p&gt;
-$$\delta^{G}{p}_{k}\approx{\color{red}+}{}_{L_{0}}^{G}R_{t_{j}}
+$$$$\delta^{G}{p}_{k}\approx{\color{red}+}{}_{L_{0}}^{G}R_{t_{j}}
 \big({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\big)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}
 +\delta_{L_{0}}^{G}{t}_{t_{j}}{\color{red}+}\\{}_{L_{\color{red}i}}^{G}R_{t_{j}}\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
-+{}_{L_{0}}^{G}{R}_{t_{j}}\delta_{L_{i}}^{L_{0}}{t}$$&lt;p&gt;上面用到一些近似化：
-&lt;/p&gt;
-$$
++{}_{L_{0}}^{G}{R}_{t_{j}}\delta_{L_{i}}^{L_{0}}{t}$$$$
 \exp(\phi^{\wedge})\approx I+\phi^{\wedge}\tag{式8}
-$$&lt;p&gt;
-结合式3到式7有以下结论：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 \begin{gathered}
 \lambda_{3}({x}\boxplus\delta{x}) \approx\lambda_{3}({x})+{JD}\delta{x}+\frac{1}{2}
@@ -3116,8 +2860,6 @@ $$&lt;/li&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;二阶段优化副雷达到主雷达的外参&#34;&gt;二阶段：优化副雷达到主雷达的外参
 &lt;/h3&gt;&lt;p&gt;将一阶段中优化出的主雷达里程计作为真值，对于每一个副雷达，使用主雷达里程计以及各副雷达到主雷达的外参将各个副雷达的点云投影回世界坐标系构成局部地图，并和一阶段中的地图叠在一起构成新的局部地图。和一阶段相同，对使用自适应体素化方法提取面特征，并对于每一个特征体素递归构建基于点面误差的一致性评价指标。&lt;/p&gt;
-&lt;p&gt;由于主雷达轨迹固定，$D=\frac{\delta p}{\delta T}$不同于2.2.4章节的公式7。具体如下
-&lt;/p&gt;
 $$
 \begin{align*}
 {}^{G}{p}_{k}+\delta^{G}{p}_{k}=
@@ -3147,25 +2889,15 @@ $$
 +\delta_{L_{i}}^{L_{0}}{t}\big)
 \end{align*}
 \tag{式1}
-$$&lt;p&gt;
-则可推导对应$\delta^{G}{p}_{k}$的表达式：
-&lt;/p&gt;
-$$
+$$$$
 \delta^{G}{p}_{k}={}_{L_{0}}^{G}R_{t_{j}}\big((-{}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{i}}^{L_{0}}\phi
 +\delta_{L_{i}}^{L_{0}}{t}\big)\tag{式2}
-$$&lt;p&gt;
-因此可得：
-&lt;/p&gt;
-$$
+$$$$
 D=\frac{\delta p}{\delta T}=\begin{bmatrix}
 -{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}&amp;
 {}_{L_{0}}^{G}R_{t_{j}}
 \end{bmatrix}
-$$&lt;p&gt;
-由于$\frac{\delta \lambda}{\delta p}$不变，所以$H$和$J$没有变换将其带入2.2.3章节的式9即可推导出$\bar{J}$和$\bar{H}$。
-其中关于Hessian矩阵块的更新，以点$P(k,j)$为例推导如下其对$\bar{H}_{00}$的更新如下：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 \bar{H}_{0,0}=D_{0,k}^{T}H_{k,j}D_{j,0}\\
 =\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}&amp;{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}^{T}
@@ -3218,16 +2950,12 @@ $$&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;三阶段联合优化雷达外参和主激光雷达里程计&#34;&gt;三阶段：联合优化雷达外参和主激光雷达里程计
 &lt;/h3&gt;&lt;p&gt;使用主雷达里程计以及各副雷达到主雷达的外参将各个副雷达的点云投影回世界坐标系构成局部地图，将所有雷达的局部地图堆叠在一起构成新的局部地图。同样的，对于这个局部地图构建基于点面误差的损失函数。&lt;/p&gt;
-&lt;p&gt;关于参考雷达点云部分求雅可比矩阵的逆推导如下所示：
-&lt;/p&gt;
 $$
 \begin{align*}
 \bar{J}^{T}=(JD)^{T}=D^{T}J^{J}
 \end{align*}\tag{式1}
 $$&lt;p&gt;
 考虑两种情况：分辨为$p=j$和$q=i$。&lt;/p&gt;
-&lt;p&gt;当$p=j$时,$D=[-{}_{L_0}^{G}R_{t_j}({}_{L_i}^{L_0}Rp_k+{}_{L_i}^{L_0}t)^{\wedge}\quad I]$,将其代入式1中可得：
-&lt;/p&gt;
 $$
 \begin{align*}
 \bar{J}^{T}=(JD)^{T}=D^{T}J^{J}\\
@@ -3238,10 +2966,7 @@ $$
 I^{T}
 \end{bmatrix}\cdot{J}^{T}
 \end{align*}\tag{式2}
-$$&lt;p&gt;
-当$q=i$时，$D=[-{}_{L_0}^{G}R_{t_j}{}_{L_i}^{L_0}R(p_k)^{\wedge}\quad {}_{L_0}^{G}R_{t_j}]$,将其代入式1中可得：
-&lt;/p&gt;
-$$
+$$$$
 \begin{align*}
 \bar{J}^{T}=(JD)^{T}=D^{T}J^{J}\\
 =[-{}_{L_0}^{G}R_{t_j}{}_{L_i}^{L_0}R(p_k)^{\wedge}\quad {}_{L_0}^{G}R_{t_j}]^{T}\cdot J^{T}\\

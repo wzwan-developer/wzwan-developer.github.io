@@ -324,46 +324,27 @@ $$M=\begin{bmatrix} A & B\\  C &D\\ \end{bmatrix}$$<ul>
 <li>如果，矩阵块 $A$ 是可逆的，则 $D − CA^{-1}  B$称之为 $A$ 关于 $M$的舒尔补。</li>
 </ul>
 <h2 id="舒尔补的定理推导">舒尔补的定理推导
-</h2><p>将$M$矩阵分别变成上三角或者下三角：
-</p>
-$$\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}
+</h2>$$\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}
 \begin{bmatrix}A & B\\ C & D\end{bmatrix}=\begin{bmatrix}A & B\\ 0 & \Delta _{A}\end{bmatrix}$$$$\begin{bmatrix}A & B\\ C&D\end{bmatrix}
 \begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}=
-\begin{bmatrix}A & 0\\ C & \Delta _{A}\end{bmatrix}$$<p>其中${\Delta _{A} =D-CA^{-1}B }$。联合起来，将${M}$变形为对角形：
-</p>
-$$\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}
+\begin{bmatrix}A & 0\\ C & \Delta _{A}\end{bmatrix}$$$$\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}
 \begin{bmatrix}A & B\\ C & D\end{bmatrix}
 \begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}=
 \begin{bmatrix}A & 0\\ 0 & \Delta _{A}\end{bmatrix}
-$$<p>
-反过来亦可从对角矩阵恢复${M}$:
-</p>
-$$\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}
+$$$$\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}
 \begin{bmatrix}A & 0\\ 0& \Delta _{A}\end{bmatrix}
 \begin{bmatrix}I & A^{-1}B\\  0&I\\\end{bmatrix}=
 \begin{bmatrix}A & B\\ C & D\ \end{bmatrix}
 $$<h2 id="用途">用途
 </h2><h3 id="快速求矩阵的逆">快速求矩阵的逆
-</h3><p>矩阵${M}$可以改写为：
-</p>
-$$M=\begin{bmatrix}A & B\\ C&D\end{bmatrix}=\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}
+</h3>$$M=\begin{bmatrix}A & B\\ C&D\end{bmatrix}=\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}
 \begin{bmatrix}A & 0\\ 0& \Delta _{A}\end{bmatrix}
 \begin{bmatrix}I & A^{-1}B\\  0&I\\\end{bmatrix}$$$$M^{-1}=\begin{bmatrix}A & B\\ C&D\end{bmatrix}^{-1}=\begin{bmatrix}I & 0\\ CA^{-1} &I\\\end{bmatrix}^{-1}\begin{bmatrix}A^{-1} & 0\\ 0& \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I & A^{-1}B\\  0&I\\\end{bmatrix}^{-1}\\  =\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}\begin{bmatrix}A^{-1} & 0\\ 0& \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}\\=\begin{bmatrix}A^{-1}+A^{-1}B{\Delta _A}^{-1}CA^{-1}&-A^{-1}B{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&{\Delta _A}^{-1} \end{bmatrix}
 $$<h3 id="舒尔补在信息矩阵求解中的使用">舒尔补在信息矩阵求解中的使用
-</h3><p>协方差矩阵</p>
-$$\sum=\begin{bmatrix}A & C^{T}\\C&D\end{bmatrix}$$<p>,
-则信息矩阵</p>
-$$\sum^{-1}=\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\\=\begin{bmatrix}A^{-1}+A^{-1}C^{T}{\Delta _A}^{-1}CA^{-1}&-A^{-1}C^{T}{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&{\Delta _A}^{-1} \end{bmatrix}\\\stackrel{\triangle}{=}\begin{bmatrix}\Lambda_{aa}&\Lambda _{ab}\\\Lambda _{ba}&\Lambda _{bb} \end{bmatrix}$$<p>
+</h3>$$\sum=\begin{bmatrix}A & C^{T}\\C&D\end{bmatrix}$$$$\sum^{-1}=\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\\=\begin{bmatrix}A^{-1}+A^{-1}C^{T}{\Delta _A}^{-1}CA^{-1}&-A^{-1}C^{T}{\Delta _A}^{-1}\\-{\Delta _A}^{-1}CA^{-1}&{\Delta _A}^{-1} \end{bmatrix}\\\stackrel{\triangle}{=}\begin{bmatrix}\Lambda_{aa}&\Lambda _{ab}\\\Lambda _{ba}&\Lambda _{bb} \end{bmatrix}$$<p>
 其中，由上式可推导得$A^{-1}=\Lambda _{aa}-\Lambda _{ab}\Lambda _{bb}^{-1}\Lambda _{ba}$, 以及$D^{-1}=\Lambda _{bb}-\Lambda _{ba}\Lambda _{aa}^{-1}\Lambda _{ab}$，它们即为下次优化会使用的先验信息矩阵（边际概率的信息矩阵）。</p>
 <h3 id="通过舒尔补分解多元高斯分布">通过舒尔补分解多元高斯分布
-</h3><p>假设多元变量$M$服从高斯分布，且由两部分组成：</p>
-$$ x=\begin{bmatrix}a\\b\end{bmatrix} $$<p>,变量构成的协方差矩阵等于</p>
-$$\sum=\begin{bmatrix} A & C^{T} \\C&D \end{bmatrix}$$<p>,其中$A=cov(a,a)$,$C=cov(a,b)$,$D=cov(b,b)$。
-则$x$的概率分布为：
-</p>
-$$P(a,b)=P(a)P(b|a)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix})$$<p>。使用上一节内容将矩阵转化为对角矩阵
-</p>
-$$ \begin{align}
+</h3>$$ x=\begin{bmatrix}a\\b\end{bmatrix} $$$$\sum=\begin{bmatrix} A & C^{T} \\C&D \end{bmatrix}$$$$P(a,b)=P(a)P(b|a)\propto exp(-\frac{1}{2} \begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix})$$$$ \begin{align}
 P(a,b) \\ 
 \propto  exp\left (  -\frac{1}{2}\begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}A&C^{T}\\C&D\end{bmatrix}^{-1}\begin{bmatrix}a&b\end{bmatrix}\right) \\
   \propto exp \left( -\frac{1}{2}\begin{bmatrix}a\\b\end{bmatrix}^{T}\begin{bmatrix}I & 0\\ -CA^{-1} &I\\\end{bmatrix}\begin{bmatrix}A^{-1} & 0\\ 0& \Delta _{A}^{-1}\end{bmatrix}\begin{bmatrix}I & -A^{-1}B\\  0&I\\\end{bmatrix}\begin{bmatrix}a&b\end{bmatrix})\right )\\
