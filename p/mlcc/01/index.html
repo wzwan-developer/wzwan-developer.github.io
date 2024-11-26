@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-26T22:09:37&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-26T22:39:04&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
@@ -658,14 +658,14 @@ $$$$
 +{}_{L_{0}}^{G}{t}_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}\\
 \approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}
 +{}_{L_{0}}^{G}{t}_{t_{j}}\big)+{}_{L_{0}}^{G}{t}_{t_{j}}
-+{}_{L_{0}}^{G}R_{t_{j}}\big(I\cdot{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
 +\delta_{L_{i}}^{L_{0}}{t}\big)\\
 +{}_{L_{0}}^{G}R_{t_{j}}{}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}
 \bigg({}_{L_{i}}^{L_{0}}Rp_{k}
 +{}_{L_{i}}^{L_{0}}{t}\bigg)+\delta_{L_{0}}^{G}{t}_{t_{j}}\\
 \approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}
 +{}_{L_{0}}^{G}{t}_{t_{j}}\big)+{}_{L_{0}}^{G}{t}_{t_{j}}\\
--{}_{L_0}^GR_{t_j}\left(p_k\right)^{\wedge}\cdot_{L_i}^{L_0}\phi+_{L_0}^GR_{t_j}\delta_{L_i}^{L_0}t
+-{}_{L_0}^GR_{t_j}{}_{L_{i}}^{L_{0}}R\left(p_k\right)^{\wedge}\cdot_{L_i}^{L_0}\phi+_{L_0}^GR_{t_j}\delta_{L_i}^{L_0}t
 -{}_{L_{0}}^{G}R_{t_{j}}\bigg({}_{L_{i}}^{L_{0}}Rp_{k}
 +{}_{L_{i}}^{L_{0}}{t}\bigg)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}
 \end{align*}
@@ -674,14 +674,14 @@ $$$$
 \begin{align*}
 \delta^{G}{p}_{k}\approx-{}_{L_{0}}^{G}R_{t_{j}}
 \big({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\big)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}
-+\delta_{L_{0}}^{G}{t}_{t_{j}}-\\{}_{L_{0}}^{G}R_{t_{j}}\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++\delta_{L_{0}}^{G}{t}_{t_{j}}-\\{}_{L_{0}}^{G}R_{t_{j}}{}_{L_{i}}^{L_{0}}R\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
 +{}_{L_{0}}^{G}{R}_{t_{j}}\delta_{L_{i}}^{L_{0}}{t}\\
 =D\cdot \delta x ,
 \end{align*}
 \tag{式7}
 $$<p>
 其中$\delta{x}=\begin{bmatrix}\cdots \quad {^G_{L_0}\phi_{t_j}^{T}\quad\delta_{L_0}^{G}t_{t_j}^T}\cdots{^{L_{0}}_{L_i}\phi^{T}\quad\delta_{L_i}^{L_0}t^T} \cdots\end{bmatrix}^{T}
-\ne\mathbb{R}^{6\left(m+n-2\right)}$是优化变量$x=\begin{bmatrix}\cdots{_{L_0}^GR_{t_j} }\quad{_{L_0}^{G}t_{t_j}}\cdots{_{L_0}^{L_i}R}\quad{_{L_0}^{L_i}t}\cdots\end{bmatrix}$的微小扰动。</p>
+\ne\mathbb{R}^{6\left(m+n-2\right)}$是优化变量$x=\begin{bmatrix}\cdots{_{L_0}^GR_{t_j} }\quad{_{L_0}^{G}t_{t_j}}\cdots{_{L_i}^{L_0}R}\quad{_{L_i}^{L_0}t}\cdots\end{bmatrix}$的微小扰,$m$代表帧数，n代表参考雷达的个数。</p>
 $$\begin{align*}
 D =\begin{bmatrix}\vdots&\vdots\\\cdots {D}_{k,p}^{\mathcal{S}}&\cdots {D}_{k,q}^{\varepsilon_{L}}&\cdots\\\vdots&\vdots\end{bmatrix}\in\mathbb{R}^{3N_{l}\times6(m+n-2)} \\
 \mathrm{D}_{k,p}^{\mathcal{S}}
@@ -691,13 +691,13 @@ D =\begin{bmatrix}\vdots&\vdots\\\cdots {D}_{k,p}^{\mathcal{S}}&\cdots {D}_{k,q}
 \end{cases}\\
 \mathrm{D}_{k,q}^{\mathcal{E}_{L}} 
 \begin{cases}
-\begin{bmatrix}{-{}_{L_{0}}^{G}{R}_{t_{j}}}({}_{L_{i}}^{L_{0}}{R}{p}_{k})^{\wedge}&{}_{L_{0}}^{G}{R}_{t_{j}}\end{bmatrix},\quad{\mathrm{if~}q=i}\\
+\begin{bmatrix}{-{}_{L_{0}}^{G}{R}_{t_{j}}}{}_{L_{i}}^{L_{0}}{R}({p}_{k})^{\wedge}&{}_{L_{0}}^{G}{R}_{t_{j}}\end{bmatrix},\quad{\mathrm{if~}q=i}\\
 {0}_{3\times6},\quad {else}
 \end{cases}
 \end{align*}
 $$$$\delta^{G}{p}_{k}\approx{\color{red}+}{}_{L_{0}}^{G}R_{t_{j}}
 \big({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\big)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}
-+\delta_{L_{0}}^{G}{t}_{t_{j}}{\color{red}+}\\{}_{L_{\color{red}i}}^{G}R_{t_{j}}\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++\delta_{L_{0}}^{G}{t}_{t_{j}}{\color{red}+}\\{}_{L_{i}}^{G}R_{t_{j}}\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
 +{}_{L_{0}}^{G}{R}_{t_{j}}\delta_{L_{i}}^{L_{0}}{t}$$$$
 \exp(\phi^{\wedge})\approx I+\phi^{\wedge}\tag{式8}
 $$$$
@@ -1734,7 +1734,7 @@ $$<div class="highlight"><div class="chroma">
 
 
         <span>
-            最后更新于 2024-11-26  22:09  &#43;0800
+            最后更新于 2024-11-26  22:39  &#43;0800
         </span>
     </section></footer>
 
