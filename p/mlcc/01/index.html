@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-23T22:53:23&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-26T22:09:37&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
@@ -691,7 +691,7 @@ D =\begin{bmatrix}\vdots&\vdots\\\cdots {D}_{k,p}^{\mathcal{S}}&\cdots {D}_{k,q}
 \end{cases}\\
 \mathrm{D}_{k,q}^{\mathcal{E}_{L}} 
 \begin{cases}
-\begin{bmatrix}{-{}_{L_{0}}^{G}{R}_{t_{j}}}{}_{L_{i}}^{L_{0}}{R}({p}_{k})^{\wedge}&{}_{L_{0}}^{G}{R}_{t_{j}}\end{bmatrix},\quad{\mathrm{if~}q=i}\\
+\begin{bmatrix}{-{}_{L_{0}}^{G}{R}_{t_{j}}}({}_{L_{i}}^{L_{0}}{R}{p}_{k})^{\wedge}&{}_{L_{0}}^{G}{R}_{t_{j}}\end{bmatrix},\quad{\mathrm{if~}q=i}\\
 {0}_{3\times6},\quad {else}
 \end{cases}
 \end{align*}
@@ -1734,7 +1734,7 @@ $$<div class="highlight"><div class="chroma">
 
 
         <span>
-            最后更新于 2024-11-23  22:53  &#43;0800
+            最后更新于 2024-11-26  22:09  &#43;0800
         </span>
     </section></footer>
 
