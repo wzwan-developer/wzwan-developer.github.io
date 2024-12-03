@@ -10,7 +10,7 @@
 <meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。">
 <meta property='og:url' content='https://wzwan-developer.github.io/p/mlcc/01/'>
 <meta property='og:site_name' content='wzwan'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-26T22:39:04&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='mlcc' /><meta property='article:published_time' content='2024-09-11T09:05:20&#43;08:00'/><meta property='article:modified_time' content='2024-12-03T09:26:07&#43;08:00'/><meta property='og:image' content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
 <meta name="twitter:title" content="Chapter 01: Multi-LiDAR Extrinsic Calibration">
 <meta name="twitter:description" content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg' />
@@ -1176,15 +1176,15 @@ $$
 \bigg({}_{L_{i}}^{L_{0}}Rp_{k}+{}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
 +{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
 +{}_{L_{0}}^{G}{t}_{t_{j}}\\
-\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{L_i}{t}\big)
 +{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
 +\delta_{L_{i}}^{L_{0}}{t}\big)
 +{}_{L_{0}}^{G}{t}_{t_{j}}\\
-\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{L_i}{t}\big)
 +{}_{L_{0}}^{G}{t}_{t_{j}}
 +{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
 +\delta_{L_{i}}^{L_{0}}{t}\big)\\
-\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{L_i}{t}\big)
 +{}_{L_{0}}^{G}{t}_{t_{j}}
 +{}_{L_{0}}^{G}R_{t_{j}}\big(-{}_{L_{i}}^{L_{0}}R{p_k}^{\wedge}{}_{L_{i}}^{L_{0}}\phi
 +\delta_{L_{i}}^{L_{0}}{t}\big)
@@ -1734,7 +1734,7 @@ $$<div class="highlight"><div class="chroma">
 
 
         <span>
-            最后更新于 2024-11-26  22:39  &#43;0800
+            最后更新于 2024-12-03  09:26  &#43;0800
         </span>
     </section></footer>
 
