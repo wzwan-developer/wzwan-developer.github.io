@@ -1979,8 +1979,7 @@ data-flex-basis="397px"
 >《BALM: Bundle Adjustment for Lidar Mapping》&lt;/a>&lt;/p>
 &lt;p>[3]&lt;a class="link" href="https://www.cnblogs.com/Glucklichste/p/11505743.html" target="_blank" rel="noopener"
 >《octree八叉树数据结构原理与实现》&lt;/a>&lt;/p></description></item><item><title>Chapter 01: Multi-LiDAR Extrinsic Calibration</title><link>/p/mlcc/01/</link><pubDate>Wed, 11 Sep 2024 09:05:20 +0800</pubDate><guid>/p/mlcc/01/</guid><description>&lt;img src="/p/mlcc/01/dense_map.jpg" alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration" />&lt;h2 id="文章内容">文章内容
-&lt;/h2>&lt;blockquote>
-$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p>， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.
+&lt;/h2>$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p>， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.
 &lt;img src="/p/mlcc/01/graph1.png"
 width="1976"
 height="830"
@@ -1991,7 +1990,6 @@ class="gallery-image"
 data-flex-grow="238"
 data-flex-basis="571px"
 >Fig.4 :(a) The $l-th$ factor item relating to $\mathcal{S}$ and $\mathcal{E}_{L}$ with $L_{i} \in \mathcal{L}$ and $t_{j} \in \mathcal{T}$ . (b) The distance from the point $_{}^{G}p_{k}$ to the plane $\pi$.&lt;/p>
-&lt;/blockquote>
 &lt;!--
 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;通过自适应体素化，我们可以获得一组不同大小的体素。每个体素包含大致在一个平面上的点，并为所有包含在此体素内的雷达姿态创建一个平面约束。更具体地说，考虑由$L_{i} \in \mathcal{L}$在时刻$t_{j} \in \mathcal{T}$扫描的一组点组成的第$l$个体素。我们定义了一个点云一致性指标$_{c_{l}}(_{L_{i}}^{G}T_{t_{j}})$ ，它在图4(a)中形成了$\mathcal{S}$ 和 $\mathcal{E}_{L}$上的因子。然后，通过优化因子图来估计基准雷达的轨迹和外参。对于一致性指标$c_{l}(\cdot)$的一个自然选择是计算每个$_{}^{G}P_{L_{i},t_{j}}$到平面的欧几里得距离之和（见图4(b)）。考虑到体素图中所有这样的指标，我们可以将问题表述为
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$
