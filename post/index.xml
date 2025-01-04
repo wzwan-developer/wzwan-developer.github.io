@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on wzwan</title><link>https://wzwan-developer.github.io/post/</link><description>Recent content in Posts on wzwan</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>wzwan</copyright><lastBuildDate>Tue, 22 Oct 2024 20:39:43 +0800</lastBuildDate><atom:link href="https://wzwan-developer.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>K-d树</title><link>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>https://wzwan-developer.github.io/p/nearestneighborproblem/01/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on wzwan</title><link>/post/</link><description>Recent content in Posts on wzwan</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>wzwan</copyright><lastBuildDate>Tue, 22 Oct 2024 20:39:43 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml"/><item><title>K-d树</title><link>/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>/p/nearestneighborproblem/01/</guid><description>&lt;img src="/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
 &lt;/h2>&lt;p>        K-d树最早由Bentley Jon Louis提出,是二分树的高维度版本。
 K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组成。在二分树里,可以用单个维度的信息来区分左右,但在 K-d 树里,由于要分割高维数据,会用超平面(Hyperplane)来区分左右侧(不过,对于三维点,实际上的超平面就是普通的二维平面)。在如何分割方面,则存在一些方法上的差异。下文介绍的是沿轴超平面分割(Axis-aligned Splitting Plane)。只需要沿着所有维度中任意一个轴将点云分开即可,实现起来十分简单。&lt;/p>
 &lt;p>        我们可以对一个任意维度的点云建立 K-d 树,称为 K-d树的构建过程,或者叫建树。随后, 可以对空间中任意一点进行k近邻查找,称为查找过程。根据查找方法的不同,K-d树也分按范围查找(Search by Range)和按 k 最近邻查找(Search by k Nearest Neighbours),二者的具体实现方法大同小异。在K-d树中,以树状结构来表达点云的结构关系,规定:&lt;/p>
@@ -735,7 +735,7 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 &lt;/h2>&lt;p>[1]&lt;a class="link" href="https://product.dangdang.com/11478791697.html" target="_blank" rel="noopener"
 >《自动驾驶与机器人中的 SLAM技术:从理论到实践》&lt;/a>&lt;/p>
 &lt;p>[2]&lt;a class="link" href="https://github.com/gaoxiang12/slam_in_autonomous_driving/tree/master" target="_blank" rel="noopener"
->《slam_in_autonomous_driving》——高翔老师的开源仓库&lt;/a>&lt;/p></description></item><item><title>暴力最近邻法</title><link>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</link><pubDate>Tue, 22 Oct 2024 20:29:04 +0800</pubDate><guid>https://wzwan-developer.github.io/p/nearestneighborproblem/00/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/nearestneighborproblem/00/title.png" alt="Featured image of post 暴力最近邻法" />&lt;h2 id="理论内容">理论内容
+>《slam_in_autonomous_driving》——高翔老师的开源仓库&lt;/a>&lt;/p></description></item><item><title>暴力最近邻法</title><link>/p/nearestneighborproblem/00/</link><pubDate>Tue, 22 Oct 2024 20:29:04 +0800</pubDate><guid>/p/nearestneighborproblem/00/</guid><description>&lt;img src="/p/nearestneighborproblem/00/title.png" alt="Featured image of post 暴力最近邻法" />&lt;h2 id="理论内容">理论内容
 &lt;/h2>&lt;p>暴力最近邻法(Brute-force Nearest Neighbour Search,BF 最近邻搜索)是最简单直观的最近邻计算方法,无须任何辅助的数据结构。
 如果我们搜索一个点的最近邻,不妨称为暴力最近邻搜索;如果搜索k个最近邻,不妨称为暴力k近邻搜索。整体而言,这是一种简单粗暴的思路。&lt;/p>
 &lt;p>&lt;strong>暴力最近邻搜索&lt;/strong> 给定点云$\mathcal{X}$和待查找点$x_m$,计算$x_m$与$\mathcal{X}中每个点的距离,并给出最小距离。
@@ -853,7 +853,7 @@ K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组�
 &lt;/h2>&lt;p>[1]&lt;a class="link" href="https://product.dangdang.com/11478791697.html" target="_blank" rel="noopener"
 >《自动驾驶与机器人中的 SLAM技术:从理论到实践》&lt;/a>&lt;/p>
 &lt;p>[2]&lt;a class="link" href="https://github.com/gaoxiang12/slam_in_autonomous_driving/tree/master" target="_blank" rel="noopener"
->《slam_in_autonomous_driving》——高翔老师的开源仓库&lt;/a>&lt;/p></description></item><item><title>Chapter 02: LiDAR-Camera Extrinsic Calibration</title><link>https://wzwan-developer.github.io/p/mlcc/02/</link><pubDate>Wed, 09 Oct 2024 17:22:01 +0800</pubDate><guid>https://wzwan-developer.github.io/p/mlcc/02/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/mlcc/02/camera_voxel.png" alt="Featured image of post Chapter 02: LiDAR-Camera Extrinsic Calibration" />&lt;h2 id="文章内容">文章内容
+>《slam_in_autonomous_driving》——高翔老师的开源仓库&lt;/a>&lt;/p></description></item><item><title>Chapter 02: LiDAR-Camera Extrinsic Calibration</title><link>/p/mlcc/02/</link><pubDate>Wed, 09 Oct 2024 17:22:01 +0800</pubDate><guid>/p/mlcc/02/</guid><description>&lt;img src="/p/mlcc/02/camera_voxel.png" alt="Featured image of post Chapter 02: LiDAR-Camera Extrinsic Calibration" />&lt;h2 id="文章内容">文章内容
 &lt;/h2>&lt;blockquote>
 &lt;p>          With the LiDAR extrinsic parameter $\mathcal{E}_L$ and pose trajectory $\mathcal{S}$ computed above, we obtain a dense global point cloud by transforming all LiDAR points to the base LiDAR frame. Then, the extrinsic $\mathcal{E}_C$ is optimized by minimizing the summed distance between the back-projected LiDAR edge feature points and the image edge feature points. Two types of LiDAR edge points could be extracted from the point cloud. One is the depth-discontinuous edge between the foreground and background objects, and the other is the depth-continuous edge between two neighboring non-parallel planes. As explained in our previous work [28], depth-discontinuous edges suffer from foreground inflation and bleeding points phenomenon; we hence use depth-continuous edges to match the point cloud and images.&lt;/p>
 &lt;/blockquote>
@@ -1791,10 +1791,10 @@ $$&lt;p>
 &lt;/ol>
 $$\mathcal{E}_{C}^{*}=\arg\min_{\mathcal{E}_{C}}\sum_{i}\sum_{\mathbf{I}_{l,j}\in\mathcal{I}_{i}}\left(\mathbf{n}_{i,l,j}^{T}\left({}^{\mathbf{I}_{l,j}}\mathbf{p}_{i}-\mathbf{q}_{i,l,j}\right)\right)\tag{1}$$&lt;p>
 &lt;span style="color:red;">上式暂时还没理解,等后面再看！&lt;/span>，但是好在代码实现上与问题表达是有差异，代码是优化点到直线上的距离，与BLAM中关于边缘特征问题表述是一样的，具体如下所示：&lt;/p>
-&lt;p>&lt;img src="https://wzwan-developer.github.io/p/mlcc/02/edge_feature.png"
+&lt;p>&lt;img src="/p/mlcc/02/edge_feature.png"
 width="518"
 height="456"
-srcset="https://wzwan-developer.github.io/p/mlcc/02/edge_feature_hu13040877973016550492.png 480w, https://wzwan-developer.github.io/p/mlcc/02/edge_feature_hu6924721684517982466.png 1024w"
+srcset="/p/mlcc/02/edge_feature_hu13040877973016550492.png 480w, /p/mlcc/02/edge_feature_hu6924721684517982466.png 1024w"
 loading="lazy"
 alt="边缘特征"
 class="gallery-image"
@@ -2060,7 +2060,7 @@ $$&lt;p>。&lt;/p>
 &lt;/h2>&lt;p>[1]&lt;a class="link" href="https://arxiv.org/pdf/2109.06550" target="_blank" rel="noopener"
 >《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》&lt;/a>&lt;/p>
 &lt;p>[2]&lt;a class="link" href="https://www.arxiv.org/pdf/2010.08215" target="_blank" rel="noopener"
->《BALM: Bundle Adjustment for Lidar Mapping》&lt;/a>&lt;/p></description></item><item><title>Chapter 00: Adaptive Voxelization</title><link>https://wzwan-developer.github.io/p/mlcc/00/</link><pubDate>Mon, 16 Sep 2024 15:55:17 +0800</pubDate><guid>https://wzwan-developer.github.io/p/mlcc/00/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/mlcc/00/lidar_voxel.png" alt="Featured image of post Chapter 00: Adaptive Voxelization" />&lt;h2 id="文章内容">文章内容
+>《BALM: Bundle Adjustment for Lidar Mapping》&lt;/a>&lt;/p></description></item><item><title>Chapter 00: Adaptive Voxelization</title><link>/p/mlcc/00/</link><pubDate>Mon, 16 Sep 2024 15:55:17 +0800</pubDate><guid>/p/mlcc/00/</guid><description>&lt;img src="/p/mlcc/00/lidar_voxel.png" alt="Featured image of post Chapter 00: Adaptive Voxelization" />&lt;h2 id="文章内容">文章内容
 &lt;/h2>&lt;blockquote>
 &lt;p>          To find the correspondences among different LiDAR scans, we assume the initial base LiDAR trajectory $\mathcal{S}$, LiDAR extrinsic $\mathcal{E}_L$, and camera extrinsic $\mathcal{E}_C$ are available. The initial base LiDAR trajectory $\mathcal{S}$ could be obtained by an online LiDAR SLAM (e.g., [3]), and the initial extrinsic could be obtained from the CAD design or a rough Hand-Eye calibration [14].
 Our previous work [5] extracts edge and plane feature points from each LiDAR scan and matches them to the nearby edge and plane points in the map by a $k$-nearest neighbor search ($k-NN$). This would repeatedly build a $k$-d tree of the global map at each iteration. In this paper, we use a more efficient voxel map proposed in [4] to create correspondences among all LiDAR scans.&lt;/p>
@@ -2073,10 +2073,10 @@ Our previous work [5] extracts edge and plane feature points from each LiDAR sca
 具体来说，整个地图首先被切割成预设大小的体素（通常较大，例如4米）。然后对于每个体素，如果所有LiDAR扫描中包含的点大致形成一个平面（通过检查特征值之间的比率来判断），则将其视为平面体素；否则，这些体素将被分成八个八分之一体素（octants），每个都将再次进行检查，直到包含的点大致形成一个平面，或者体素尺寸达到预设的最小下限。此外，自适应体素化直接在LiDAR的原始点上执行，因此不需要像文献[5]那样预先提取特征点。&lt;/p>
 &lt;blockquote>
 &lt;p>          Fig. 3 shows a typical result of the adaptive voxelization process in a complicated campus environment. As can be seen, this process is able to segment planes of different sizes, including large planes on the ground, medium planes on the building walls, and tiny planes on tree crowns.
-&lt;img src="https://wzwan-developer.github.io/p/mlcc/00/adaptive_voxelization.png"
+&lt;img src="/p/mlcc/00/adaptive_voxelization.png"
 width="2574"
 height="930"
-srcset="https://wzwan-developer.github.io/p/mlcc/00/adaptive_voxelization_hu12395980834133490816.png 480w, https://wzwan-developer.github.io/p/mlcc/00/adaptive_voxelization_hu3118485833705387669.png 1024w"
+srcset="/p/mlcc/00/adaptive_voxelization_hu12395980834133490816.png 480w, /p/mlcc/00/adaptive_voxelization_hu3118485833705387669.png 1024w"
 loading="lazy"
 alt="图3"
 class="gallery-image"
@@ -2086,10 +2086,10 @@ data-flex-basis="664px"
 Fig. 3: A) LiDAR point cloud segmented with the adaptive voxelization. Points within the same voxel are colored identically. The detailed adaptive voxelization of points in the dashed white rectangle could be viewed in B) colored points and C) original points. The default size for the initial voxelization is 4m, and the minimum voxel size is 0.25m.&lt;/p>
 &lt;/blockquote>
 &lt;p>图3展示了一个复杂校园环境中自适应体素化过程的典型结果。如图所示，该过程能够分割出不同大小的平面，包括地面上的大平面、建筑物墙面上的中等平面以及树冠上的小平面。
-&lt;img src="https://wzwan-developer.github.io/p/mlcc/00/adaptive_voxelization.png"
+&lt;img src="/p/mlcc/00/adaptive_voxelization.png"
 width="2574"
 height="930"
-srcset="https://wzwan-developer.github.io/p/mlcc/00/adaptive_voxelization_hu12395980834133490816.png 480w, https://wzwan-developer.github.io/p/mlcc/00/adaptive_voxelization_hu3118485833705387669.png 1024w"
+srcset="/p/mlcc/00/adaptive_voxelization_hu12395980834133490816.png 480w, /p/mlcc/00/adaptive_voxelization_hu3118485833705387669.png 1024w"
 loading="lazy"
 alt="图3"
 class="gallery-image"
@@ -2103,7 +2103,7 @@ data-flex-basis="664px"
 &lt;h3 id="自适应体素化">自适应体素化
 &lt;/h3>&lt;p>        我们在默认大小的3D空间中重复体素化，如果当前体素中的所有特征点都位于平面，则将当前体素与包含的特征点一起保存在内存中；否则，将当前体素分解为八个八分体，并继续检查每个八分体直到达到最小尺寸。在具体实现过程中有以下细节：&lt;/p>
 &lt;ul>
-&lt;li>如果一个体素内包含太多的特征点，则会导致文章&lt;a class="link" href="https://wzwan-developer.github.io/p/mlcc/01/" >《Chapter 01: Multi-LiDAR Extrinsic Calibration》&lt;/a>中推导过程章节中二阶闭式导数中的Hessian矩阵维度过高，在这种情况下，我们可以将点进行平均，以实现降采样但不降低映射一致性；&lt;/li>
+&lt;li>如果一个体素内包含太多的特征点，则会导致文章&lt;a class="link" href="/p/mlcc/01/" >《Chapter 01: Multi-LiDAR Extrinsic Calibration》&lt;/a>中推导过程章节中二阶闭式导数中的Hessian矩阵维度过高，在这种情况下，我们可以将点进行平均，以实现降采样但不降低映射一致性；&lt;/li>
 &lt;li>同时，二阶闭式导数中的Hessian矩阵推导过程中提到$\lambda_m\ne\lambda_n$,因此当遇到$\lambda$的代数多重性大于1的体素需要跳过（忽略）；&lt;/li>
 &lt;li>只需检查体素所包含的点，是否位于同一平面时允许更大的方差，则能自然地扩展到非平面特征（BALM只提到了平面特征和边缘特征）；&lt;/li>
 &lt;li>设置了两个条件来停止递归体素化：一个是树的最大深度，另一个是体素的最小点数。&lt;/li>
@@ -2121,10 +2121,10 @@ C=\frac{1}{N}\sum_{i=1}^{N}\big(p_i - c\big)\big(p_i - c\big)^T\\
 =\frac{1}{N}\sum_{i=1}^{N}p_ip_i^T-cc^T
 \end{align*}
 $$&lt;h3 id="八叉树数据结构">八叉树数据结构
-&lt;/h3>&lt;p>&lt;img src="https://wzwan-developer.github.io/p/mlcc/00/octree.png"
+&lt;/h3>&lt;p>&lt;img src="/p/mlcc/00/octree.png"
 width="431"
 height="260"
-srcset="https://wzwan-developer.github.io/p/mlcc/00/octree_hu12793898556502101269.png 480w, https://wzwan-developer.github.io/p/mlcc/00/octree_hu14844167966149893531.png 1024w"
+srcset="/p/mlcc/00/octree_hu12793898556502101269.png 480w, /p/mlcc/00/octree_hu14844167966149893531.png 1024w"
 loading="lazy"
 alt="八叉树结构示意图"
 class="gallery-image"
@@ -2833,13 +2833,13 @@ data-flex-basis="397px"
 &lt;p>[2]&lt;a class="link" href="https://www.arxiv.org/pdf/2010.08215" target="_blank" rel="noopener"
 >《BALM: Bundle Adjustment for Lidar Mapping》&lt;/a>&lt;/p>
 &lt;p>[3]&lt;a class="link" href="https://www.cnblogs.com/Glucklichste/p/11505743.html" target="_blank" rel="noopener"
->《octree八叉树数据结构原理与实现》&lt;/a>&lt;/p></description></item><item><title>Chapter 01: Multi-LiDAR Extrinsic Calibration</title><link>https://wzwan-developer.github.io/p/mlcc/01/</link><pubDate>Wed, 11 Sep 2024 09:05:20 +0800</pubDate><guid>https://wzwan-developer.github.io/p/mlcc/01/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/dense_map.jpg" alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration" />&lt;h2 id="文章内容">文章内容
+>《octree八叉树数据结构原理与实现》&lt;/a>&lt;/p></description></item><item><title>Chapter 01: Multi-LiDAR Extrinsic Calibration</title><link>/p/mlcc/01/</link><pubDate>Wed, 11 Sep 2024 09:05:20 +0800</pubDate><guid>/p/mlcc/01/</guid><description>&lt;img src="/p/mlcc/01/dense_map.jpg" alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration" />&lt;h2 id="文章内容">文章内容
 &lt;/h2>&lt;blockquote>
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p>， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.
-&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/graph1.png"
+&lt;img src="/p/mlcc/01/graph1.png"
 width="1976"
 height="830"
-srcset="https://wzwan-developer.github.io/p/mlcc/01/graph1_hu4057890427085875171.png 480w, https://wzwan-developer.github.io/p/mlcc/01/graph1_hu18239084144532588545.png 1024w"
+srcset="/p/mlcc/01/graph1_hu4057890427085875171.png 480w, /p/mlcc/01/graph1_hu18239084144532588545.png 1024w"
 loading="lazy"
 alt="Fig.4"
 class="gallery-image"
@@ -2851,10 +2851,10 @@ Fig.4 :(a) The $l-th$ factor item relating to $\mathcal{S}$ and $\mathcal{E}_{L}
 $$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$&lt;p>
 ，其中 $_{}^{G}p_{k}\in \mathcal{P}_{l}$，$N_{l}$ 是 $\mathcal{P}_{l}$中所有点的总点数, $n_{l}$ 是平面的
 法向量， $q_{l}$ 是平面中的一点。
-&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/graph1.png"
+&lt;img src="/p/mlcc/01/graph1.png"
 width="1976"
 height="830"
-srcset="https://wzwan-developer.github.io/p/mlcc/01/graph1_hu4057890427085875171.png 480w, https://wzwan-developer.github.io/p/mlcc/01/graph1_hu18239084144532588545.png 1024w"
+srcset="/p/mlcc/01/graph1_hu4057890427085875171.png 480w, /p/mlcc/01/graph1_hu18239084144532588545.png 1024w"
 loading="lazy"
 alt="图4"
 class="gallery-image"
@@ -2889,10 +2889,10 @@ q_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{^{G}p_{k}}
 =\lambda_{min}(A_{l})\\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}\\
 =\lambda_{3}(A_{l})\end{align*}$$$$\begin{align*}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)}\\
 =\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align*}$$&lt;p>补充内容：由上述图4可知，$n_{l}^{T}({}^{G}p_{k}-q_{l})$表达了点${}^{G}p_{k}$到平面$\pi$的距离，其推导来源于向量法求点到平面的距离。如下图所示：
-&lt;img src="https://wzwan-developer.github.io/p/mlcc/01/distance.jpeg"
+&lt;img src="/p/mlcc/01/distance.jpeg"
 width="830"
 height="570"
-srcset="https://wzwan-developer.github.io/p/mlcc/01/distance_hu4242366416134835914.jpeg 480w, https://wzwan-developer.github.io/p/mlcc/01/distance_hu1847709023545538150.jpeg 1024w"
+srcset="/p/mlcc/01/distance_hu4242366416134835914.jpeg 480w, /p/mlcc/01/distance_hu1847709023545538150.jpeg 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="145"
@@ -4032,13 +4032,13 @@ $$&lt;div class="highlight">&lt;div class="chroma">
 &lt;p>[5]&lt;a class="link" href="https://blog.csdn.net/CV_Autobot/article/details/134173441" target="_blank" rel="noopener"
 >《多个LiDAR-Camera无目标跨视角联合标定方法》&lt;/a>&lt;/p>
 &lt;p>[6]&lt;a class="link" href="https://blog.csdn.net/weixin_36444661/article/details/112768144" target="_blank" rel="noopener"
->《如何用法向量求点到平面距离_【立体几何】用空间向量求点到面的距离》&lt;/a>&lt;/p></description></item><item><title>如何理解概率论中的“矩”</title><link>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/</link><pubDate>Mon, 09 Sep 2024 11:12:48 +0800</pubDate><guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.png" alt="Featured image of post 如何理解概率论中的“矩”" />&lt;h2 id="概率论中的矩">概率论中的“矩”
+>《如何用法向量求点到平面距离_【立体几何】用空间向量求点到面的距离》&lt;/a>&lt;/p></description></item><item><title>如何理解概率论中的“矩”</title><link>/p/state_estimation_for_robotics/2_03/</link><pubDate>Mon, 09 Sep 2024 11:12:48 +0800</pubDate><guid>/p/state_estimation_for_robotics/2_03/</guid><description>&lt;img src="/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.png" alt="Featured image of post 如何理解概率论中的“矩”" />&lt;h2 id="概率论中的矩">概率论中的“矩”
 &lt;/h2>&lt;h3 id="彩票的问题">彩票的问题
 &lt;/h3>&lt;p>假设福利彩票，每一注两元钱，且中奖的概率分布如下：
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph1.png"
+&lt;img src="/p/state_estimation_for_robotics/2_03/graph1.png"
 width="359"
 height="402"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph1_hu7074458194076008173.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph1_hu11398514835930632876.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_03/graph1_hu7074458194076008173.png 480w, /p/state_estimation_for_robotics/2_03/graph1_hu11398514835930632876.png 1024w"
 loading="lazy"
 alt="概率分布图"
 class="gallery-image"
@@ -4046,10 +4046,10 @@ data-flex-grow="89"
 data-flex-basis="214px"
 >&lt;/p>
 &lt;p>其中，概率的“称”如下所示：
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph2.png"
+&lt;img src="/p/state_estimation_for_robotics/2_03/graph2.png"
 width="613"
 height="402"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph2_hu1581581583894811490.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph2_hu3775081096410037377.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_03/graph2_hu1581581583894811490.png 480w, /p/state_estimation_for_robotics/2_03/graph2_hu3775081096410037377.png 1024w"
 loading="lazy"
 alt="概率的称"
 class="gallery-image"
@@ -4057,10 +4057,10 @@ data-flex-grow="152"
 data-flex-basis="365px"
 >&lt;/p>
 &lt;p>此时我们称量一下中奖500万元：
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph3.png"
+&lt;img src="/p/state_estimation_for_robotics/2_03/graph3.png"
 width="613"
 height="402"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph3_hu9993873231620659325.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph3_hu8003149627366197390.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_03/graph3_hu9993873231620659325.png 480w, /p/state_estimation_for_robotics/2_03/graph3_hu8003149627366197390.png 1024w"
 loading="lazy"
 alt="500万元"
 class="gallery-image"
@@ -4068,10 +4068,10 @@ data-flex-grow="152"
 data-flex-basis="365px"
 >&lt;/p>
 &lt;p>上述结果表明：不确定的500万元等价于确定的0.5元。此时将所有的中奖概率刻画上去：
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph4.png"
+&lt;img src="/p/state_estimation_for_robotics/2_03/graph4.png"
 width="613"
 height="402"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph4_hu8029704338762354472.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph4_hu18134410058688724433.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_03/graph4_hu8029704338762354472.png 480w, /p/state_estimation_for_robotics/2_03/graph4_hu18134410058688724433.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="152"
@@ -4086,10 +4086,10 @@ $$1.5 = 5\times 10\% + 100\times0.5\% + 5000000\times0.000001\% $$&lt;p>
 $$
 E[X]=\sum p_{i}x_{i}
 $$&lt;p>含义如下：
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph5.png"
+&lt;img src="/p/state_estimation_for_robotics/2_03/graph5.png"
 width="572"
 height="402"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph5_hu18168430126999916666.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_03/graph5_hu8960376600484578208.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_03/graph5_hu18168430126999916666.png 480w, /p/state_estimation_for_robotics/2_03/graph5_hu8960376600484578208.png 1024w"
 loading="lazy"
 alt="”期望含义“"
 class="gallery-image"
@@ -4103,7 +4103,7 @@ $$&lt;h3 id="高阶矩">高阶矩
 &lt;/h3>&lt;p>三阶矩称为偏度，四阶矩称为峰度。各有用途但是共同的特点为称量之后才能使用。&lt;/p>
 &lt;h2 id="参考链接">参考链接
 &lt;/h2>&lt;p>[1]&lt;a class="link" href="https://matongxue.blog.csdn.net/article/details/109766892" target="_blank" rel="noopener"
->如何理解概率论中的“矩”？&lt;/a>&lt;/p></description></item><item><title>舒尔补</title><link>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/</link><pubDate>Mon, 02 Sep 2024 23:51:06 +0800</pubDate><guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_02/gaussian-normal-distribution-graph.png" alt="Featured image of post 舒尔补" />&lt;h2 id="舒尔补定义">舒尔补定义
+>如何理解概率论中的“矩”？&lt;/a>&lt;/p></description></item><item><title>舒尔补</title><link>/p/state_estimation_for_robotics/2_02/</link><pubDate>Mon, 02 Sep 2024 23:51:06 +0800</pubDate><guid>/p/state_estimation_for_robotics/2_02/</guid><description>&lt;img src="/p/state_estimation_for_robotics/2_02/gaussian-normal-distribution-graph.png" alt="Featured image of post 舒尔补" />&lt;h2 id="舒尔补定义">舒尔补定义
 &lt;/h2>&lt;p>给定任意的矩阵块 $M$ ，如下所示：&lt;/p>
 $$M=\begin{bmatrix} A &amp; B\\ C &amp;D\\ \end{bmatrix}$$&lt;ul>
 &lt;li>如果，矩阵块 $D$ 是可逆的，则 $A − B D^{-1} C$称之为 $D$ 关于 $M$的舒尔补。&lt;/li>
@@ -4139,7 +4139,7 @@ P(a,b) \\
 \propto exp \left( -\frac{1}{2}a^{T}A^{-1}a\right)exp \left ( -\frac{1}{2}(b-CA^{-1}a)^{T}\Delta _A^{-1}(b-CA^{-1}a)\right)\\
 \propto P(a)P(b|a)
 \\\end{align}$$&lt;p>
-在《机器人学中的状态估计》2.2.3章节&amp;quot;联合概率密度函数，分解与推断&amp;quot;可见相似内容,其实就是高斯推断，套用相关模型$P(a)$是观测（边际概率），$P(b|a)$是后验概率，$P(a|b)$是传感器模型。&lt;/p></description></item><item><title>边缘化</title><link>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/</link><pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate><guid>https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/</guid><description>&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.png" alt="Featured image of post 边缘化" />&lt;h2 id="从优化角度理解边缘化">从优化角度理解边缘化
+在《机器人学中的状态估计》2.2.3章节&amp;quot;联合概率密度函数，分解与推断&amp;quot;可见相似内容,其实就是高斯推断，套用相关模型$P(a)$是观测（边际概率），$P(b|a)$是后验概率，$P(a|b)$是传感器模型。&lt;/p></description></item><item><title>边缘化</title><link>/p/state_estimation_for_robotics/2_01/</link><pubDate>Mon, 02 Sep 2024 00:00:00 +0000</pubDate><guid>/p/state_estimation_for_robotics/2_01/</guid><description>&lt;img src="/p/state_estimation_for_robotics/2_01/gaussian-normal-distribution-graph.png" alt="Featured image of post 边缘化" />&lt;h2 id="从优化角度理解边缘化">从优化角度理解边缘化
 &lt;/h2>&lt;h3 id="模型">模型
 &lt;/h3>$$\begin{bmatrix}H_{mm}&amp;H_{mr}\\H_{rm}&amp;H_{rr}\end{bmatrix}\begin{bmatrix}X_m\\X_r\end{bmatrix}=\begin{bmatrix}b_m\\b_r\end{bmatrix} $$&lt;p>
 拆解的目的是通过边缘化将$X_m$从状态量里删除掉，但是要保留它的约束。在划窗模式里，这个$X_m$为要边缘化掉的量。&lt;/p>
@@ -4156,29 +4156,29 @@ y_k=C_kx_k+n_k,&amp;k=0...K
 &lt;em>注：此时形式以及是接近优化角度的$HX=b$。&lt;/em>&lt;/p>
 &lt;h3 id="滤波角度">滤波角度
 &lt;/h3>$$ \{ \hat {x}_{k-1} ,\hat{P}_{k-1}\}$$$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$$$ \{ \hat {x}_{k} ,\hat{P}_{k}\}$$$$ z=\begin{bmatrix}\hat{x}_{k-1}\\v_k\\y_k\end{bmatrix},H=\begin{bmatrix}I&amp;&amp;\\-A_{k-1}&amp;I\\&amp;&amp;C_{k}\end{bmatrix},W=\begin{bmatrix}\hat {P}_{k-1}&amp;&amp;\\&amp;Q_k&amp;\\&amp;&amp;R_k\end{bmatrix}$$$$(H_{k}^{T}W_{k}^{-1}H_{k})\hat{x}=H_{k}^{T}W_{k}^{-1}z_k$$$$\hat{x}=\begin{bmatrix}\hat{x'}_{k-1}\\\hat{x}_k\end{bmatrix}$$&lt;p>
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00.png"
+&lt;img src="/p/state_estimation_for_robotics/2_01/image00.png"
 width="714"
 height="352"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00_hu2802948725242621933.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image00_hu16496475951586850660.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_01/image00_hu2802948725242621933.png 480w, /p/state_estimation_for_robotics/2_01/image00_hu16496475951586850660.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="202"
 data-flex-basis="486px"
 >
 借助本文第一节，目标为从$x$变量中删除$\hat{x'}_{k-1}$，执行舒尔补可得
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image01.png"
+&lt;img src="/p/state_estimation_for_robotics/2_01/image01.png"
 width="707"
 height="463"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image01_hu12842677403844977782.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image01_hu10364658897043807725.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_01/image01_hu12842677403844977782.png 480w, /p/state_estimation_for_robotics/2_01/image01_hu10364658897043807725.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="152"
 data-flex-basis="366px"
 >
-&lt;img src="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image02.png"
+&lt;img src="/p/state_estimation_for_robotics/2_01/image02.png"
 width="1371"
 height="694"
-srcset="https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image02_hu7680983322299133859.png 480w, https://wzwan-developer.github.io/p/state_estimation_for_robotics/2_01/image02_hu10029282904931644770.png 1024w"
+srcset="/p/state_estimation_for_robotics/2_01/image02_hu7680983322299133859.png 480w, /p/state_estimation_for_robotics/2_01/image02_hu10029282904931644770.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="197"
