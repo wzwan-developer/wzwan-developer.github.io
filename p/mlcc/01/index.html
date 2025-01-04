@@ -1,18 +1,1107 @@
 <!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><title>Chapter 01: Multi-LiDAR Extrinsic Calibration</title>
-<link rel=canonical href=/p/mlcc/01/><link rel=stylesheet href=/scss/style.min.97647ae9d1ae42d5eb506cb3df5390c4a98ca9f026b51f91b3e94f56f6fe1153.css><meta property='og:title' content="Chapter 01: Multi-LiDAR Extrinsic Calibration"><meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta property='og:url' content='/p/mlcc/01/'><meta property='og:site_name' content='wzwan'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='mlcc'><meta property='article:published_time' content='2024-09-11T09:05:20+08:00'><meta property='article:modified_time' content='2025-01-04T15:47:25+08:00'><meta property='og:image' content='/p/mlcc/01/dense_map.jpg'><meta name=twitter:title content="Chapter 01: Multi-LiDAR Extrinsic Calibration"><meta name=twitter:description content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='/p/mlcc/01/dense_map.jpg'><link rel="shortcut icon" href=/favicon.ico><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><meta name=referrer content="no-referrer-when-downgrade"><script id=MathJax-script async src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js></script><script>MathJax={tex:{displayMath:[["\\[","\\]"],["$$","$$"]],inlineMath:[["$","$"]]}}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<link rel=canonical href=/p/mlcc/01/><link rel=stylesheet href=/scss/style.min.97647ae9d1ae42d5eb506cb3df5390c4a98ca9f026b51f91b3e94f56f6fe1153.css><meta property='og:title' content="Chapter 01: Multi-LiDAR Extrinsic Calibration"><meta property='og:description' content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta property='og:url' content='/p/mlcc/01/'><meta property='og:site_name' content='wzwan'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='mlcc'><meta property='article:published_time' content='2024-09-11T09:05:20+08:00'><meta property='article:modified_time' content='2025-01-04T16:06:37+08:00'><meta property='og:image' content='/p/mlcc/01/dense_map.jpg'><meta name=twitter:title content="Chapter 01: Multi-LiDAR Extrinsic Calibration"><meta name=twitter:description content="论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='/p/mlcc/01/dense_map.jpg'><link rel="shortcut icon" href=/favicon.ico><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><meta name=referrer content="no-referrer-when-downgrade"><script id=MathJax-script async src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js></script><script>MathJax={tex:{displayMath:[["\\[","\\]"],["$$","$$"]],inlineMath:[["$","$"]]}}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
 <span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu13765723581977241775.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
 </a><span class=emoji>🧐</span></figure><div class=site-meta><h1 class=site-name><a href=/>wzwan</a></h1><h2 class=site-description>一切真知都是从直接经验发源的。</h2></div></header><ol class=menu-social><li><a href=mailto:wz.wang.work@outlook.com target=_blank title=wz.wang.work@outlook.com rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-mail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path d="M3 7l9 6 9-6"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
 <span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
 <span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
 <span>搜索</span></a></li><li><a href=/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
-<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#文章内容>文章内容</a></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/mlcc/01/><img src=/p/mlcc/01/dense_map_hu1903590611417995448.jpg srcset="/p/mlcc/01/dense_map_hu1903590611417995448.jpg 800w, /p/mlcc/01/dense_map_hu18159231785415710900.jpg 1600w" width=800 height=453 loading=lazy alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration"></a></div><div class=article-details><header class=article-category><a href=/categories/calibrate/ style=background-color:#2a9d8f;color:#fff>传感器标定</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/mlcc/01/>Chapter 01: Multi-LiDAR Extrinsic Calibration</a></h2><h3 class=article-subtitle>论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#文章内容>文章内容</a></li><li><a href=#理论推导>理论推导</a><ol><li><a href=#损失函数的降维>损失函数的降维</a><ol><li><a href=#推导一balm论文的思路>推导一：BALM论文的思路</a></li><li><a href=#推导二该论文中的推导思路>推导二：该论文中的推导思路</a></li></ol></li><li><a href=#二阶闭式导数的推导>二阶闭式导数的推导</a><ol><li><a href=#定理1>定理1</a></li><li><a href=#定理2>定理2</a></li><li><a href=#推导过程>推导过程</a></li></ol></li></ol></li><li><a href=#代码详解>代码详解</a><ol><li><a href=#一阶段优化主雷达位姿>一阶段：优化主雷达位姿</a></li><li><a href=#二阶段优化副雷达到主雷达的外参>二阶段：优化副雷达到主雷达的外参</a></li><li><a href=#三阶段联合优化雷达外参和主激光雷达里程计>三阶段：联合优化雷达外参和主激光雷达里程计</a></li></ol></li><li><a href=#参考文献>参考文献</a></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/mlcc/01/><img src=/p/mlcc/01/dense_map_hu1903590611417995448.jpg srcset="/p/mlcc/01/dense_map_hu1903590611417995448.jpg 800w, /p/mlcc/01/dense_map_hu18159231785415710900.jpg 1600w" width=800 height=453 loading=lazy alt="Featured image of post Chapter 01: Multi-LiDAR Extrinsic Calibration"></a></div><div class=article-details><header class=article-category><a href=/categories/calibrate/ style=background-color:#2a9d8f;color:#fff>传感器标定</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/mlcc/01/>Chapter 01: Multi-LiDAR Extrinsic Calibration</a></h2><h3 class=article-subtitle>论文《 Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》解读系列。</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>2024-09-11</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 1 分钟</time></div><div class=article-analysic>&nbsp
+<time class=article-time--reading>阅读时长: 18 分钟</time></div><div class=article-analysic>&nbsp
             
             <!doctype html><svg t="1725155025621" class="icon" viewBox="0 0 1024 1024" p-id="4312" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M979.222 415.474c-84.268-83.454-202.912-223.47-469.264-223.47-266.316.0-384.962 140.016-469.23 223.47-19.86 19.682-30.788 45.784-30.788 73.534.0 27.728 10.93 53.85 30.788 73.51 84.27 83.476 202.896 223.47 469.23 223.47 266.368.0 384.996-139.994 469.264-223.47 19.86-19.66 30.79-45.784 30.79-73.51C1010.01 461.256 999.082 435.156 979.222 415.474zm-38.34 108.808C862.556 601.838 756.802 732 509.958 732c-246.81.0-352.564-130.164-430.89-207.718-9.548-9.468-14.8-22.01-14.8-35.276.0-13.288 5.252-25.806 14.8-35.252 78.344-77.578 184.098-207.764 430.89-207.764 246.826.0 352.58 130.186 430.924 207.764 9.55 9.446 14.802 21.966 14.802 35.252C955.684 502.272 950.432 514.812 940.882 524.282zM509.974 335.996c-84.868.0-153.928 68.652-153.928 152.988.0 84.358 69.06 153.01 153.928 153.01 84.872.0 153.93-68.652 153.93-153.01C663.904 404.648 594.846 335.996 509.974 335.996zm0 252.012c-54.912.0-99.6-44.428-99.6-99.024.0-54.574 44.69-98.978 99.6-98.978 54.912.0 99.6 44.404 99.6 98.978C609.576 543.58 564.888 588.008 509.974 588.008z" p-id="4313"/></svg>
-<time class=article-words><span id=busuanzi_container_page_pv><span id=busuanzi_value_page_pv></span> &nbsp阅读</span></time></div></footer></div></header><section class=article-content><h2 id=文章内容>文章内容</h2><blockquote>$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$<p>， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.</p></blockquote></section><footer class=article-footer><section class=article-tags><a href=/tags/mlcc/>Mlcc</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<time class=article-words><span id=busuanzi_container_page_pv><span id=busuanzi_value_page_pv></span> &nbsp阅读</span></time></div></footer></div></header><section class=article-content><h2 id=文章内容>文章内容</h2><p>            With adaptive voxelization, we can obtain a set of voxels of different sizes. Each voxel contains points that are roughly on a plane and creates a planar constraint for all LiDAR poses that have points in this voxel. More specifically, considering the $l-th$ voxel consisting of a group of points $\mathcal{P}_{l}={_{}^{G}P_{L_{i},t_{j}}}$ scanned by $L_{i} \in \mathcal{L}$ at times $t_{j} \in \mathcal{T}$.</p><p>We define a point cloud consistency indicator $_{c_{l}}(_{L_{i}}^{G}T_{t_{j}})$ which forms a factor on $\mathcal{S}$ and $\mathcal{E}_{L}$ shown in Fig. 4(a). Then, the base LiDAR trajectory and extrinsic are estimated by optimizing the factor graph.</p>$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$<p>， where $_{}^{G}p_{k}\in \mathcal{P}_{l}$, $N_{l}$ is the total number of points in $\mathcal{P}_{l}$, $n_{l}$ is the normal vector of the plane and $q_{l}$ is a point on this plane.</p><p><img src=/p/mlcc/01/graph1.png width=1976 height=830 srcset="/p/mlcc/01/graph1_hu4057890427085875171.png 480w, /p/mlcc/01/graph1_hu18239084144532588545.png 1024w" loading=lazy alt=Fig.4 class=gallery-image data-flex-grow=238 data-flex-basis=571px>Fig.4 :(a) The $l-th$ factor item relating to $\mathcal{S}$ and $\mathcal{E}_{L}$ with $L_{i} \in \mathcal{L}$ and $t_{j} \in \mathcal{T}$ . (b) The distance from the point $_{}^{G}p_{k}$ to the plane $\pi$.</p><p>         通过自适应体素化，我们可以获得一组不同大小的体素。每个体素包含大致在一个平面上的点，并为所有包含在此体素内的雷达姿态创建一个平面约束。更具体地说，考虑由$L_{i} \in \mathcal{L}$在时刻$t_{j} \in \mathcal{T}$扫描的一组点组成的第$l$个体素。</p>$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$<p>，其中 $_{}^{G}p_{k}\in \mathcal{P}_{l}$，$N_{l}$ 是 $\mathcal{P}_{l}$中所有点的总点数, $n_{l}$ 是平面的法向量， $q_{l}$ 是平面中的一点。</p><p><img src=/p/mlcc/01/graph1.png width=1976 height=830 srcset="/p/mlcc/01/graph1_hu4057890427085875171.png 480w, /p/mlcc/01/graph1_hu18239084144532588545.png 1024w" loading=lazy alt=图4 class=gallery-image data-flex-grow=238 data-flex-basis=571px>
+Fig.4 :(a) 第$l$ 个因子项，涉及$\mathcal{S}$ 和 $\mathcal{E}_{L}$，其中 $L_{i} \in \mathcal{L}$
+且 $t_{j} \in \mathcal{T}$ 。 (b)点 $_{}^{G}p_{k}$到平面$\pi$的距离.</p>$$ \arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l}) $$$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$<p>.</p>$$\lambda_3({x}\boxplus\delta{x})\approx\lambda_3({x})+{\bar{J}}\delta{x}+\frac12\delta{x}^T{\bar{H}}\delta{x}$$$${x}=[\underbrace{\cdots_{L_{0}}^{G}{R}_{t_{j}}\quad L_{0}^{G}{t}_{t_{j}}\cdots}_{\mathcal{S}}\underbrace{\cdots {}_{L_{i}}^{L_{0}}{R}\quad{}_{L_{i}}^{L_{0}}{t}\cdots}_{\mathcal{E}_{L}}]$$<p>.</p>$$(\bar{{H}}+\mu{I}) \delta{x}=-\bar{{J}}^T$$$$ \arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l}) $$$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$<p>。</p>$$\lambda_3({x}\boxplus\delta{x})\approx\lambda_3({x})+{\bar{J}}\delta{x}+\frac12\delta{x}^T{\bar{H}}\delta{x}$$$${x}=[\underbrace{\cdots_{L_{0}}^{G}{R}_{t_{j}}\quad L_{0}^{G}{t}_{t_{j}}\cdots}_{\mathcal{S}}\underbrace{\cdots_{L_{i}}^{L_{0}}{R}\quad {}_{L_{i}}^{L_{0}}{t}\cdots}_{\mathcal{E}_{L}}]$$<p>。</p>$$(\bar{{H}}+\mu{I}) \delta{x}=-{\bar{{J}}}^T$$<h2 id=理论推导>理论推导</h2><h3 id=损失函数的降维>损失函数的降维</h3><h4 id=推导一balm论文的思路>推导一：BALM论文的思路</h4>$$\arg\min_{{\mathcal{S},\mathcal{E}_{L},{n}_{l},{q}_{l}}}\sum_{l}\underbrace{{\left(\frac{1}{N_{l}}\sum_{k=1}^{{N_{l}}}\left({n}_{l}^{T}\left(^{G}{p}_{k}-{q}_{l}\right)\right)^{2}\right)}}_{{l\mathrm{-th~factor}}}$$$$\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)} $$<p>在$(n_{l},q_{l})$两个平面参数优化过程中可以优先优化$q_{l}$，再优化$n_{l}$，下式为优化$q_{l}$。</p>$$\begin{align*}\arg\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \\
+= \arg\min_{n_{l}}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}}\right)\\
+=\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}
+\end{align*}$$$$\begin{align*}\arg\min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\\
+=\min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)\left( {^{G}p_{k}-q_{l}}\right)^{T}}}\end{align*}$$<p>需要求当上式最小化是$q_{l}$的最优解，我们需要找到上式梯度为0的$q_{l}$的值，因此我们对上式求关于$q_{l}$的导数，如下所示：</p>$$\begin{align*}\frac{\partial}{\partial{q_{l}}} \left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)\left( {^{G}p_{k}-q_{l}}\right)^{T}}}\right) \\
+={\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} {-({^{G}p_{k}-q_{l})}^{T}}-\left( {^{G}p_{k}-q_{l}}\right)}}\\
+= {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} {-2({^{G}p_{k}-q_{l})}}}}\\
+=-{\frac{2}{N_{l}}{\sum_{k=1}^{N_{l}} {({^{G}p_{k}-q_{l})}}}}
+\end{align*}$$$$\begin{align*}-{\frac{2}{N_{l}}{\sum_{k=1}^{N_{l}} {({^{G}p_{k}}-q_{l})}}}=0 \\
+\sum_{k=1}^{N_{l}}{({^{G}p_{k}-q_{l}})} =0\\
+\sum_{k=1}^{N_{l}}{^{G}p_{k}}-N_{l}q_{l}=0\\
+N_{l}q_{l}=\sum_{k=1}^{N_{l}}{^{G}p_{k}}\\
+q_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{^{G}p_{k}}
+\end{align*}$$<p>由此可知，最优的$q_{l}$是所有$^{G}p_{k}$的均值$q_{l}^{\ast}$,接下来继续简化$n_{l}$</p>$$\begin{align*}\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}\\
+=\arg\min_{n_{l}}n_{l}^{T}\left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\right)n_{l}\end{align*}$$$${\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\\
+\Leftrightarrow \frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}} $$<p>需要注意的是上式中$q_{l}^{\ast} \cdot_{}^{G}p_{k}^{T}$与$_{}^{G}p_{k}\cdot{q_{l}^{\ast}}^{T}$两个交叉项在最小化过程中不会对优化结果产生影响，所以两式等价。
+所以，带入</p>$$ A_{l}=\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k} \cdot_{}^{G}p_{k}^{T}-q_{l}^{\ast}\cdot {q_{l}^{\ast}}^{T}},q_{l}^{\ast} =\frac{1}{N_{l}}\sum_{k=1}^{N_{l}}{_{}^{G}p_{k}}$$$$\begin{align*}\arg\min_{n_{l}}n_{l}^{T}\left( {\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}^{\ast}}\right)^{2}}}\right)n_{l}\\
+=\arg\min_{n_{l}}n_{l}^{T}A_{l}n_{l}\end{align*}$$$$\lambda_{min}(M)\le \frac{x^{T}Mx}{x^{T}x}\le\lambda_{max}(M),\forall{x}\ne0$$$$\begin{align*}\
+=\lambda_{min}(A_{l})\\arg\min_{n_{l}}n_{l}^{T}\left( \min_{q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( {^{G}p_{k}-q_{l}}\right)^{2}}}\right)n_{l}\\
+=\lambda_{3}(A_{l})\end{align*}$$$$\begin{align*}\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\left(\min_{n_{l},q_{l}}{\frac{1}{N_{l}}{\sum_{k=1}^{N_{l}} \left( n_{l}^{T}\left( {^{G}p_{k}-q_{l}}\right)\right)^{2}}} \right)}\\
+=\arg\min_{{\mathcal{S},\mathcal{E}_{L}}}\sum_{l}{\lambda_{3}(A_{l})}\end{align*}$$<p>补充内容：由上述图4可知，$n_{l}^{T}({}^{G}p_{k}-q_{l})$表达了点${}^{G}p_{k}$到平面$\pi$的距离，其推导来源于向量法求点到平面的距离。如下图所示：
+<img src=/p/mlcc/01/distance.jpeg width=830 height=570 srcset="/p/mlcc/01/distance_hu4242366416134835914.jpeg 480w, /p/mlcc/01/distance_hu1847709023545538150.jpeg 1024w" loading=lazy class=gallery-image data-flex-grow=145 data-flex-basis=349px></p><h4 id=推导二该论文中的推导思路>推导二：该论文中的推导思路</h4><p><span style=color:red>后续补充！</span></p><h3 id=二阶闭式导数的推导>二阶闭式导数的推导</h3><p>首先引入BALM中两个定理，如下所示:</p><h4 id=定理1>定理1</h4>$${A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T,\bar{{p}}=\frac{1}{N}\sum_{i=1}^{N}{p}_{i}$$$$\frac{\partial\lambda_k}{\partial{p}_i}=\frac2N({p}_i-\bar{{p}})^T{u}_k{u}_k^T$$<p>其中,$\bar{p}$是$N$个点的均值。</p><p><strong>证明如下</strong>：假设点$p_i= [x_{i} \quad y_{i} \quad z_{i}]^{T}$以及对应的特征向量矩阵$U={[u_{1} \quad u_{2} \quad u_{3} ]}^{T}$。进一步定义$p$是$p_{i}$的一个元素，$p$是$x_{i},y_{i},z_{i}$中其中一个。协方差矩阵$A$可以分解为
+$\Lambda=U^{T}AU$,其中:</p><ul><li>$\Lambda$是对角矩阵，其对角线元素是特征值,
+$\lambda_{1},\lambda_{2},\lambda_{3}$。</li><li>$U$是一个正交矩阵，其列是$A$的特征向量$u_{1},u_{2},u_{3}$。</li></ul>$$
+\frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}AU+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+U^{T}A\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式1}
+$$$$U^{T}A=\Lambda{}U^{T},AU=U\Lambda\tag{式2}$$<p>,将式1带入式2，可得：</p>$$
+\frac{\partial{}\Lambda}{\partial{p}}=\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)\tag{式3}
+$$<p>又因为：</p>$$
+U^{T}U=I\\
+\Longrightarrow {U^{T}\frac{\partial{U}}{\partial{p}}+\left(\frac{\partial{U}}{\partial{p}}\right)^{T}U=0}\tag{式4}
+$$<p>由此可知，$U^{T}\frac{\partial{U}}{\partial{p}}$是一个<a class=link href=https://baike.baidu.com/item/%E5%8F%8D%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5/9063240 target=_blank rel=noopener>反对称矩阵</a>，其对角线元素和0。
+<img src=/p/mlcc/01/skew-symmetric-matrix.png width=1640 height=268 srcset="/p/mlcc/01/skew-symmetric-matrix_hu12682485345853843236.png 480w, /p/mlcc/01/skew-symmetric-matrix_hu16826235980269994892.png 1024w" loading=lazy alt=反对称矩阵的定义 class=gallery-image data-flex-grow=611 data-flex-basis=1468px>
+因此可得:</p>$$
+\left( \frac{\partial{U}}{\partial{p}}\right)^{T}U\Lambda+\Lambda{}U^{T}\left(\frac{\partial{U}}{\partial{p}}\right)=0\tag{式5}
+$$<p>将式5带入式3中，可得：</p>$$
+\frac{\partial{}\Lambda}{\partial{p}}=U^{T}\left(\frac{\partial{A}}{\partial{p}}\right)U\tag{式6}
+$$$$
+\frac{\partial{}\lambda_{k}}{\partial{p}}={u_{k}}^{T}\left(\frac{\partial{A}}{\partial{p}}\right)u_{k}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p}}\tag{式7}
+$$$$
+\frac{\partial{}\lambda_{k}}{\partial{p_{i}}}=\begin{bmatrix}
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{x_{i}}}&
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{y_{i}}}&
+\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{z_{i}}}
+\end{bmatrix}=\frac{\partial{{u_{k}}^{T}Au_{k}}}{\partial{p_{i}}}\tag{式8}
+$$$$
+\begin{align}
+\frac{\partial{}\lambda_{k}}{\partial{p_{j}}}=\frac1N\sum_{i=1}^N{\frac{\partial{{u_{k}}^{T}\left({p}_j-\bar{p}\right)\left(p_j-\bar{p}\right)^Tu_{k}}}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{\frac{\partial{\left({p}_j-\bar{p}\right)^{T}{u_{k}}{u_{k}}^{T}\left(p_j-\bar{p}\right)}}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{\frac{\partial\left(\left({u_{k}}^{T}\left(p_j-\bar{p}\right)\right)^{T}\left({u_{k}}^{T}\left(p_j-\bar{p}\right)\right)\right)}{\partial{p_{i}}}}\\
+=\frac1N\sum_{j=1}^N{2{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\bar{p}\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\bar{p}\right)}{\partial{p_{i}}}}\\
+=\frac2N\sum_{j=1}^N{{\left(p_j-\bar{p}\right)^{T}u_{k}}\frac{\partial{u_{k}}^{T}\left(p_j-\left(\frac{1}{N}\sum_{i=1}^{N}p_{i}\right)\right)}{\partial{p_{i}}}}\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2N\sum_{j=1,j\ne{i}}^N\left(p_j-\bar{p}\right)^{T}u_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\sum_{j=1,j\ne{i}}^N\left(p_j-\bar{p}\right)^{T}\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(\left(\sum_{j=1}^{N}(p_{j}-\bar{p})^{T}\right)-\left(p_i-\bar{p}\right)^{T}\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}\left(I-\frac{1}{N}I\right)}+\\\frac2Nu_{k}{u_{k}}^{T}\left(-\frac{1}{N}I\right)\left(0-\left(p_i-\bar{p}\right)^{T}\right)\\
+=\frac2N{{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}
+\end{align}\tag{式9}
+$$$$
+\frac{\partial{p}_j}{\partial{p}_i}={I},(i=j)\quad\frac{\partial{p}_j}{\partial{p}_i}={0},(i\neq j)
+\tag{式10}
+$$<h4 id=定理2>定理2</h4>$${A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T,\bar{{p}}=\frac{1}{N}\sum_{i=1}^{N}{p}_{i}$$<p>对于一组点$p_{i}\left(i=1,\dots,\right)$和定义的协方差矩阵$A$,假设$A$具有对应于特征向量的$u_{k}\left(k=1,2,3\right)$,则有</p>$$\begin{aligned}\frac{\partial^{2}\lambda_{k}}{\partial{p}_{j}\partial{p}_{i}}=\begin{cases}\frac{2}{N}\biggl(\frac{N-1}{N}{u}_{k}{u}_{k}^{T}+{u}_{k}({p}_{i}-\bar{{p}})^{T}{U}{F}_{k}^{{p}_{j}}\\\\+{U}{F}_{k}^{{p}_{j}}\biggl({u}_{k}^{T}({p}_{i}-\bar{{p}})\biggr)\biggr),\quad i=j\\\\\frac{2}{N}\biggl(-\frac{1}{N}{u}_{k}{u}_{k}^{T}+{u}_{k}({p}_{i}-\bar{{p}})^{T}{U}{F}_{k}^{{p}_{j}}\\\\+{U}{F}_{k}^{{p}_{j}}\biggl({u}_{k}^{T}({p}_{i}-\bar{{p}})\biggr)\biggr),\quad i\neq j\end{cases}\end{aligned}$$$${F}_{k}^{{P}_{j}}=\begin{bmatrix}{F}_{1,k}^{{P}_{j}}\\{F}_{2,k}^{{P}_{j}}\\{F}_{3,k}^{{P}_{j}}\end{bmatrix}\in\mathbb{R}^{3\times3},\quad{U}=\begin{bmatrix}{u}_{1}&{u}_{2}&{u}_{3}\end{bmatrix}$$$$\left.{F}_{m,n}^{{P}_{j}}=\left\{\begin{matrix}\frac{({p}_{j}-\bar{{p}})^{T}}{N(\lambda_{n}-\lambda_{m})}({u}_{m}{u}_{n}^{T}+{u}_{n}{u}_{m}^{T}),m\neq n\\{0}_{1\times3}&,m=n\end{matrix}\right.\right.$$<p><strong>证明如下</strong>：
+已知协方差矩阵可被分解，且设$q$是点$p_{i}$的一个标量$x_{i},y_{i},z_{i}$之一，如下所示：</p>$${A}={U}{\Lambda}{U}^{T} \tag{式1}$$$$\frac{\partial{A}}{\partial q}=\frac{\partial}{\partial q}\left({U}{\Lambda}{U}^{T}\right)\tag{式2}$$<p>根据链式法则，右侧可以写为：</p>$${\frac{\partial{A}}{\partial q}}={\frac{\partial{U}}{\partial q}}{\Lambda}{U}^{T}+{U}{\frac{\partial{\Lambda}}{\partial q}}{U}^{T}+{U}{\Lambda}{\frac{\partial{U}^{T}}{\partial q}} $$<p>由于$\frac{\partial{U}^{T}}{\partial{q}}=\left({\frac{\partial{U}}{\partial q}}\right)^{T}$,因此式2可以变为</p>$$\begin{align}
+\frac{\partial{A}}{\partial q}=\frac{\partial{U}}{\partial q}{\Lambda}{U}^T+{U}\frac{\partial{\Lambda}}{\partial q}{U}^T+{U}{\Lambda}\left(\frac{\partial{U}}{\partial q}\right)^T\\
+\Longrightarrow {U}^{T}{\frac{\partial{A}}{\partial q}}{U}={U}^{T}{\frac{\partial{U}}{\partial q}}{\Lambda}+{\frac{\partial{\Lambda}}{\partial q}}+{\Lambda}\left({\frac{\partial{U}}{\partial q}}\right)^{T}{U}
+\end{align}\tag{式3}$$<p>设$C^{q}=U^{T}\frac{\partial{U}}{\partial q} $,因为$C^{q}$是反对称矩阵(由定理1的证明可知),所以有以下$C^{q}+{C^{q}}^{T}=0$,即${C^{q}}^{T}=-C^{q}$。代入式3可得：</p>$$
+{U}^{T}{\frac{\partial{A}}{\partial q}}{U}={C}^{q}{\Lambda}+{\frac{\partial{\Lambda}}{\partial q}}-{\Lambda}{C}^{q}
+\tag{式4}$$<p>取$C^{q}$的m行，n列可得：</p>$$
+\begin{align}
+\left({U}^T\frac{\partial{A}}{\partial q}{U}\right)_{m,n}=\left(\frac{\partial\boldsymbol{\Lambda}}{\partial q}\right)_{m,n}-\left({\Lambda}{C}^q-{C}^q{\Lambda}\right)_{m,n}\\
+\Longrightarrow
+\left(\frac{\partial\boldsymbol{\Lambda}}{\partial q}\right)_{m,n}=\left({U}^T\frac{\partial{A}}{\partial q}{U}\right)_{m,n}+\left({\Lambda}{C}^q-{C}^q{\Lambda}\right)_{m,n}\\
+\Longrightarrow
+0=\left({U}^T\frac{\partial{A}}{\partial q}{U}\right)_{m,n}+\left({\Lambda}{C}^q-{C}^q{\Lambda}\right)_{m,n}\\
+\Longrightarrow
+0=u_{m}^{T}{\frac{\partial{A}}{\partial{q}}}u_{n}+\lambda_{m}C_{m,n}^{q}-C_{m,n}^{q}\lambda_{n}\\
+\Longrightarrow
+C_{m,n}^{q}\left(\lambda_{m}-\lambda_{n}\right)=-u_{m}^{T}{\frac{\partial{A}}{\partial{q}}}u_{n}\\
+\Longrightarrow
+{C}_{m,n}^q=\frac{{u}_m^T\frac{\partial{A}}{\partial q}{u}_n}{\lambda_n-\lambda_m}&,(\lambda_{m}\ne\lambda_{n})
+\end{align}
+\tag{式5}$$<p>取$C^{q}$的m行，m列,由于它是反对称矩阵，所以它的对角线元素为0，即：</p>$$\begin{align}
+{C}_{m,m}^q={u}_m^T\frac{\partial{u}_m}{\partial q}\\
+\Longrightarrow
+{C}_{m,m}^q=0&,(m=n)
+\end{align}\tag{式6}$$<p>接下来求解$u_{k}$对$p_{j}$的三个分量的微积分：</p>$$
+\begin{align}
+\frac{\partial u_{k}}{\partial{q}}=\frac{\partial Ue_{k}}{\partial q}
+=UU^{T}\frac{\partial U}{\partial q}e_{k}
+=UC^{q}e_{k}
+\end{align}
+\tag{式7}
+$$<p>其中$e_{k}$是3x1的向量，其中第k个元素是1，其它元素是0，这意味着：</p>$$
+C^{q}e_{k}=\begin{bmatrix}
+C_{1,k}^{q}\\
+C_{2,k}^{q}\\
+C_{3,k}^{q}
+\end{bmatrix}
+\tag{式8}$$$$
+\begin{align}
+\begin{aligned}
+\frac{\partial{u}_k}{\partial{p}_j}& =\begin{bmatrix}\frac{\partial{U}{e}_k}{\partial x_j}&\frac{\partial{U}{e}_k}{\partial y_j}&\frac{\partial{U}{e}_k}{\partial z_j}\end{bmatrix} \\
+&=\begin{bmatrix}{U}{C}^{x_j}{e}_k&{U}{C}^{y_j}{e}_k&{U}{C}^{z_j}{e}_k\end{bmatrix} \\
+&={U}\big[{C}^{x_j}{e}_k\quad{C}^{y_j}{e}_k\quad{C}^{z_j}{e}_k\big] \\
+&={U}\begin{bmatrix}{C}_{1,k}^{x_j}&{C}_{1,k}^{y_j}&{C}_{1,k}^{z_j}\\{C}_{2,k}^{x_j}&{C}_{2,k}^{y_j}&{C}_{2,k}^{z_j}\\{C}_{3,k}^{x_j}&{C}_{3,k}^{y_j}&{C}_{3,k}^{z_j}\end{bmatrix}
+\end{aligned}
+\end{align}
+\tag{式9}
+$$<p>结合式9和式5、6可有如下定义：</p>$$
+\begin{align*}
+{F}_{m,n}^{{p}_{j}}=
+\begin{bmatrix}{C}_{m,n}^{x_{j}}&{C}_{m,n}^{y_{j}}&{C}_{m,n}^{z_{j}}\end{bmatrix}\in\mathbb{R}^{1\times3},\quad m,n\in\{1,2,3\}.\\
+=\begin{cases}
+\frac{{u}_m^T\frac{\partial{A}}{\partial {p_{j}}}{u}_n}{\lambda_n-\lambda_m} , \quad m\ne n \\
+0,\quad m=n
+\end{cases}
+\end{align*}
+\tag{式10}$$<p>将式10带入式9中可得：</p>$$
+\frac{\partial{u_{k}}}{\partial{p_{j}}}=
+U\begin{bmatrix}
+F_{1,k}^{p_{j}}\\
+F_{2,k}^{p_{j}}\\
+F_{3,k}^{p_{j}}
+\end{bmatrix}
+=UF_{k}^{p_{j}}\tag{式11}$$<p>接下来对式10做以下化简，首先考虑$m\ne n$的情况，过程如下所示：</p>$$
+\begin{align*}
+\frac{u_{m}^{T} \frac{\partial A }{\partial p_{j}} u_{n}}{\lambda_n -\lambda_m}\\
+=\frac{1}{\lambda_n -\lambda_m}\cdot u_{m}^{T} \frac{\partial A }{\partial p_{j}} u_{n}\\
+=\frac{1}{\lambda_n -\lambda_m}\cdot u_{m}^{T} \frac{\partial {\left({A}=\frac1N\sum_{i=1}^N\left({p}_i-\bar{{p}}\right)\left({p}_i-\bar{{p}}\right)^T\right)} }{\partial p_{j}} u_{n}\\
+=\frac{1}{\lambda_n -\lambda_m}\cdot\left(\frac{1}{N}\sum_{i=1}^{N}\frac{u_{m}^{T}\left(p_{i}-\bar{p}\right)\left(p_{i}-\bar{p}\right)^{T}u_{n}}{\partial{p_j}}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}
+\cdot\frac{1}{N}\sum_{i=1}^{N}
+\left(\frac{u_{m}^{T}\left(p_{i}-\bar{p}\right)\left(p_{i}-\bar{p}\right)^{T}u_{n}}{\partial{\left(p_{i}-\bar{p}\right)}}\cdot\frac{\partial{\left(p_{i}-\bar{p}\right)}}{\partial{p_j}}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}
+\cdot\frac{1}{N}\sum_{i=1}^{N}
+\left(\left(p_{i}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\cdot\frac{\partial{\left(p_{i}-\bar{p}\right)}}{\partial{p_j}}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}\\
+\cdot\frac{1}{N}\sum_{i=1}^{N}
+\left(\left(p_{i}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\cdot
+\frac{\partial{\left(p_{i}-\left(\frac{1}{N}\sum_{i=1}^{N}{p}_{i}\right)\right)}}{\partial{p_j}}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}\\
+\cdot\frac{1}{N}\sum_{i=1}^{N}
+\left(\left(p_{i}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\cdot
+\frac{\partial{\left(p_{i}-\left(\frac{1}{N}\sum_{i=1}^{N}{p}_{i}\right)\right)}}{\partial{p_j}}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}
+\frac{1}{N}\left(p_{j}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)
+\cdot
+\left(I-\frac{1}{N}I\right)\\
++\frac{1}{N}\sum_{i=1,i\ne{j}}^{N}{\left(\left(p_{i}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\cdot\left(-\frac{1}{N}I\right)\right)}\\
+=\frac{1}{\lambda_n -\lambda_m}
+\frac{1}{N}\left(p_{j}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)
+\cdot
+\left(I-\frac{1}{N}I\right)\\
++\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\left(-\frac{1}{N}I\right)
+\frac{1}{N}\sum_{i=1,i\ne{j}}^{N}\left(p_{i}-\bar{p}\right)^{T}\\
+=\frac{1}{\lambda_n -\lambda_m}
+\frac{1}{N}\left(p_{j}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)
+\cdot\left(I-\frac{1}{N}I\right)\\
++\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\left(-\frac{1}{N}I\right)
+\left(\left(\sum_{i=1}^{N}(p_{i}-\bar{p})^{T}\right)-\left(p_j-\bar{p}\right)^{T}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}
+\frac{1}{N}\left(p_{j}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)
+\cdot\left(I-\frac{1}{N}I\right)\\
++\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\left(-\frac{1}{N}I\right)
+\left(0-\left(p_j-\bar{p}\right)^{T}\right)\\
+=\frac{1}{\lambda_n -\lambda_m}
+\frac{1}{N}\left(p_{j}-\bar{p}\right)^{T}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)\\
+=\frac{\left(p_{j}-\bar{p}\right)^{T}}{\left(\lambda_n -\lambda_m\right)N}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right)
+\end{align*}
+\tag{式12}$$$$
+\frac{\partial{p}_j}{\partial{p}_i}={I},(i=j)\quad\frac{\partial{p}_j}{\partial{p}_i}={0},(i\neq j)
+\tag{式13}$$$$
+\frac{\partial {a}^\top{x}{x}^\top{b}}{\partial {x}}={x}^\top\left({a}{b}^\top+{b}{a}^\top\right)
+\tag{式14}$$<p>结合$m=n$的情况，${F}_{m,n}^{{p}_{j}}$的简化结果如下所示：</p>$$
+F_{m,n}^{p_{j}}=
+\begin{cases}
+\frac{\left(p_{j}-\bar{p}\right)^{T}}{\left(\lambda_n -\lambda_m\right)N}\left(u_{m}u_{n}^{T}+u_{n}u_{m}^{T}\right),\quad m\ne n\\
+0,\quad m=n
+\end{cases}
+\tag{式15}$$<p>此时，开始求解二阶导数：</p>$$
+\begin{align*}
+\frac{\partial}{\partial{p_{j}}}\left(\frac{\partial{\lambda_k}}{\partial{p_{i}}}\right)
+=\frac{\partial{\frac2N\left({{\left(p_i-\bar{p}\right)^{T}u_{k}}{u_{k}}^{T}}\right)^{T}}}{\partial{p_{j}}}\\
+=\frac{2}{N}\cdot\frac{\partial{u_{k}{u_{k}}^{T}\left(p_i-\bar{p}\right)}}{\partial{p_{j}}}\\
+=\frac{2}{N}\cdot\left({\frac{\partial {u_{k}}}{\partial{p_j}}u_{k}^{T}\left(p_i-\bar{p}\right)}+u_{k}\frac{\partial{u_{k}^{T}\left(p_i-\bar{p}\right)}}{p_j}\right)\\
+=\frac{2}{N}\cdot\left(\frac{\partial {u_{k}}}{\partial{p_j}}u_{k}^{T}\left(p_i-\bar{p}\right)
++u_{k}u_{k}^{T}\frac{\partial{\left(p_i-\bar{p}\right)}}{p_j}
++u_{k}\left(p_i-\bar{p}\right)^{T}\frac{\partial{u_k}}{p_j}\right)\\
+=\frac{2}{N}\cdot\left(UF_{k}^{p_j}u_{k}^{T}\left(p_i-\bar{p}\right)
++u_{k}u_{k}^{T}\frac{\partial{\left(p_i-\bar{p}\right)}}{p_j}
++u_{k}\left(p_i-\bar{p}\right)^{T}UF_{k}^{p_j}
+\right)\\
+=\begin{cases}
+\frac{2}{N}\cdot\left(UF_{k}^{p_j}u_{k}^{T}\left(p_i-\bar{p}\right)
++u_{k}u_{k}^{T}\frac{N-1}{N}I
++u_{k}\left(p_i-\bar{p}\right)^{T}UF_{k}^{p_j}
+\right),\quad i=j \\
+\frac{2}{N}\cdot\left(UF_{k}^{p_j}u_{k}^{T}\left(p_i-\bar{p}\right)
++u_{k}u_{k}^{T}\frac{-1}{N}I
++u_{k}\left(p_i-\bar{p}\right)^{T}UF_{k}^{p_j}
+\right),\quad i \ne j
+\end{cases}
+\end{align*}
+\tag{式16}
+$$<p>其中同样涉及到式13。</p><h4 id=推导过程>推导过程</h4>$$\arg\min_{\mathcal{S},\mathcal{E}_{L}}\sum_{l}^{}\lambda_{3}(A_{l})\tag{式1}$$<p>，优化问题是非线性的，通过迭代求解，每次迭代中，代价函数被二阶近似，具体的说，我们将$\lambda_3$视为包含所有点${^G}p$的函数，其中
+$^{G}p$是一个列向量，每个点$^{G}p_{k}\in\mathcal{P}_{l}$，即：</p>$$
+^{G}p=\begin{bmatrix}{^{G}p_{1}^{T}} \quad {^{G}p_{2}^{T}} \quad \cdots \quad {^{G}p_{N_{l}}^{T}} \end{bmatrix}\in\mathbb{R} ^{3N_{l}}
+\tag{式2}
+$$$$
+\lambda_{3}\left(^{G}{p}+\delta^{G}{p}\right)\approx\lambda_{3}\left(^{G}{p}\right)+{J}\cdot\delta^{G}{p}+\frac{1}{2} \delta^{G}{p}^{T}\cdot{H}\cdot\delta^{G}{p}
+\tag{式3}
+$$$$
+\begin{align*}
+^Gp_k={^{G}_{L_i}T}_{t_j}p_k={^{G}_{L_0}T}_{t_j}\cdot {^{L_{0}}_{L_i}T}\cdot p_{k}\\
+={^{G}_{L_0}R_{t_j}}\left({^{L_0}_{L_i}R\cdot {p_k}+{^{L_0}_{L_i}t}}\right)+{^G_{L_0}t_{t_j}}
+\end{align*}
+\tag{式4}
+$$$$
+T=(R,t)\quad ,T \boxplus\delta{T}=\left(R\exp(\phi^{\wedge} ),t+\delta{t}\right)
+\tag{式5}
+$$$$
+\begin{align*}
+{}^{G}{p}_{k}+\delta^{G}{p}_{k}=
+{}_{L_{0}}^{G}R_{t_{j}}\exp\big({}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}\big)
+\bigg({}_{L_{i}}^{L_{0}}R\exp\big({}_{L_{i}}^{L_{0}}\phi^{\wedge}\big)p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)\\
++{}_{L_{0}}^{G}{t}_{t_{j}}
++\delta_{L_{0}}^{G}{t}_{t_{j}}\\
+={}_{L_{0}}^{G}R_{t_{j}}\big(I+{}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}\big)
+\bigg({}_{L_{i}}^{L_{0}}R\big(I+{}_{L_{i}}^{L_{0}}\phi^{\wedge}\big)p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)\\
++{}_{L_{0}}^{G}{t}_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}\\
+={}_{L_{0}}^{G}{R}_{t_{j}}\big(I+{}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}\big)
+\bigg({}_{L_{i}}^{L_{0}}Rp_{k}+{}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)\\
++{}_{L_{0}}^{G}{t}_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{G}{t}_{t_{j}}\big)
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++\delta_{L_{i}}^{L_{0}}{t}\big)\\
++{}_{L_{0}}^{G}R_{t_{j}}{}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}
+\bigg({}_{L_{i}}^{L_{0}}Rp_{k}+{}_{L_{i}}^{L_{0}}{t}\bigg)\\
++{}_{L_{0}}^{G}{t}_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}
++{}_{L_{0}}^{G}{t}_{t_{j}}\big)+{}_{L_{0}}^{G}{t}_{t_{j}}
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++\delta_{L_{i}}^{L_{0}}{t}\big)\\
++{}_{L_{0}}^{G}R_{t_{j}}{}_{L_{0}}^{G}\phi_{t_{j}}^{\wedge}
+\bigg({}_{L_{i}}^{L_{0}}Rp_{k}
++{}_{L_{i}}^{L_{0}}{t}\bigg)+\delta_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}
++{}_{L_{0}}^{G}{t}_{t_{j}}\big)+{}_{L_{0}}^{G}{t}_{t_{j}}\\
+-{}_{L_0}^GR_{t_j}{}_{L_{i}}^{L_{0}}R\left(p_k\right)^{\wedge}\cdot_{L_i}^{L_0}\phi+_{L_0}^GR_{t_j}\delta_{L_i}^{L_0}t
+-{}_{L_{0}}^{G}R_{t_{j}}\bigg({}_{L_{i}}^{L_{0}}Rp_{k}
++{}_{L_{i}}^{L_{0}}{t}\bigg)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}+\delta_{L_{0}}^{G}{t}_{t_{j}}
+\end{align*}
+\tag{式6}
+$$$$
+\begin{align*}
+\delta^{G}{p}_{k}\approx-{}_{L_{0}}^{G}R_{t_{j}}
+\big({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\big)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}
++\delta_{L_{0}}^{G}{t}_{t_{j}}-\\{}_{L_{0}}^{G}R_{t_{j}}{}_{L_{i}}^{L_{0}}R\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++{}_{L_{0}}^{G}{R}_{t_{j}}\delta_{L_{i}}^{L_{0}}{t}\\
+=D\cdot \delta x ,
+\end{align*}
+\tag{式7}
+$$$$\begin{align*}
+D =\begin{bmatrix}\vdots&\vdots\\\cdots {D}_{k,p}^{\mathcal{S}}&\cdots {D}_{k,q}^{\varepsilon_{L}}&\cdots\\\vdots&\vdots\end{bmatrix}\in\mathbb{R}^{3N_{l}\times6(m+n-2)} \\
+\mathrm{D}_{k,p}^{\mathcal{S}}
+\begin{cases}
+\begin{bmatrix}{-{}_{L_{0}}^{G}{R}_{t_{j}}}\left({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\right)^{\wedge}&{I}\end{bmatrix},\quad{\mathrm{if} p=j}\\
+{0}_{3\times6},\quad {else}
+\end{cases}\\
+\mathrm{D}_{k,q}^{\mathcal{E}_{L}}
+\begin{cases}
+\begin{bmatrix}{-{}_{L_{0}}^{G}{R}_{t_{j}}}{}_{L_{i}}^{L_{0}}{R}({p}_{k})^{\wedge}&{}_{L_{0}}^{G}{R}_{t_{j}}\end{bmatrix},\quad{\mathrm{if~}q=i}\\
+{0}_{3\times6},\quad {else}
+\end{cases}
+\end{align*}
+$$$$\delta^{G}{p}_{k}\approx{\color{red}+}{}_{L_{0}}^{G}R_{t_{j}}
+\big({}_{L_{i}}^{L_{0}}{R}{p}_{k}+{}_{L_{i}}^{L_{0}}{t}\big)^{\wedge}{}_{L_{0}}^{G}\phi_{t_{j}}
++\delta_{L_{0}}^{G}{t}_{t_{j}}{\color{red}+}\\{}_{L_{i}}^{G}R_{t_{j}}\big({p}_{k}\big)^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++{}_{L_{0}}^{G}{R}_{t_{j}}\delta_{L_{i}}^{L_{0}}{t}$$$$
+\exp(\phi^{\wedge})\approx I+\phi^{\wedge}\tag{式8}
+$$$$
+\begin{align*}
+\begin{gathered}
+\lambda_{3}({x}\boxplus\delta{x}) \approx\lambda_{3}({x})+{JD}\delta{x}+\frac{1}{2}
+\delta{x}^{T}{D}^{T}{HD}\delta{x} \\
+=\lambda_{3}({x})+{\bar{J}}\delta{x}+\frac{1}{2}\delta{x}^{T}{\bar{H}}\delta{x}.
+\end{gathered}
+\end{align*}
+\tag{式9}
+$$<p>根据定理1和定理2的结论可知：</p><ul><li>$J$为雅可比矩阵，其中第$i$个元素按照定理1计算；</li><li>$H$为Hessian矩阵，其中第$i$行，第$j$列元素按照定理2计算。</li></ul><p>并可得且LM算法的增量公式为$\left(\bar{H}(^{G}p+\mu I)\right)\delta{^Gp^{\ast}}=-\bar{J}(^Gp)^T$。</p><h2 id=代码详解>代码详解</h2><p>工程实现并非直接按照上文的推算一步完成，而是拆分为三阶段完成,分别为优化主激光雷达位姿、优化每个副雷达到主雷达的外参以及联合优化所有雷达外参以及主雷达里程计。</p><h3 id=一阶段优化主雷达位姿>一阶段：优化主雷达位姿</h3><p>第一阶段中先优化主雷达里程计。优化之前的初值可以靠纯激光里程计，或者借助其他传感器
+（如IMU和轮速）的方式获取，使用这个里程计堆叠主雷达的局部地图，并通过自适应体素化的
+方式提取面特征，通过八叉树递归的方式计算每一个体素的点面误差，构建局部地图的一致性评价指标；</p><ol><li>计算雅可比矩阵和海森矩阵</li></ol>$$
+D=\begin{bmatrix}
+-{}^{G}_{L_0}R_{t_j}(p_k)^{\wedge}&I
+\end{bmatrix}=\begin{bmatrix}
+-({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}&I
+\end{bmatrix}\tag{式1}
+$$$$
+\begin{align*}
+\bar{H}_{0,0}=D_{0,k}^{T}H_{k,j}D_{j,0}\\
+=\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}&I\end{bmatrix}^{T}H_{k,j}\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&I\end{bmatrix}\\
+=\begin{bmatrix}( {}^{G}_{L_0}R_{t_j}p_k)^{\wedge} \\I\end{bmatrix}H_{k,j}\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&I\end{bmatrix}\\
+=\begin{bmatrix}(
+{}^{G}_{L_0}R_{t_j}p_k)^{\wedge}H_{k,j}\\H_{k,j}\end{bmatrix}\begin{bmatrix}-({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&I\end{bmatrix}\\
+=\begin{bmatrix}
+-({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}H_{k,j}({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}&({}^{G}_{L_0}R_{t_j}p_k)^{\wedge}H_{k,j}\\
+-H_{k,j} ({}^{G}_{L_0}R_{t_j}p_j)^{\wedge}& H_{k,j} 
+\end{bmatrix}
+\end{align*}\tag{式2}
+$$<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-C++ data-lang=C++><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * 计算Hessian矩阵、转置的Jacobian矩阵和残差
+</span></span></span><span class=line><span class=cl><span class=cm>     *
+</span></span></span><span class=line><span class=cl><span class=cm>     * 该函数是优化算法的一部分，用于计算给定姿势、平移和初始Hessian矩阵、
+</span></span></span><span class=line><span class=cl><span class=cm>     * Jacobian向量以及残差的更新值。它是基于输入数据执行迭代计算的关键步骤。
+</span></span></span><span class=line><span class=cl><span class=cm>     *
+</span></span></span><span class=line><span class=cl><span class=cm>     * @param poses 姿态向量，表示每个窗口的旋转
+</span></span></span><span class=line><span class=cl><span class=cm>     * @param ts 平移向量，表示每个窗口的平移
+</span></span></span><span class=line><span class=cl><span class=cm>     * @param Hess Hessian矩阵，用于二阶优化方法
+</span></span></span><span class=line><span class=cl><span class=cm>     * @param JacT 转置的Jacobian矩阵，优化过程中的线性逼近
+</span></span></span><span class=line><span class=cl><span class=cm>     * @param residual 残差，衡量当前优化状态的误差
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=kt>void</span> <span class=nf>calculate_HJ</span><span class=p>(</span><span class=n>vector_quad</span> <span class=o>&amp;</span><span class=n>poses</span><span class=p>,</span> <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>ts</span><span class=p>,</span> <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=o>&amp;</span><span class=n>Hess</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                      <span class=n>Eigen</span><span class=o>::</span><span class=n>VectorXd</span> <span class=o>&amp;</span><span class=n>JacT</span><span class=p>,</span> <span class=kt>double</span> <span class=o>&amp;</span><span class=n>residual</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 初始化Hessian矩阵、转置的Jacobian矩阵和残差
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>Hess</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>JacT</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>residual</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 创建本地副本以避免重复计算
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=n>_hess</span><span class=p>(</span><span class=n>Hess</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=n>_jact</span><span class=p>(</span><span class=n>JacT</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 获取体素的数量
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>size_t</span> <span class=n>voxel_size</span> <span class=o>=</span> <span class=n>origin_points</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 遍历每个体素
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>voxel_size</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 获取当前体素的原始点和窗口数量
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>origin_pts</span> <span class=o>=</span> <span class=o>*</span><span class=n>origin_points</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>win_num</span> <span class=o>=</span> <span class=o>*</span><span class=n>window_nums</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=n>size_t</span> <span class=n>pts_size</span> <span class=o>=</span> <span class=n>origin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 初始化变量
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>vec_tran</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>vector_vec3d</span> <span class=n>pt_trans</span><span class=p>(</span><span class=n>pts_size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>point_xis</span><span class=p>(</span><span class=n>pts_size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>centor</span><span class=p>(</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span><span class=o>::</span><span class=n>Zero</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>covMat</span><span class=p>(</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>::</span><span class=n>Zero</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 遍历当前体素的所有点
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>pts_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 计算变换后的向量
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>vec_tran</span> <span class=o>=</span> <span class=n>poses</span><span class=p>[</span><span class=n>win_num</span><span class=p>[</span><span class=n>j</span><span class=p>]]</span> <span class=o>*</span> <span class=n>origin_pts</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 计算并存储点的变换和反对称矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=o>-</span><span class=n>wedge</span><span class=p>(</span><span class=n>vec_tran</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>vec_tran</span> <span class=o>+</span> <span class=n>ts</span><span class=p>[</span><span class=n>win_num</span><span class=p>[</span><span class=n>j</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=c1>// 更新中心点和协方差矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>centor</span> <span class=o>+=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=n>covMat</span> <span class=o>+=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>*</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 计算协方差矩阵的平均值
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=kt>double</span> <span class=n>N</span> <span class=o>=</span> <span class=n>pts_size</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>covMat</span> <span class=o>=</span> <span class=p>(</span><span class=n>covMat</span> <span class=o>-</span> <span class=n>centor</span> <span class=o>*</span> <span class=n>centor</span><span class=p>.</span><span class=n>transpose</span><span class=p>()</span> <span class=o>/</span> <span class=n>N</span><span class=p>)</span> <span class=o>/</span> <span class=n>N</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>centor</span> <span class=o>=</span> <span class=n>centor</span> <span class=o>/</span> <span class=n>N</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 计算协方差矩阵的特征值和特征向量
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>Eigen</span><span class=o>::</span><span class=n>SelfAdjointEigenSolver</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>saes</span><span class=p>(</span><span class=n>covMat</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>eigen_value</span> <span class=o>=</span> <span class=n>saes</span><span class=p>.</span><span class=n>eigenvalues</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>U</span> <span class=o>=</span> <span class=n>saes</span><span class=p>.</span><span class=n>eigenvectors</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>u</span><span class=p>[</span><span class=mi>3</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>u</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>U</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=n>j</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 更新Jacobian矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=c1>//损失函数降维之后优化的目标函数转为$\arg min_{\mathcal{S}，\mathcal{E}_L}\sum_{l}\lambda_{3}{(A_l)}$
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=c1>//其中$\lambda_3$是矩阵A的最小特征值，u0即为最小特征值
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>ukukT</span> <span class=o>=</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>*</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>pts_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span><span class=c1>//雅可比矩阵J和D的乘积的转置，见推导过程章节的式9
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>-</span> <span class=n>centor</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>vec_Jt</span> <span class=o>=</span> <span class=mf>2.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span> <span class=o>*</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>win_num</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=mi>0</span><span class=p>)</span> <span class=o>-=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>*</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>win_num</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>+=</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 计算Hessian矩阵的辅助变量
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>F_</span><span class=p>(</span><span class=mi>3</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>j</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span><span class=c1>//定理2：公式10 $F_{m,n}^{p_j}$ n=0,m=0的情况
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>F_</span><span class=p>[</span><span class=n>j</span><span class=p>].</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                    <span class=k>continue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>Hessian33</span> <span class=o>=</span> <span class=n>u</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>*</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//定理2：公式10 $F_{m,n}^{p_j}$ n=0,m!=0的情况
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=c1>//注意此辅助函数缺乏$(p_i-\bar{p})^T$，下面的公式会有补充
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>F_</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=mf>1.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>/</span> <span class=p>(</span><span class=n>eigen_value</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>-</span> <span class=n>eigen_value</span><span class=p>[</span><span class=n>j</span><span class=p>])</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>Hessian33</span> <span class=o>+</span> <span class=n>Hessian33</span><span class=p>.</span><span class=n>transpose</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 更新Hessian矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>h33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>size_t</span> <span class=n>rownum</span><span class=p>,</span> <span class=n>colnum</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>pts_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>f</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>f</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=p>;</span> <span class=n>f</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=c1>//此时是完整的辅助变量F
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>F</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>f</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>].</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>F_</span><span class=p>[</span><span class=n>f</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=n>F</span> <span class=o>=</span> <span class=n>U</span> <span class=o>*</span> <span class=n>F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//按照定义D的子项为3行6列，位置为k行j列。
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>colnum</span> <span class=o>=</span> <span class=mi>6</span> <span class=o>*</span> <span class=n>win_num</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>pts_size</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=c1>//注意$u_{k}^{T}\cdot{\left(p_i-\bar{p}\right)}$是一个标量，所以可以挪到F前面，与文中公式16推导略有差异
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>Hessian33</span> <span class=o>=</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>*</span> <span class=p>(</span><span class=n>pt_trans</span><span class=p>[</span><span class=n>k</span><span class=p>]).</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>F</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>                                <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=n>dot</span><span class=p>(</span><span class=n>pt_trans</span><span class=p>[</span><span class=n>k</span><span class=p>])</span> <span class=o>*</span> <span class=n>F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                    <span class=n>rownum</span> <span class=o>=</span> <span class=mi>6</span> <span class=o>*</span> <span class=n>win_num</span><span class=p>[</span><span class=n>k</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>k</span> <span class=o>==</span> <span class=n>j</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=n>Hessian33</span> <span class=o>+=</span> <span class=p>(</span><span class=n>N</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span>
+</span></span><span class=line><span class=cl>                        <span class=n>Hessian33</span> <span class=o>-=</span> <span class=mf>1.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Hessian33</span> <span class=o>=</span> <span class=mf>2.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=c1>//到此完整的公式16，下文为$D^{T}HD$，是$\bar{H}$，见3.1章节的公式2     
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=n>colnum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>+=</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>h33</span> <span class=o>=</span> <span class=n>Hessian33</span> <span class=o>*</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                    <span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=n>colnum</span><span class=p>)</span> <span class=o>+=</span> <span class=n>h33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span><span class=p>,</span> <span class=n>colnum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>-=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>*</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span><span class=p>,</span> <span class=n>colnum</span><span class=p>)</span> <span class=o>-=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>*</span> <span class=n>h33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 更新残差
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>residual</span> <span class=o>+=</span> <span class=n>eigen_value</span><span class=p>[</span><span class=mi>0</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=n>Hess</span> <span class=o>+=</span> <span class=n>_hess</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>JacT</span> <span class=o>+=</span> <span class=n>_jact</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>_hess</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>_jact</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=二阶段优化副雷达到主雷达的外参>二阶段：优化副雷达到主雷达的外参</h3><p>将一阶段中优化出的主雷达里程计作为真值，对于每一个副雷达，使用主雷达里程计以及各副雷达到主雷达的外参将各个副雷达的点云投影回世界坐标系构成局部地图，并和一阶段中的地图叠在一起构成新的局部地图。和一阶段相同，对使用自适应体素化方法提取面特征，并对于每一个特征体素递归构建基于点面误差的一致性评价指标。</p>$$
+\begin{align*}
+{}^{G}{p}_{k}+\delta^{G}{p}_{k}=
+{}_{L_{0}}^{G}R_{t_{j}}
+\bigg({}_{L_{i}}^{L_{0}}R\exp\big({}_{L_{i}}^{L_{0}}\phi^{\wedge}\big)p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}{}_{L_{0}}^{G}R_{t_{j}}
+\bigg({}_{L_{i}}^{L_{0}}R\big(I+{}_{L_{i}}^{L_{0}}\phi^{\wedge}\big)p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}{}_{L_{0}}^{G}{R}_{t_{j}}
+\bigg({}_{L_{i}}^{L_{0}}Rp_{k}+{}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++{}_{L_{i}}^{L_{0}}{t}+\delta_{L_{i}}^{L_{0}}{t}\bigg)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{L_i}{t}\big)
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++\delta_{L_{i}}^{L_{0}}{t}\big)
++{}_{L_{0}}^{G}{t}_{t_{j}}\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{L_i}{t}\big)
++{}_{L_{0}}^{G}{t}_{t_{j}}
++{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R{}_{L_{i}}^{L_{0}}\phi^{\wedge}p_{k}
++\delta_{L_{i}}^{L_{0}}{t}\big)\\
+\approx{}_{L_{0}}^{G}R_{t_{j}}\big({}_{L_{i}}^{L_{0}}R\cdot{p_{k}}+{}_{L_{0}}^{L_i}{t}\big)
++{}_{L_{0}}^{G}{t}_{t_{j}}
++{}_{L_{0}}^{G}R_{t_{j}}\big(-{}_{L_{i}}^{L_{0}}R{p_k}^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++\delta_{L_{i}}^{L_{0}}{t}\big)
+\end{align*}
+\tag{式1}
+$$$$
+\delta^{G}{p}_{k}={}_{L_{0}}^{G}R_{t_{j}}\big((-{}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{i}}^{L_{0}}\phi
++\delta_{L_{i}}^{L_{0}}{t}\big)\tag{式2}
+$$$$
+D=\frac{\delta p}{\delta T}=\begin{bmatrix}
+-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}&
+{}_{L_{0}}^{G}R_{t_{j}}
+\end{bmatrix}
+$$$$
+\begin{align*}
+\bar{H}_{0,0}=D_{0,k}^{T}H_{k,j}D_{j,0}\\
+=\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}^{T}
+H_{k,j}
+\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}\\
+=\begin{bmatrix} ({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T} \\{{}_{L_{0}}^{G}R_{t_{j}}}^{T}\end{bmatrix}
+H_{k,j}
+\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}\\
+=\begin{bmatrix}
+({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T}H_{k,j}\\{{}_{L_{0}}^{G}R_{t_{j}}}^{T}H_{k,j}\end{bmatrix}
+\begin{bmatrix}-{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&{}_{L_{0}}^{G}R_{t_{j}}\end{bmatrix}\\
+=\begin{bmatrix}
+-({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge}&({}_{L_{i}}^{L_{0}}R{p_k})^{\wedge}{}_{L_{0}}^{G}R_{t_{j}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}\\
+-{{}_{L_{0}}^{G}R_{t_{j}}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}({}_{L_{i}}^{L_{0}}R{p_j})^{\wedge} & {{}_{L_{0}}^{G}R_{t_{j}}}^{T}H_{k,j}{}_{L_{0}}^{G}R_{t_{j}}
+\end{bmatrix}
+\end{align*}\tag{式3}
+$$<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-C++ data-lang=C++><span class=line><span class=cl><span class=c1>//节选自第二阶段的calculate_HJ函数
+</span></span></span><span class=line><span class=cl><span class=c1>//公式推导见公式3
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=n>colnum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>+=</span>
+</span></span><span class=line><span class=cl>        <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>k</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>().</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>        <span class=n>Hessian33</span> <span class=o>*</span> <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=n>colnum</span><span class=p>)</span> <span class=o>+=</span>
+</span></span><span class=line><span class=cl>        <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>k</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>().</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>Hessian33</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>        <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>()</span> <span class=o>*</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span><span class=p>,</span> <span class=n>colnum</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>-=</span>
+</span></span><span class=line><span class=cl>        <span class=n>point_xis</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>*</span> <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>k</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>().</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>        <span class=n>Hessian33</span> <span class=o>*</span> <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=n>_hess</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>rownum</span><span class=p>,</span> <span class=n>colnum</span><span class=p>)</span> <span class=o>-=</span>
+</span></span><span class=line><span class=cl>        <span class=n>point_xis</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>*</span> <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>k</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>().</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>        <span class=n>Hessian33</span> <span class=o>*</span> <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>()</span> <span class=o>*</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=三阶段联合优化雷达外参和主激光雷达里程计>三阶段：联合优化雷达外参和主激光雷达里程计</h3><p>使用主雷达里程计以及各副雷达到主雷达的外参将各个副雷达的点云投影回世界坐标系构成局部地图，将所有雷达的局部地图堆叠在一起构成新的局部地图。同样的，对于这个局部地图构建基于点面误差的损失函数。</p>$$
+\begin{align*}
+\bar{J}^{T}=(JD)^{T}=D^{T}J^{J}
+\end{align*}\tag{式1}
+$$<p>考虑两种情况：分辨为$p=j$和$q=i$。</p>$$
+\begin{align*}
+\bar{J}^{T}=(JD)^{T}=D^{T}J^{J}\\
+=[-{}_{L_0}^{G}R_{t_j}({}_{L_i}^{L_0}Rp_k+{}_{L_i}^{L_0}t)^{\wedge}\quad I]^{T}\cdot J^{T}\\
+=[-({}_{L_0}^{G}R_{t_j}({}_{L_i}^{L_0}Rp_k+{}_{L_i}^{L_0}t))^{\wedge}\quad I]^{T}\cdot J^{T}\\
+=\begin{bmatrix}
+({}_{L_0}^{G}R_{t_j}({}_{L_i}^{L_0}Rp_k+{}_{L_i}^{L_0}t))^{\wedge}\\
+I^{T}
+\end{bmatrix}\cdot{J}^{T}
+\end{align*}\tag{式2}
+$$$$
+\begin{align*}
+\bar{J}^{T}=(JD)^{T}=D^{T}J^{J}\\
+=[-{}_{L_0}^{G}R_{t_j}{}_{L_i}^{L_0}R(p_k)^{\wedge}\quad {}_{L_0}^{G}R_{t_j}]^{T}\cdot J^{T}\\
+=\begin{bmatrix}
+({}_{L_i}^{L_0}Rp_k)^{\wedge}{{}_{L_0}^{G}R_{t_j}}^{T}\\
+{}_{L_0}^{G}R_{t_j}^{T}
+\end{bmatrix}\cdot{J}^{T}
+\end{align*}\tag{式3}
+$$<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-C++ data-lang=C++><span class=line><span class=cl><span class=c1>//以下代码选自第三阶段的计算雅可比和海森矩阵的代码
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>* @brief 计算雅可比矩阵和海森矩阵并进行更新，推导过程见2.2.3章节
+</span></span></span><span class=line><span class=cl><span class=cm>* @param poses 基准雷达的轨迹的旋转变量
+</span></span></span><span class=line><span class=cl><span class=cm>* @param ts 基准雷达的轨迹的平移变量
+</span></span></span><span class=line><span class=cl><span class=cm>* @param refQs 参考雷达的轨迹的旋转变量
+</span></span></span><span class=line><span class=cl><span class=cm>* @param refTs 参考雷达的轨迹的旋转变量
+</span></span></span><span class=line><span class=cl><span class=cm>* @param head 起始帧（所有体素被拆分为多份，多线程计算）
+</span></span></span><span class=line><span class=cl><span class=cm>* @param end  结束帧
+</span></span></span><span class=line><span class=cl><span class=cm>* @param Hess Hessian矩阵
+</span></span></span><span class=line><span class=cl><span class=cm>* @param JacT Jacobian矩阵
+</span></span></span><span class=line><span class=cl><span class=cm>* @param residual 残差
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>calculate_HJ</span><span class=p>(</span><span class=n>vector_quad</span> <span class=o>&amp;</span><span class=n>poses</span><span class=p>,</span> <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>ts</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>vector_quad</span> <span class=o>&amp;</span><span class=n>refQs</span><span class=p>,</span> <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>refTs</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=kt>int</span> <span class=n>head</span><span class=p>,</span> <span class=kt>int</span> <span class=n>end</span><span class=p>,</span> <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=o>&amp;</span><span class=n>Hess</span><span class=p>,</span> <span class=n>Eigen</span><span class=o>::</span><span class=n>VectorXd</span> <span class=o>&amp;</span><span class=n>JacT</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=kt>double</span> <span class=o>&amp;</span><span class=n>residual</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>Hess</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=n>JacT</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=n>residual</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=n>_jact</span><span class=p>(</span><span class=n>JacT</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>head</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>end</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>baseorigin_pts</span> <span class=o>=</span> <span class=o>*</span><span class=n>baseOriginPts</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>basewin_num</span> <span class=o>=</span> <span class=o>*</span><span class=n>baseWinNums</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=n>size_t</span> <span class=n>basepts_size</span> <span class=o>=</span> <span class=n>baseorigin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>      <span class=n>size_t</span> <span class=n>refpts_size_all</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>refpts_size</span><span class=p>,</span> <span class=n>refpts_size_part</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>refpts_size</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>ref_size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>refpts_size_part</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>ref_size</span> <span class=o>+</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>refpts_size_part</span><span class=p>.</span><span class=n>emplace_back</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=c1>//计算所有点的个数
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>ref_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span><span class=c1>//ref_size代表参考雷达的个数
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>reforigin_pts</span> <span class=o>=</span> <span class=o>*</span><span class=n>refOriginPts</span><span class=p>[</span><span class=n>j</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=n>refpts_size</span><span class=p>.</span><span class=n>emplace_back</span><span class=p>(</span><span class=n>reforigin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>          <span class=n>refpts_size_all</span> <span class=o>+=</span> <span class=n>reforigin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>          <span class=kt>int</span> <span class=n>temp</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>          <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;=</span> <span class=n>j</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>              <span class=n>temp</span> <span class=o>+=</span> <span class=n>refOriginPts</span><span class=p>[</span><span class=n>k</span><span class=p>][</span><span class=n>i</span><span class=p>]</span><span class=o>-&gt;</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>          <span class=n>refpts_size_part</span><span class=p>.</span><span class=n>emplace_back</span><span class=p>(</span><span class=n>temp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=c1>//计参考雷达+基准雷达点的个数
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kt>double</span> <span class=n>N</span> <span class=o>=</span> <span class=n>refpts_size_all</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=kt>int</span> <span class=n>_N</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span> <span class=n>N</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=c1>//定义$D$和$H$
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=n>_H</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>_N</span><span class=p>,</span> <span class=mi>3</span> <span class=o>*</span> <span class=n>_N</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>_H</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span> <span class=n>_D</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>_N</span><span class=p>,</span> <span class=n>jacob_len</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>_D</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>      <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>vec_tran</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>vector_vec3d</span> <span class=n>pt_trans</span><span class=p>(</span><span class=n>basepts_size</span> <span class=o>+</span> <span class=n>refpts_size_all</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>point_xis</span><span class=p>(</span><span class=n>basepts_size</span> <span class=o>+</span> <span class=n>refpts_size_all</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>point_xic</span><span class=p>(</span><span class=n>basepts_size</span> <span class=o>+</span> <span class=n>refpts_size_all</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>center</span><span class=p>(</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span><span class=o>::</span><span class=n>Zero</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>      <span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>covMat</span><span class=p>(</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>::</span><span class=n>Zero</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>      <span class=c1>//计算基准雷达的协方差矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>basepts_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=n>vec_tran</span> <span class=o>=</span> <span class=n>poses</span><span class=p>[</span><span class=n>basewin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]]</span> <span class=o>*</span> <span class=n>baseorigin_pts</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=o>-</span><span class=n>wedge</span><span class=p>(</span><span class=n>vec_tran</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>vec_tran</span> <span class=o>+</span> <span class=n>ts</span><span class=p>[</span><span class=n>basewin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>          <span class=c1>//基准雷达点云转化到世界坐标系下的坐标
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=n>center</span> <span class=o>+=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=n>covMat</span> <span class=o>+=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>*</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=c1>//计算参考雷达的协方差矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=n>size_t</span> <span class=n>cnt</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>ref_size</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>reforigin_pts</span> <span class=o>=</span> <span class=o>*</span><span class=n>refOriginPts</span><span class=p>[</span><span class=n>k</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>refwin_num</span> <span class=o>=</span> <span class=o>*</span><span class=n>refWinNums</span><span class=p>[</span><span class=n>k</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>reforigin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>();</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>              <span class=n>vec_tran</span> <span class=o>=</span> <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]]</span> <span class=o>*</span> <span class=p>(</span><span class=n>refQs</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>*</span> <span class=n>reforigin_pts</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>+</span> <span class=n>refTs</span><span class=p>[</span><span class=n>k</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>              <span class=n>point_xis</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>=</span> <span class=o>-</span><span class=n>wedge</span><span class=p>(</span><span class=n>vec_tran</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>              <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>=</span> <span class=n>vec_tran</span> <span class=o>+</span> <span class=n>ts</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>              <span class=c1>//参考雷达的点云转化到世界坐标系下的坐标
+</span></span></span><span class=line><span class=cl><span class=c1></span>              <span class=n>center</span> <span class=o>+=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>              <span class=n>covMat</span> <span class=o>+=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>*</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>              <span class=n>cnt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 初始化计数器和点的变换
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>cnt</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>basepts_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>point_xic</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span><span class=o>::</span><span class=n>Zero</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>ref_size</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>reforigin_pts</span> <span class=o>=</span> <span class=o>*</span><span class=n>refOriginPts</span><span class=p>[</span><span class=n>k</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>reforigin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>();</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>vec_tran</span> <span class=o>=</span> <span class=n>refQs</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>*</span> <span class=n>reforigin_pts</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=n>point_xic</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>=</span> <span class=o>-</span><span class=n>wedge</span><span class=p>(</span><span class=n>vec_tran</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>cnt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 计算协方差矩阵和中心点
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>covMat</span> <span class=o>=</span> <span class=n>covMat</span> <span class=o>-</span> <span class=n>center</span> <span class=o>*</span> <span class=n>center</span><span class=p>.</span><span class=n>transpose</span><span class=p>()</span> <span class=o>/</span> <span class=n>N</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>covMat</span> <span class=o>=</span> <span class=n>covMat</span> <span class=o>/</span> <span class=n>N</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>center</span> <span class=o>=</span> <span class=n>center</span> <span class=o>/</span> <span class=n>N</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 计算协方差矩阵的特征值和特征向量
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>Eigen</span><span class=o>::</span><span class=n>SelfAdjointEigenSolver</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>saes</span><span class=p>(</span><span class=n>covMat</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>eigen_value</span> <span class=o>=</span> <span class=n>saes</span><span class=p>.</span><span class=n>eigenvalues</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>U</span> <span class=o>=</span> <span class=n>saes</span><span class=p>.</span><span class=n>eigenvectors</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>u</span><span class=p>[</span><span class=mi>3</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>u</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>U</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=n>j</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 更新雅可比矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>ukukT</span> <span class=o>=</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>*</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=n>Eigen</span><span class=o>::</span><span class=n>Vector3d</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=c1>//基准雷达点云的影响
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>basepts_size</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>-</span> <span class=n>center</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>//计算文中的$J$
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>vec_Jt</span> <span class=o>=</span> <span class=mf>2.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span> <span class=o>*</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>       <span class=c1>//计算基准雷达轨迹的$\bar J$
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>basewin_num</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=mi>0</span><span class=p>)</span> <span class=o>-=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>*</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>basewin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>+=</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>//参考雷达点云的影响
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>cnt</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>ref_size</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>vector_vec3d</span> <span class=o>&amp;</span><span class=n>reforigin_pts</span> <span class=o>=</span> <span class=o>*</span><span class=n>refOriginPts</span><span class=p>[</span><span class=n>k</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>refwin_num</span> <span class=o>=</span> <span class=o>*</span><span class=n>refWinNums</span><span class=p>[</span><span class=n>k</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>reforigin_pts</span><span class=p>.</span><span class=n>size</span><span class=p>();</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>-</span> <span class=n>center</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>vec_Jt</span> <span class=o>=</span> <span class=mf>2.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span> <span class=o>*</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=c1>//公式中p=j的部分,见文中公式2
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=mi>0</span><span class=p>)</span> <span class=o>-=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>*</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>+</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>+=</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=c1>//公式中q=i的部分,见文中公式3
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>pose_size</span> <span class=o>+</span> <span class=mi>6</span> <span class=o>*</span> <span class=n>k</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>-=</span> <span class=n>point_xic</span><span class=p>[</span><span class=n>cnt</span> <span class=o>+</span> <span class=n>basepts_size</span><span class=p>]</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>                                                       <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>().</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>                                                       <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>_jact</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>1</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=n>pose_size</span> <span class=o>+</span> <span class=mi>3</span> <span class=o>+</span> <span class=mi>6</span> <span class=o>*</span> <span class=n>k</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>+=</span>
+</span></span><span class=line><span class=cl>                <span class=n>poses</span><span class=p>[</span><span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span><span class=p>]].</span><span class=n>toRotationMatrix</span><span class=p>().</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>vec_Jt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>cnt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>assert</span><span class=p>(</span><span class=n>cnt</span> <span class=o>==</span> <span class=n>refpts_size_all</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 计算Hessian矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span> <span class=n>F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>Eigen</span><span class=o>::</span><span class=n>Matrix3d</span><span class=o>&gt;</span> <span class=n>F_</span><span class=p>(</span><span class=mi>3</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>j</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>F_</span><span class=p>[</span><span class=n>j</span><span class=p>].</span><span class=n>setZero</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>continue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>Hessian33</span> <span class=o>=</span> <span class=n>u</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>*</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=n>transpose</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=n>F_</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=mf>1.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>/</span> <span class=p>(</span><span class=n>eigen_value</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>-</span> <span class=n>eigen_value</span><span class=p>[</span><span class=n>j</span><span class=p>])</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>            <span class=p>(</span><span class=n>Hessian33</span> <span class=o>+</span> <span class=n>Hessian33</span><span class=p>.</span><span class=n>transpose</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>size_t</span> <span class=n>colnum_s</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 计算Hessian矩阵和雅可比矩阵的乘积
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>N</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>f</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>f</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=p>;</span> <span class=n>f</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>F</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=n>f</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>=</span> <span class=n>pt_trans</span><span class=p>[</span><span class=n>j</span><span class=p>].</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>F_</span><span class=p>[</span><span class=n>f</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=n>F</span> <span class=o>=</span> <span class=n>U</span> <span class=o>*</span> <span class=n>F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>N</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Hessian33</span> <span class=o>=</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>*</span> <span class=p>(</span><span class=n>pt_trans</span><span class=p>[</span><span class=n>k</span><span class=p>]).</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>F</span> <span class=o>+</span> <span class=n>u</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=n>dot</span><span class=p>(</span><span class=n>pt_trans</span><span class=p>[</span><span class=n>k</span><span class=p>])</span> <span class=o>*</span> <span class=n>F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>k</span> <span class=o>==</span> <span class=n>j</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>Hessian33</span> <span class=o>+=</span> <span class=p>(</span><span class=n>N</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span>
+</span></span><span class=line><span class=cl>            <span class=n>Hessian33</span> <span class=o>-=</span> <span class=mf>1.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>ukukT</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>Hessian33</span> <span class=o>=</span> <span class=mf>2.0</span> <span class=o>/</span> <span class=n>N</span> <span class=o>*</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>_H</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>k</span><span class=p>,</span> <span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>)</span> <span class=o>=</span> <span class=n>Hessian33</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>j</span> <span class=o>&lt;</span> <span class=n>basepts_size</span><span class=p>)</span> <span class=p>{</span><span class=c1>//基准雷达轨迹的D
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>colnum_s</span> <span class=o>=</span> <span class=mi>6</span> <span class=o>*</span> <span class=n>basewin_num</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=n>_D</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>,</span> <span class=n>colnum_s</span><span class=p>)</span> <span class=o>=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=n>_D</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>,</span> <span class=n>colnum_s</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>=</span> <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span><span class=o>::</span><span class=n>Identity</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>base_pose</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>a</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>a</span> <span class=o>&lt;</span> <span class=n>ref_size</span><span class=p>;</span> <span class=n>a</span><span class=o>++</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>j</span> <span class=o>-</span> <span class=n>basepts_size</span> <span class=o>&lt;</span> <span class=n>refpts_size_part</span><span class=p>[</span><span class=n>a</span> <span class=o>+</span> <span class=mi>1</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//注意与前面几个阶段求hessian矩阵有差异，这里仅表达了完整的D,而非\bar{H}，所以这里不用进行D^{T}HD的求解
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>refwin_num</span> <span class=o>=</span> <span class=o>*</span><span class=n>refWinNums</span><span class=p>[</span><span class=n>a</span><span class=p>][</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=n>colnum_s</span> <span class=o>=</span> <span class=mi>6</span> <span class=o>*</span> <span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>basepts_size</span> <span class=o>-</span> <span class=n>refpts_size_part</span><span class=p>[</span><span class=n>a</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>                <span class=n>base_pose</span> <span class=o>=</span> <span class=n>refwin_num</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>basepts_size</span> <span class=o>-</span> <span class=n>refpts_size_part</span><span class=p>[</span><span class=n>a</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>                <span class=n>_D</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>,</span> <span class=n>colnum_s</span><span class=p>)</span> <span class=o>=</span> <span class=n>point_xis</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=n>_D</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>,</span> <span class=n>colnum_s</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>=</span> <span class=n>Eigen</span><span class=o>::</span><span class=n>MatrixXd</span><span class=o>::</span><span class=n>Identity</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>colnum_s</span> <span class=o>=</span> <span class=mi>6</span> <span class=o>*</span> <span class=p>(</span><span class=n>pose_size</span> <span class=o>+</span> <span class=n>a</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>_D</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>,</span> <span class=n>colnum_s</span><span class=p>)</span> <span class=o>=</span> <span class=n>poses</span><span class=p>[</span><span class=n>base_pose</span><span class=p>]</span> <span class=o>*</span> <span class=n>point_xic</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=n>_D</span><span class=p>.</span><span class=n>block</span><span class=o>&lt;</span><span class=mi>3</span><span class=p>,</span> <span class=mi>3</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>3</span> <span class=o>*</span> <span class=n>j</span><span class=p>,</span> <span class=n>colnum_s</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>=</span> <span class=n>poses</span><span class=p>[</span><span class=n>base_pose</span><span class=p>].</span><span class=n>toRotationMatrix</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>                <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 更新残差和Hessian矩阵
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>residual</span> <span class=o>+=</span> <span class=n>eigen_value</span><span class=p>[</span><span class=mi>0</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=n>Hess</span> <span class=o>+=</span> <span class=n>_D</span><span class=p>.</span><span class=n>transpose</span><span class=p>()</span> <span class=o>*</span> <span class=n>_H</span> <span class=o>*</span> <span class=n>_D</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>JacT</span> <span class=o>+=</span> <span class=n>_jact</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>_jact</span><span class=p>.</span><span class=n>setZero</span><span class=p>();</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=参考文献>参考文献</h2><p>[1]<a class=link href=https://arxiv.org/pdf/2109.06550 target=_blank rel=noopener>《Targetless Extrinsic Calibration of Multiple Small FoV LiDARs and Cameras using Adaptive Voxelization》</a></p><p>[2]<a class=link href=https://www.arxiv.org/pdf/2010.08215 target=_blank rel=noopener>《BALM: Bundle Adjustment for Lidar Mapping》</a></p><p>[3]<a class=link href=http://epsilonjohn.club/2020/11/03/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/BALM%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ target=_blank rel=noopener>《BALM论文阅读》——epsilonjohn的博客文章</a></p><p>[4]<a class=link href=https://arxiv.org/pdf/1812.01537 target=_blank rel=noopener>《A micro Lie theory for state estimation in robotics》</a></p><p>[5]<a class=link href=https://blog.csdn.net/CV_Autobot/article/details/134173441 target=_blank rel=noopener>《多个LiDAR-Camera无目标跨视角联合标定方法》</a></p><p>[6]<a class=link href=https://blog.csdn.net/weixin_36444661/article/details/112768144 target=_blank rel=noopener>《如何用法向量求点到平面距离_【立体几何】用空间向量求点到面的距离》</a></p></section><footer class=article-footer><section class=article-tags><a href=/tags/mlcc/>Mlcc</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
 <span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<span>最后更新于 2025-01-04 15:47 +0800</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/mlcc/02/><div class=article-image><img src=/p/mlcc/02/camera_voxel.127fe1f33eed6bad21fc61cb8af10709_hu6328242681866785286.png width=250 height=150 loading=lazy alt="Featured image of post Chapter 02: LiDAR-Camera Extrinsic Calibration" data-key=mlcc/02 data-hash="md5-En/h8z7ta60h/GHLivEHCQ=="></div><div class=article-details><h2 class=article-title>Chapter 02: LiDAR-Camera Extrinsic Calibration</h2></div></a></article><article class=has-image><a href=/p/mlcc/00/><div class=article-image><img src=/p/mlcc/00/lidar_voxel.1f71b10121cabd2c2a83171a4e189741_hu12138103120238954164.png width=250 height=150 loading=lazy alt="Featured image of post Chapter 00: Adaptive Voxelization" data-key=mlcc/00 data-hash="md5-H3GxASHKvSwqgxcaThiXQQ=="></div><div class=article-details><h2 class=article-title>Chapter 00: Adaptive Voxelization</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=wzwan-developer/wzwan-developer.github.io issue-term=pathname crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+<span>最后更新于 2025-01-04 16:06 +0800</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/mlcc/02/><div class=article-image><img src=/p/mlcc/02/camera_voxel.127fe1f33eed6bad21fc61cb8af10709_hu6328242681866785286.png width=250 height=150 loading=lazy alt="Featured image of post Chapter 02: LiDAR-Camera Extrinsic Calibration" data-key=mlcc/02 data-hash="md5-En/h8z7ta60h/GHLivEHCQ=="></div><div class=article-details><h2 class=article-title>Chapter 02: LiDAR-Camera Extrinsic Calibration</h2></div></a></article><article class=has-image><a href=/p/mlcc/00/><div class=article-image><img src=/p/mlcc/00/lidar_voxel.1f71b10121cabd2c2a83171a4e189741_hu12138103120238954164.png width=250 height=150 loading=lazy alt="Featured image of post Chapter 00: Adaptive Voxelization" data-key=mlcc/00 data-hash="md5-H3GxASHKvSwqgxcaThiXQQ=="></div><div class=article-details><h2 class=article-title>Chapter 00: Adaptive Voxelization</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=wzwan-developer/wzwan-developer.github.io issue-term=pathname crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
 2024 -
 2025 wzwan<div class=busuanzi-footer><span id=busuanzi_container_site_pv>本站总访问量<span id=busuanzi_value_site_pv></span>次
 </span><span id=busuanzi_container_site_uv>本站访客数<span id=busuanzi_value_site_uv></span>人次</span></div></section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.26.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
