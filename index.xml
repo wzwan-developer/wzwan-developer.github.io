@@ -1,4 +1,51 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>wzwan</title><link>/</link><description>Recent content on wzwan</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>wzwan</copyright><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>K-d树</title><link>/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>/p/nearestneighborproblem/01/</guid><description>&lt;img src="/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>wzwan</title><link>/</link><description>Recent content on wzwan</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>wzwan</copyright><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Least-Squares Estimation of Transformation Parameters Between Two Point Patterns</title><link>/p/least-squares-estimation-of-transformation-parameters-between-two-point-patterns/</link><pubDate>Sun, 12 Jan 2025 14:48:16 +0800</pubDate><guid>/p/least-squares-estimation-of-transformation-parameters-between-two-point-patterns/</guid><description>&lt;img src="/p/least-squares-estimation-of-transformation-parameters-between-two-point-patterns/title.png" alt="Featured image of post Least-Squares Estimation of Transformation Parameters Between Two Point Patterns" />&lt;h2 id="文章内容">文章内容
+&lt;/h2>&lt;h3 id="摘要">摘要
+&lt;/h3>&lt;blockquote>
+&lt;p>      &lt;em>Abstract&lt;/em>— In many applications of computer vision, the following probler is encountered. Two point patterns （sets of points）$\left\{a_i \right\} $ and $\left\{y_i\right\}$;i = 1,2 $\cdots$,n are given in m-dimensional space, and we want to find the similarity transformation parameters （rotation， translation, and scaling） that give the least mean squared error between these point patterns. Recently Arun &lt;em>et al.&lt;/em> and Horn &lt;em>et al.&lt;/em> have presented a solution of this problem. Their solution, however, sometimes fails to give a correct rotation matrix and gives a reflection instead when the data is severely corrupted. The theorem given in this correspondence is a strict solution of the problem, and it always gives the correct transformation parameters even when the data is corrupted.&lt;/p>
+&lt;/blockquote>
+&lt;p>      摘要——在计算机视觉的许多应用中，存在以下问题。给定两个点集合$\left\{a_i \right\} $和$\left\{y_i\right\}$； i = 1,2$\cdots$，n 在 m 维空间中，我们想找到使这两个点集合之间的最小均方误差最小的相似变换参数（旋转，平移和缩放）。最近，Aru等人和Horn等人提出了一个解决这个问题的解决方案。然而，当数据严重损坏时，他们的解决方案有时会失败，无法给出正确的旋转矩阵，反而给出一个反射矩阵。这篇文章给出的定理是该问题的一个严格解，无论数据是否损坏，它总是给出正确的变换参数。&lt;/p>
+&lt;blockquote>
+&lt;p>      &lt;em>Index Terms&lt;/em>—— Absolute orientation problem, computer vision, least-squares, motion estimation, singular value decomposition.&lt;/p>
+&lt;/blockquote>
+&lt;p>      索引术语——绝对定向问题，计算机视觉，最小二乘法，运动估计，奇异值分解。&lt;/p>
+&lt;h3 id="引言">引言
+&lt;/h3>&lt;blockquote>
+$$e^2(R,\boldsymbol{t},c)=\frac{1}{n}\sum_{i=1}^n\left\|\boldsymbol{y}_i-(cR\boldsymbol{x}_i+\boldsymbol{t})\right\|^2\tag{1}$$&lt;p>The dimensionality $m$ is usually 2 or 3.&lt;/p>
+&lt;/blockquote>
+$$e^2(R,\boldsymbol{t},c)=\frac{1}{n}\sum_{i=1}^n\left\|\boldsymbol{y}_i-(cR\boldsymbol{x}_i+\boldsymbol{t})\right\|^2\tag{1}$$&lt;p>维度$m$通常是2或者3。&lt;/p>
+&lt;blockquote>
+&lt;p>      This problem is sometimes called the absolute orientation problem ［1］, and an iterative algorithms for finding the solution ［2］ and a noniterative algorithm based on quaternions ［3］ are proposed for a 3-D problem. A good reference can be found in ［1］. Recently, Arun &lt;em>et al.&lt;/em> ［4］ and Horn &lt;em>et al.&lt;/em> ［1］ have presented a solution of this problem, which is based on the singular value decomposition of a covariance matrix of the data. Their solution, however, sometimes fails to give a correct rotation matrix and gives a reflection instead (det(R) = -1) when the data is severely corrupted.&lt;/p>
+&lt;/blockquote>
+&lt;p>      该问题有时被称为绝对定向问题，针对三维问题已经提出了迭代算法和基于四元数的非跌点算法来求解。关于这一问题，可以参考文献1。最近，Arun等人和Horn等人提出了一种基于数据协方差矩阵奇异值分解的解决方案。然而，当数据严重损坏时，他们的解决方案有时无法给出正确的旋转矩阵，而是给出一个反射矩阵（det(R) = -1）。&lt;/p>
+&lt;blockquote>
+&lt;p>      The theorem given in this correspondence is a strict solution of the problem, and it is derived by refining Arun&amp;rsquo;s result. The theorem always gives the correct transformation parameters even when the data is corrupted.&lt;/p>
+&lt;/blockquote>
+&lt;p>      该文中给出的定理是通过对 Arun 的结果进行改进而得到的问题的严格解。即使数据遭到破坏，该定理也总是能够给出正确的变换参数。&lt;/p>
+&lt;h3 id="变换参数的最小二乘估计">变换参数的最小二乘估计
+&lt;/h3>&lt;blockquote>
+&lt;p>      In this section, we show a theorem which gives the least-squares estimation of similarity transformation parameters between two point patterns. Before showing the theorem, we prove a lemma, which gives the least-squares estimation of rotation parameters. This lemma is the main result of this correspondence.&lt;/p>
+&lt;/blockquote>
+&lt;p>在本节中，我们将展示一个定理，该定理给出了两个点模式之间相似变换参数的最小二乘估计。在展示定理之前，我们先证明一个引理，该引理给出了旋转参数的最小方差估计。这个引理是本文的主要结果。&lt;/p>
+&lt;blockquote>
+$$\min_R\left\|A-RB\right\|^2=\left\|A\right\|^2+\left\|B\right\|^2-2\mathrm{tr}(DS)\tag{2}$$$$S=\left\{
+\begin{array}
+{ll}I &amp; \quad\mathrm{if~}\det(AB^T)\geq0 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if~}\det(AB^T)&lt;0.
+\end{array}\right.\tag{3}$$$$R=USV^T\tag{4}$$$$S=\left\{
+\begin{array}
+{ll}I &amp; \quad\mathrm{if}\quad\det(U)\det(V)=1 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if}\quad\det(U)\det(V)=-1
+\end{array}\right.\tag{5}$$&lt;p>when $det (AB^T) = 0 (rank(AB^T) = m - 1)$.&lt;/p>
+&lt;/blockquote>
+$$\min_R\left\|A-RB\right\|^2=\left\|A\right\|^2+\left\|B\right\|^2-2\mathrm{tr}(DS)\tag{2}$$$$S=\left\{
+\begin{array}
+{ll}I &amp; \quad\mathrm{if~}\det(AB^T)\geq0 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if~}\det(AB^T)&lt;0.
+\end{array}\right.\tag{3}$$$$R=USV^T\tag{4}$$$$S=\left\{
+\begin{array}
+{ll}I &amp; \quad\mathrm{if}\quad\det(U)\det(V)=1 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if}\quad\det(U)\det(V)=-1
+\end{array}\right.\tag{5}$$&lt;p>。&lt;/p></description></item><item><title>K-d树</title><link>/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>/p/nearestneighborproblem/01/</guid><description>&lt;img src="/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
 &lt;/h2>&lt;p>        K-d树最早由Bentley Jon Louis提出,是二分树的高维度版本。
 K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组成。在二分树里,可以用单个维度的信息来区分左右,但在 K-d 树里,由于要分割高维数据,会用超平面(Hyperplane)来区分左右侧(不过,对于三维点,实际上的超平面就是普通的二维平面)。在如何分割方面,则存在一些方法上的差异。下文介绍的是沿轴超平面分割(Axis-aligned Splitting Plane)。只需要沿着所有维度中任意一个轴将点云分开即可,实现起来十分简单。&lt;/p>
 &lt;p>        我们可以对一个任意维度的点云建立 K-d 树,称为 K-d树的构建过程,或者叫建树。随后, 可以对空间中任意一点进行k近邻查找,称为查找过程。根据查找方法的不同,K-d树也分按范围查找(Search by Range)和按 k 最近邻查找(Search by k Nearest Neighbours),二者的具体实现方法大同小异。在K-d树中,以树状结构来表达点云的结构关系,规定:&lt;/p>
