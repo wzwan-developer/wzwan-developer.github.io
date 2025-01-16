@@ -68,7 +68,7 @@ $$F=\|A-R B\|^{2}+\operatorname{tr}\left(L\left(R^{T} R-I\right)\right)+g\{\oper
 e_i\:=\:\left(0,0,\cdots,1,\cdots,0\right)^T
 \end{matrix}\tag{27}$$$$q_{m}=e_{m}\quad\mathrm{or}\quad q_{m}=-e_{m}.\tag{28}$$$$\begin{aligned}\mathrm{det}(Q)&amp;=\mathrm{det}\Bigl(U^T\Bigr)\mathrm{det}(R)\mathrm{det}(V)\\&amp;=\mathrm{det}(U)\mathrm{det}(V).\end{aligned}\tag{29}$$$$\begin{array}{c}R=UQV^T\\=USV^T\end{array}\tag{30}$$$$S=\left\{\begin{array}{ll}I&amp;\quad\text{if}\:\mathrm{det}(U)\mathrm{det}(V)=1\\\text{diag}(1,1,\cdots,1,-1)&amp;\quad\text{if}\:\mathrm{det}(U)\mathrm{det}(V)=-1.\end{array}\right.\tag{31}$$&lt;p>
 $Q.E.D.$&lt;br>
-We can derive the following theorem using this lemma.&lt;/p>
+      We can derive the following theorem using this lemma.&lt;/p>
 &lt;/blockquote></description></item><item><title>如何理解概率论中的“矩”</title><link>/p/state_estimation_for_robotics/2_03/</link><pubDate>Mon, 09 Sep 2024 11:12:48 +0800</pubDate><guid>/p/state_estimation_for_robotics/2_03/</guid><description>&lt;img src="/p/state_estimation_for_robotics/2_03/gaussian-normal-distribution-graph.png" alt="Featured image of post 如何理解概率论中的“矩”" />&lt;h2 id="概率论中的矩">概率论中的“矩”
 &lt;/h2>&lt;h3 id="彩票的问题">彩票的问题
 &lt;/h3>&lt;p>假设福利彩票，每一注两元钱，且中奖的概率分布如下：

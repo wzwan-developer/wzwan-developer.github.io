@@ -68,7 +68,7 @@ $$F=\|A-R B\|^{2}+\operatorname{tr}\left(L\left(R^{T} R-I\right)\right)+g\{\oper
 e_i\:=\:\left(0,0,\cdots,1,\cdots,0\right)^T
 \end{matrix}\tag{27}$$$$q_{m}=e_{m}\quad\mathrm{or}\quad q_{m}=-e_{m}.\tag{28}$$$$\begin{aligned}\mathrm{det}(Q)&amp;=\mathrm{det}\Bigl(U^T\Bigr)\mathrm{det}(R)\mathrm{det}(V)\\&amp;=\mathrm{det}(U)\mathrm{det}(V).\end{aligned}\tag{29}$$$$\begin{array}{c}R=UQV^T\\=USV^T\end{array}\tag{30}$$$$S=\left\{\begin{array}{ll}I&amp;\quad\text{if}\:\mathrm{det}(U)\mathrm{det}(V)=1\\\text{diag}(1,1,\cdots,1,-1)&amp;\quad\text{if}\:\mathrm{det}(U)\mathrm{det}(V)=-1.\end{array}\right.\tag{31}$$&lt;p>
 $Q.E.D.$&lt;br>
-We can derive the following theorem using this lemma.&lt;/p>
+      We can derive the following theorem using this lemma.&lt;/p>
 &lt;/blockquote></description></item><item><title>K-d树</title><link>/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>/p/nearestneighborproblem/01/</guid><description>&lt;img src="/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
 &lt;/h2>&lt;p>        K-d树最早由Bentley Jon Louis提出,是二分树的高维度版本。
 K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组成。在二分树里,可以用单个维度的信息来区分左右,但在 K-d 树里,由于要分割高维数据,会用超平面(Hyperplane)来区分左右侧(不过,对于三维点,实际上的超平面就是普通的二维平面)。在如何分割方面,则存在一些方法上的差异。下文介绍的是沿轴超平面分割(Axis-aligned Splitting Plane)。只需要沿着所有维度中任意一个轴将点云分开即可,实现起来十分简单。&lt;/p>
