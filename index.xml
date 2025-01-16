@@ -29,23 +29,47 @@ $$e^2(R,\boldsymbol{t},c)=\frac{1}{n}\sum_{i=1}^n\left\|\boldsymbol{y}_i-(cR\bol
 &lt;blockquote>
 $$\min_R\left\|A-RB\right\|^2=\left\|A\right\|^2+\left\|B\right\|^2-2\mathrm{tr}(DS)\tag{2}$$$$S=\left\{
 \begin{array}
-{ll}I &amp; \quad\mathrm{if~}\det(AB^T)\geq0 \\
-\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if~}\det(AB^T)&lt;0.
+{ll}I &amp; \quad\mathrm{if~}\mathrm{det}(AB^T)\geq0 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if~}\mathrm{det}(AB^T)&lt;0.
 \end{array}\right.\tag{3}$$$$R=USV^T\tag{4}$$$$S=\left\{
 \begin{array}
-{ll}I &amp; \quad\mathrm{if}\quad\det(U)\det(V)=1 \\
-\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if}\quad\det(U)\det(V)=-1
-\end{array}\right.\tag{5}$$&lt;p>when $det (AB^T) = 0 (rank(AB^T) = m - 1)$.&lt;/p>
+{ll}I &amp; \quad\mathrm{if}\quad\mathrm{det}(U)\mathrm{det}(V)=1 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if}\quad\mathrm{det}(U)\mathrm{det}(V)=-1
+\end{array}\right.\tag{5}$$&lt;p>when $\mathrm{det}(AB^T) = 0 (\mathrm{rank}(AB^T) = m - 1)$.&lt;/p>
 &lt;/blockquote>
 $$\min_R\left\|A-RB\right\|^2=\left\|A\right\|^2+\left\|B\right\|^2-2\mathrm{tr}(DS)\tag{2}$$$$S=\left\{
 \begin{array}
-{ll}I &amp; \quad\mathrm{if~}\det(AB^T)\geq0 \\
-\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if~}\det(AB^T)&lt;0.
+{ll}I &amp; \quad\mathrm{if~}\mathrm{det}(AB^T)\geq0 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if~}\mathrm{det}(AB^T)&lt;0.
 \end{array}\right.\tag{3}$$$$R=USV^T\tag{4}$$$$S=\left\{
 \begin{array}
-{ll}I &amp; \quad\mathrm{if}\quad\det(U)\det(V)=1 \\
-\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if}\quad\det(U)\det(V)=-1
-\end{array}\right.\tag{5}$$&lt;p>。&lt;/p></description></item><item><title>K-d树</title><link>/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>/p/nearestneighborproblem/01/</guid><description>&lt;img src="/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
+{ll}I &amp; \quad\mathrm{if}\quad\mathrm{det}(U)\mathrm{det}(V)=1 \\
+\operatorname{diag}(1,1,\cdots,1,-1) &amp; \quad\mathrm{if}\quad\mathrm{det}(U)\mathrm{det}(V)=-1
+\end{array}\right.\tag{5}$$&lt;p>。&lt;/p>
+&lt;blockquote>
+$$F=\|A-R B\|^{2}+\operatorname{tr}\left(L\left(R^{T} R-I\right)\right)+g\{\operatorname{det}(R)-1\}\tag{6}$$$$\frac{\partial F}{\partial R}=-2 A B^{T}+2 R B B^{T}+2 R L+g R=0\tag{7}$$$${\frac{\partial F}{\partial L}=R^{T} R-I=0\tag{8}}$$$${\frac{\partial F}{\partial g}=\operatorname{det}(R)-1=0\tag{9}}$$$$\frac{\partial}{\partial R}\mathrm{det}(R)=\mathrm{adj}\left(R^{T}\right)=\mathrm{det}\left(R^{T}\right)\left(R^{T}\right)^{-1}=R\tag{10}$$$$RL^{\prime}=AB^{T},\quad\mathrm{where}L^{\prime}=BB^{T}+L+\frac{1}{2}gI.\tag{11}$$$$L^{^{\prime}}R^{T}=BA^{T}\tag{12}$$$$L^{\prime2}=BA^TAB^T=VD^2V^T\tag{13}$$$$L^{\prime}= VDSV^T\tag{14}$$$$\begin{aligned}
+\operatorname*{det}(L^{\prime}) &amp; =\mathrm{det}\left(VDSV^{T}\right) \\
+&amp; =\mathrm{det}(V)\mathrm{det}(D)\mathrm{det}(S)\mathrm{det}\left(V^{T}\right) \\
+&amp; =\mathrm{det}(D)\mathrm{det}(S).
+\end{aligned}\tag{15}$$$$\begin{aligned}
+\operatorname*{det}(L^{\prime}) &amp; =\mathrm{det}\left(R^{T}AB^{T}\right) \\
+&amp; =\mathrm{det}\left(R^{T}\right)\mathrm{det}\left(AB^{T}\right) \\
+&amp; =\mathrm{det}\left(AB^{T}\right).
+\end{aligned}\tag{16}.$$$$\mathrm{det}(D)\mathrm{det}(S)=\mathrm{det}\left(AB^T\right).\tag{17}$$$$\begin{aligned}
+\|A-RB\|^{2} &amp; =\left\|A\right\|^{2}+\left\|B\right\|^{2}-2\mathrm{tr}\left(AB^{T}R^{T}\right) \\
+&amp; =\left\|A\right\|^{2}+\left\|B\right\|^{2}-2\mathrm{tr}\left(R^{T}AB^{T}\right) \\
+&amp; =\left\|A\right\|^{2}+\left\|B\right\|^{2}-2\mathrm{tr}\left(L^{\prime}\right).
+\end{aligned}\tag{18}$$$$\begin{aligned}
+\|A-RB\|^{2} &amp; =\left\|A\right\|^{2}+\left\|B\right\|^{2}-2\mathrm{tr}\left(VDSV^{T}\right) \\
+&amp; =\|A\|^{2}+\|B\|^{2}-2\mathrm{tr}(DS) \\
+&amp; =\|A\|^{2}+\|B\|^{2}-2(d_{1}s_{1}+d_{2}s_{2}+\cdots+d_{m}s_{m}).
+\end{aligned} \tag{19}$$$$R=AB^TL^{\prime-1}=UDV^TVD^{-1}SV^T = USV^T\tag{20}$$$$ RVDSV^T=UDV^T\tag{21}$$$$RVD=UD \tag{22}$$$$Q=U^{T}RV\tag{23}$$$$QD=D\tag{24}$$$$d_i{q}_i=d_i{e}_i\quad1\leq i\leq m-1 \tag{25}$$$${q}_{i}=e_{i}\quad1 \leq i \leq m-1 \tag{26}$$$$\begin{matrix}
+\quad \quad \quad i\\
+e_i\:=\:\left(0,0,\cdots,1,\cdots,0\right)^T
+\end{matrix}\tag{27}$$$$q_{m}=e_{m}\quad\mathrm{or}\quad q_{m}=-e_{m}.\tag{28}$$$$\begin{aligned}\mathrm{det}(Q)&amp;=\mathrm{det}\Bigl(U^T\Bigr)\mathrm{det}(R)\mathrm{det}(V)\\&amp;=\mathrm{det}(U)\mathrm{det}(V).\end{aligned}\tag{29}$$$$\begin{array}{c}R=UQV^T\\=USV^T\end{array}\tag{30}$$$$S=\left\{\begin{array}{ll}I&amp;\quad\text{if}\:\mathrm{det}(U)\mathrm{det}(V)=1\\\text{diag}(1,1,\cdots,1,-1)&amp;\quad\text{if}\:\mathrm{det}(U)\mathrm{det}(V)=-1.\end{array}\right.\tag{31}$$&lt;p>
+$Q.E.D.$&lt;br>
+We can derive the following theorem using this lemma.&lt;/p>
+&lt;/blockquote></description></item><item><title>K-d树</title><link>/p/nearestneighborproblem/01/</link><pubDate>Tue, 22 Oct 2024 20:39:43 +0800</pubDate><guid>/p/nearestneighborproblem/01/</guid><description>&lt;img src="/p/nearestneighborproblem/01/title.png" alt="Featured image of post K-d树" />&lt;h2 id="理论内容">理论内容
 &lt;/h2>&lt;p>        K-d树最早由Bentley Jon Louis提出,是二分树的高维度版本。
 K-d 树也是二叉树的一种,任意一个 K-d 树的节点由左右两侧组成。在二分树里,可以用单个维度的信息来区分左右,但在 K-d 树里,由于要分割高维数据,会用超平面(Hyperplane)来区分左右侧(不过,对于三维点,实际上的超平面就是普通的二维平面)。在如何分割方面,则存在一些方法上的差异。下文介绍的是沿轴超平面分割(Axis-aligned Splitting Plane)。只需要沿着所有维度中任意一个轴将点云分开即可,实现起来十分简单。&lt;/p>
 &lt;p>        我们可以对一个任意维度的点云建立 K-d 树,称为 K-d树的构建过程,或者叫建树。随后, 可以对空间中任意一点进行k近邻查找,称为查找过程。根据查找方法的不同,K-d树也分按范围查找(Search by Range)和按 k 最近邻查找(Search by k Nearest Neighbours),二者的具体实现方法大同小异。在K-d树中,以树状结构来表达点云的结构关系,规定:&lt;/p>
